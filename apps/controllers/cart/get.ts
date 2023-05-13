@@ -2,7 +2,7 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op, WhereOptions } from "sequelize";
-import { OrderCartAttributes, OrderCartModel } from "../../models/mysql/orders/cart";
+import { OrderCartAttributes, OrderCartModel } from "../../models/orders/cart";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
 

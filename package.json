@@ -11,7 +11,7 @@
 	"keywords": [
 		"simerdeka"
 	],
-	"author": "",
+	"author": "Misdar Manto",
 	"license": "ISC",
 	"dependencies": {
 		"axios": "^0.21.1",

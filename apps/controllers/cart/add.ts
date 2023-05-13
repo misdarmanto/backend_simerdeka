@@ -2,7 +2,7 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
-import { OrderCartModel } from "../../models/mysql/orders/cart";
+import { OrderCartModel } from "../../models/orders/cart";
 import { requestChecker } from "../../utilities/requestCheker";
 
 export const addToCart = async (req: any, res: Response) => {
