@@ -3,11 +3,12 @@ import { sequelize } from "..";
 import { ZygoteAttributes, ZygoteModel } from "../zygote";
 
 export interface UserAttributes extends ZygoteAttributes {
+	user_id: string;
 	user_name: string;
 	email: string;
 	password: string;
 	photo: string;
-	role: "lecturer" | "student";
+	role: "lecture" | "student";
 }
 
 // we're telling the Model that 'id' is optional
@@ -21,6 +22,10 @@ export const UserModel = sequelize.define<UserInstance>(
 	"user",
 	{
 		...ZygoteModel,
+		user_id: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 		user_name: {
 			type: DataTypes.STRING,
 			allowNull: false,

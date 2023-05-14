@@ -1,15 +1,16 @@
 import express, { Express, Request, Response } from "express";
 import { index } from "../controllers";
 import { middleware } from "../middlewares";
-import { ORDER_CART } from "../controllers/cart";
+import * as USER from "../controllers/user";
 
 export const route = (app: Express) => {
 	app.get("/", middleware.useAuthorization, (req: Request, res: Response) => index(req, res));
 
-	const oderRouter = express.Router();
-	app.use("/order", middleware.useAuthorization, oderRouter);
-	oderRouter.get("/cart/list", (req: Request, res: Response) => ORDER_CART.list(req, res));
-	oderRouter.get("/cart", (req: Request, res: Response) => ORDER_CART.single(req, res));
-	oderRouter.post("/cart", (req: Request, res: Response) => ORDER_CART.add(req, res));
-	oderRouter.delete("/cart", (req: Request, res: Response) => ORDER_CART.delete(req, res));
+	const userRouter = express.Router();
+	app.use("/user", userRouter);
+	userRouter.post("/register", (req: Request, res: Response) => USER.register(req, res));
+	userRouter.post("/login", (req: Request, res: Response) => USER.login(req, res));
+	userRouter.post("/logout", (req: Request, res: Response) => USER.logout(req, res));
+
+	userRouter.get("/test", middleware.useAuthorization, (req: Request, res: Response) => req);
 };

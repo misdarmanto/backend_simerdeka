@@ -1,0 +1,19 @@
+import jwt from "jsonwebtoken";
+import { CONFIG } from "../config";
+
+export interface JwtPayloadTypes {
+	user_id: string;
+	role: "lecture" | "student";
+}
+
+export function generateAccessToken(username: JwtPayloadTypes) {
+	return jwt.sign(username, CONFIG.secret.token, { expiresIn: "1800s" });
+}
+
+export function verifyAccessToken(token: string) {
+	try {
+		return jwt.verify(token, CONFIG.secret.token);
+	} catch {
+		return false;
+	}
+}
