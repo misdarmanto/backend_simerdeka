@@ -7,8 +7,8 @@ import cors from "cors";
 
 const app: Express = express();
 app.use(cors({ origin: true, credentials: true }));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
+app.use(bodyParser.json({ limit: "100mb" }));
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
@@ -24,4 +24,4 @@ app.use(function (req, res, next) {
 app.routes = route(app);
 
 const PORT = CONFIG.port;
-app.listen(PORT, () => console.log(`listening on ${PORT}`));
+app.listen(PORT, () => console.log(`listening on http://localhost:${PORT}`));

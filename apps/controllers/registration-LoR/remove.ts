@@ -1,16 +1,15 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { Op } from "sequelize";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { hashPassword } from "../../utilities/scure_password";
+import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { UserAttributes, UserModel } from "../../models/users/user";
+import { RegistrationLoRAttributes, RegistrationLoRModel } from "../../models/registration-LoR";
 
-export const login = async (req: any, res: Response) => {
-	const body = <UserAttributes>req.body;
+export const remove = async (req: any, res: Response) => {
+	const body = <RegistrationLoRAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["email", "password"],
+		requireList: ["registration_LoR_id"],
 		requestData: body,
 	});
 
@@ -21,32 +20,26 @@ export const login = async (req: any, res: Response) => {
 	}
 
 	try {
-		const user = await UserModel.findOne({
-			raw: true,
+		const registrationCheck = await RegistrationLoRModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				[Op.or]: [
-					{ user_name: { [Op.eq]: body.user_name } },
-					{ email: { [Op.eq]: body.email } },
-				],
+				registration_LoR_id: { [Op.eq]: req.query.registration_LoR_id },
 			},
-			attributes: ["user_id", "user_name", "email", "photo", "role"],
 		});
 
-		if (!user) {
-			const message = "Akun tidak ditemukan. Silahkan lakukan pendaftaran terlebih dahulu!";
+		if (!registrationCheck) {
+			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		if (hashPassword(body.password) !== user?.password) {
-			const message = "kombinasi email dan password tidak ditemukan!";
-			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.UNAUTHORIZED).json(response);
-		}
+		await RegistrationLoRModel.update(
+			{ deleted: 1 },
+			{ where: { registration_LoR_id: { [Op.eq]: body.registration_LoR_id } } }
+		);
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = user;
+		response.data = { message: "success" };
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);

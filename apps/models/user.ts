@@ -1,14 +1,14 @@
 import { DataTypes, Model, Optional } from "sequelize";
-import { sequelize } from "..";
-import { ZygoteAttributes, ZygoteModel } from "../zygote";
+import { sequelize } from ".";
+import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface UserAttributes extends ZygoteAttributes {
 	user_id: string;
-	user_name: string;
+	name: string;
 	email: string;
 	password: string;
 	photo: string;
-	role: "lecture" | "student";
+	role: "mahasiswa" | "prodi" | "jurusan" | "tim_mbkm";
 }
 
 // we're telling the Model that 'id' is optional
@@ -26,7 +26,7 @@ export const UserModel = sequelize.define<UserInstance>(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		user_name: {
+		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
@@ -43,7 +43,7 @@ export const UserModel = sequelize.define<UserInstance>(
 			allowNull: true,
 		},
 		role: {
-			type: DataTypes.ENUM("student", "lecture"),
+			type: DataTypes.ENUM("mahasiswa", "prodi", "jurusan", "tim_mbkm"),
 			allowNull: false,
 		},
 	},

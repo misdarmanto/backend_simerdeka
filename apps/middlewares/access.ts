@@ -10,6 +10,7 @@ export const useAuthorization = (req: Request | any, res: Response, next: NextFu
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
 		}
+
 		const token = req.header("authorization")?.split(" ")[1];
 		const user = verifyAccessToken(token);
 
@@ -18,7 +19,6 @@ export const useAuthorization = (req: Request | any, res: Response, next: NextFu
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
 		}
-
 		next();
 	} catch (error) {
 		console.log(error);

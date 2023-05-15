@@ -1,18 +1,18 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { Op } from "sequelize";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { hashPassword } from "../../utilities/scure_password";
-import { UserAttributes, UserModel } from "../../models/users/user";
+import { Op } from "sequelize";
+import {
+	RegistrationProgramAttributes,
+	RegistrationProgramModel,
+} from "../../models/register-program";
 import { requestChecker } from "../../utilities/requestCheker";
-import { v4 as uuidv4 } from "uuid";
-import { generateAccessToken } from "../../utilities/jwt";
 
-export const register = async (req: any, res: Response) => {
-	const body = <UserAttributes>req.body;
+export const remove = async (req: any, res: Response) => {
+	const body = <RegistrationProgramAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["user_name", "email", "password", "role"],
+		requireList: ["registration_program_id"],
 		requestData: body,
 	});
 
@@ -23,29 +23,27 @@ export const register = async (req: any, res: Response) => {
 	}
 
 	try {
-		const user = await UserModel.findOne({
-			raw: true,
+		const registrationCheck = await RegistrationProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				email: { [Op.eq]: body.email },
+				registration_program_id: { [Op.eq]: req.query.registration_program_id },
 			},
 		});
 
-		if (user) {
-			const message = `Email ${user.email} sudah terdaftar. Silahkan gunakan email lain.`;
+		if (!registrationCheck) {
+			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.BAD_REQUEST).json(response);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		body.password = hashPassword(body.password);
-		body.user_id = uuidv4();
-		await UserModel.create(body);
-
-		const token = generateAccessToken({ user_id: body.user_id, role: body.role });
+		await RegistrationProgramModel.update(
+			{ deleted: 1 },
+			{ where: { registration_program_id: { [Op.eq]: body.registration_program_id } } }
+		);
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = token;
-		return res.status(StatusCodes.CREATED).json(response);
+		response.data = { message: "success" };
+		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;
