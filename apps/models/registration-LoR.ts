@@ -3,7 +3,7 @@ import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface RegistrationLoRAttributes extends ZygoteAttributes {
-	registration_LoR_id: string;
+	registration_lor_id: string;
 	user_id: string;
 	student_id: string;
 	student_name: string;
@@ -32,7 +32,7 @@ export const RegistrationLoRModel = sequelize.define<RegistrationLoRInstance>(
 	"registration_LoR",
 	{
 		...ZygoteModel,
-		registration_LoR_id: {
+		registration_lor_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
@@ -74,7 +74,8 @@ export const RegistrationLoRModel = sequelize.define<RegistrationLoRInstance>(
 		},
 		registration_status: {
 			type: DataTypes.ENUM("waiting", "process", "accepted", "rejected"),
-			allowNull: false,
+			allowNull: true,
+			defaultValue: "waiting",
 		},
 	},
 	{

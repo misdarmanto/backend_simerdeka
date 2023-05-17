@@ -9,7 +9,7 @@ export const update = async (req: any, res: Response) => {
 	const body = <RegistrationLoRAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["registration_LoR_id"],
+		requireList: ["registration_lor_id"],
 		requestData: body,
 	});
 
@@ -23,7 +23,7 @@ export const update = async (req: any, res: Response) => {
 		const registrationLoR = await RegistrationLoRModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				registration_LoR_id: { [Op.eq]: body.registration_LoR_id },
+				registration_lor_id: { [Op.eq]: body.registration_lor_id },
 			},
 		});
 

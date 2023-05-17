@@ -44,7 +44,7 @@ export const register = async (req: any, res: Response) => {
 		const token = generateAccessToken({ user_id: body.user_id, role: body.role });
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = token;
+		response.data = { token };
 		return res.status(StatusCodes.CREATED).json(response);
 	} catch (error: any) {
 		console.log(error.message);

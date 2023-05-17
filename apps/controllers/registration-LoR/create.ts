@@ -45,7 +45,7 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.BAD_REQUEST).json(response);
 		}
 
-		body.registration_LoR_id = uuidv4();
+		body.registration_lor_id = uuidv4();
 
 		await RegistrationLoRModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;

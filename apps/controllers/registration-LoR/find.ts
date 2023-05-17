@@ -21,6 +21,19 @@ export const findAll = async (req: any, res: Response) => {
 				limit: page.limit,
 				offset: page.offset,
 			}),
+
+			// attributes: [
+			// 	"registration_lor_id",
+			// 	"user_id",
+			// 	"student_id",
+			// 	"student_name",
+			// 	"student_nim",
+			// 	"student_transkrip",
+			// 	"dosen_wali",
+			// 	"surat_persetujuan_dosen_wali",
+			// 	"program_name",
+			// 	"program_correlation_description",
+			// ],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -38,7 +51,7 @@ export const findOne = async (req: any, res: Response) => {
 	const query = <RegistrationLoRAttributes>req.query;
 
 	const emptyField = requestChecker({
-		requireList: ["registration_LoR_id"],
+		requireList: ["registration_lor_id"],
 		requestData: query,
 	});
 
@@ -52,7 +65,7 @@ export const findOne = async (req: any, res: Response) => {
 		const registrationLoR = await RegistrationLoRModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				registration_LoR_id: { [Op.eq]: query.registration_LoR_id },
+				registration_lor_id: { [Op.eq]: query.registration_lor_id },
 			},
 		});
 

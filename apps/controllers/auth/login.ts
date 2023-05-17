@@ -28,7 +28,6 @@ export const login = async (req: any, res: Response) => {
 				deleted: { [Op.eq]: 0 },
 				email: { [Op.eq]: body.email },
 			},
-			attributes: ["user_id", "user_name", "email", "photo", "role"],
 		});
 
 		if (!user) {
@@ -43,10 +42,10 @@ export const login = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		const token = generateAccessToken({ user_id: body.user_id, role: body.role });
+		const token = generateAccessToken({ user_id: user.user_id, role: body.role });
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = token;
+		response.data = { token };
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);

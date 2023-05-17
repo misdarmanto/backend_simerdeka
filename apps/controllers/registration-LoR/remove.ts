@@ -9,7 +9,7 @@ export const remove = async (req: any, res: Response) => {
 	const body = <RegistrationLoRAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["registration_LoR_id"],
+		requireList: ["registration_lor_id"],
 		requestData: body,
 	});
 
@@ -23,7 +23,7 @@ export const remove = async (req: any, res: Response) => {
 		const registrationCheck = await RegistrationLoRModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				registration_LoR_id: { [Op.eq]: req.query.registration_LoR_id },
+				registration_lor_id: { [Op.eq]: req.query.registration_lor_id },
 			},
 		});
 
@@ -35,7 +35,7 @@ export const remove = async (req: any, res: Response) => {
 
 		await RegistrationLoRModel.update(
 			{ deleted: 1 },
-			{ where: { registration_LoR_id: { [Op.eq]: body.registration_LoR_id } } }
+			{ where: { registration_lor_id: { [Op.eq]: body.registration_lor_id } } }
 		);
 
 		const response = <ResponseDataAttributes>ResponseData.default;
