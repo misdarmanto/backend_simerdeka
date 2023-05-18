@@ -15,11 +15,11 @@ export const route = (app: Express) => {
 
 	const registrationProgramRouter = express.Router();
 	app.use("/registration-programs", middleware.useAuthorization, registrationProgramRouter);
-	registrationProgramRouter.get("/", (req: Request, res: Response) =>
-		registrationProgram.findOne(req, res)
-	);
 	registrationProgramRouter.get("/all", (req: Request, res: Response) =>
 		registrationProgram.findAll(req, res)
+	);
+	registrationProgramRouter.get("/detail/:id", (req: Request, res: Response) =>
+		registrationProgram.findOne(req, res)
 	);
 	registrationProgramRouter.post("/", (req: Request, res: Response) =>
 		registrationProgram.create(req, res)
@@ -33,11 +33,12 @@ export const route = (app: Express) => {
 
 	const registrationLoRRouter = express.Router();
 	app.use("/registration-LoR", middleware.useAuthorization, registrationLoRRouter);
-	registrationLoRRouter.get("/", (req: Request, res: Response) =>
-		registrationLoR.findOne(req, res)
-	);
+
 	registrationLoRRouter.get("/all", (req: Request, res: Response) =>
 		registrationLoR.findAll(req, res)
+	);
+	registrationLoRRouter.get("/detail/:id", (req: Request, res: Response) =>
+		registrationLoR.findOne(req, res)
 	);
 	registrationLoRRouter.post("/", (req: Request, res: Response) =>
 		registrationLoR.create(req, res)

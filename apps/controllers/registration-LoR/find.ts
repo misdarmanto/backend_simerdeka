@@ -48,11 +48,11 @@ export const findAll = async (req: any, res: Response) => {
 };
 
 export const findOne = async (req: any, res: Response) => {
-	const query = <RegistrationLoRAttributes>req.query;
+	const params = <RegistrationLoRAttributes>req.params;
 
 	const emptyField = requestChecker({
-		requireList: ["registration_lor_id"],
-		requestData: query,
+		requireList: ["id"],
+		requestData: params,
 	});
 
 	if (emptyField) {
@@ -65,7 +65,7 @@ export const findOne = async (req: any, res: Response) => {
 		const registrationLoR = await RegistrationLoRModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				registration_lor_id: { [Op.eq]: query.registration_lor_id },
+				registration_lor_id: { [Op.eq]: params.id },
 			},
 		});
 
