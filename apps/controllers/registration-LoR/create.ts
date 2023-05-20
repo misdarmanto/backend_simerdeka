@@ -4,7 +4,10 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
-import { RegistrationLoRAttributes, RegistrationLoRModel } from "../../models/registration-LoR";
+import {
+	RegistrationLoRAttributes,
+	RegistrationLoRModel,
+} from "../../models/registration-LoR";
 
 export const create = async (req: any, res: Response) => {
 	const body = <RegistrationLoRAttributes>req.body;
@@ -46,6 +49,8 @@ export const create = async (req: any, res: Response) => {
 		}
 
 		body.registration_lor_id = uuidv4();
+		body.registration_lor_assign_to_mahasiswa = true;
+		body.registration_lor_assign_to_prodi = true;
 
 		await RegistrationLoRModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;

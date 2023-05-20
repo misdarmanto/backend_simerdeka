@@ -15,7 +15,7 @@ export const CONFIG = {
 		token: process.env.TOKEN_SECRET || "",
 	},
 	authorization: {
-		username: process.env.AUTHORIZATION_USERNAME || "test",
-		passsword: process.env.AUTHORIZATION_PASSWORD || "test",
+		username: process.env.AUTHORIZATION_USERNAME || "simerdeka",
+		passsword: process.env.AUTHORIZATION_PASSWORD || "simerdeka2023",
 	},
 };

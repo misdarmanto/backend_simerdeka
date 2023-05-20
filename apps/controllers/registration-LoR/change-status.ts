@@ -1,18 +1,14 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { Op } from "sequelize";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { hashPassword } from "../../utilities/scure_password";
+import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { UserAttributes, UserModel } from "../../models/user";
-import { generateAccessToken } from "../../utilities/jwt";
+import { RegistrationLoRModel } from "../../models/registration-LoR";
 
-export const login = async (req: any, res: Response) => {
-	const body = <UserAttributes>req.body;
-
+export const changeAssignMentStatus = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
-		requireList: ["user_email", "user_password"],
-		requestData: body,
+		requireList: ["registration_lor_id"],
+		requestData: req.body,
 	});
 
 	if (emptyField) {
@@ -22,33 +18,43 @@ export const login = async (req: any, res: Response) => {
 	}
 
 	try {
-		const user = await UserModel.findOne({
-			raw: true,
+		const registrationLoR = await RegistrationLoRModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_email: { [Op.eq]: body.user_email },
+				registration_lor_id: { [Op.eq]: req.body.registration_lor_id },
 			},
 		});
 
-		if (!user) {
-			const message = "Akun tidak ditemukan. Silahkan lakukan pendaftaran terlebih dahulu!";
+		if (!registrationLoR) {
+			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		if (hashPassword(body.user_password) !== user?.user_password) {
-			const message = "kombinasi email dan password tidak ditemukan!";
-			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		switch (req.body.assign_to) {
+			case "mahasiswa":
+				registrationLoR.registration_lor_assign_to_mahasiswa = true;
+				break;
+			case "prodi":
+				registrationLoR.registration_lor_assign_to_prodi = true;
+				break;
+			case "jurusan":
+				registrationLoR.registration_lor_assign_to_jurusan = true;
+				break;
+			case "akademik":
+				registrationLoR.registration_lor_assign_to_akademik = true;
+				break;
+			case "biro":
+				registrationLoR.registration_lor_assign_to_biro = true;
+				break;
+			default:
+				break;
 		}
 
-		const token = generateAccessToken({
-			user_id: user.user_id,
-			role: body.user_role,
-		});
+		await registrationLoR.save();
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = { token };
+		response.data = { message: "success" };
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);

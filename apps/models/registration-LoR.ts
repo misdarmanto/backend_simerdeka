@@ -13,7 +13,13 @@ export interface RegistrationLoRAttributes extends ZygoteAttributes {
 	surat_persetujuan_dosen_wali: string;
 	program_name: string;
 	program_correlation_description: string;
-	registration_status: "waiting" | "process" | "accepted" | "rejected";
+	registration_status: "waiting" | "accepted" | "rejected";
+	registration_status_message: string;
+	registration_lor_assign_to_mahasiswa: boolean;
+	registration_lor_assign_to_prodi: boolean;
+	registration_lor_assign_to_jurusan: boolean;
+	registration_lor_assign_to_akademik: boolean;
+	registration_lor_assign_to_biro: boolean;
 }
 
 // we're telling the Model that 'id' is optional
@@ -73,9 +79,33 @@ export const RegistrationLoRModel = sequelize.define<RegistrationLoRInstance>(
 			allowNull: false,
 		},
 		registration_status: {
-			type: DataTypes.ENUM("waiting", "process", "accepted", "rejected"),
+			type: DataTypes.ENUM("waiting", "accepted", "rejected"),
 			allowNull: true,
 			defaultValue: "waiting",
+		},
+		registration_status_message: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		registration_lor_assign_to_mahasiswa: {
+			type: DataTypes.BOOLEAN,
+			allowNull: true,
+		},
+		registration_lor_assign_to_prodi: {
+			type: DataTypes.BOOLEAN,
+			allowNull: true,
+		},
+		registration_lor_assign_to_jurusan: {
+			type: DataTypes.BOOLEAN,
+			allowNull: true,
+		},
+		registration_lor_assign_to_akademik: {
+			type: DataTypes.BOOLEAN,
+			allowNull: true,
+		},
+		registration_lor_assign_to_biro: {
+			type: DataTypes.BOOLEAN,
+			allowNull: true,
 		},
 	},
 	{

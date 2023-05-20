@@ -4,19 +4,24 @@ import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface UserAttributes extends ZygoteAttributes {
 	user_id: string;
-	name: string;
-	email: string;
-	password: string;
-	photo: string;
-	role: "mahasiswa" | "prodi" | "jurusan" | "tim_mbkm";
+	user_name: string;
+	user_email: string;
+	user_password: string;
+	user_photo: string;
+	user_role: "mahasiswa" | "prodi" | "jurusan" | "akademik" | "biro";
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type UserCreationAttributes = Optional<UserAttributes, "id" | "created_on" | "modified_on">;
+type UserCreationAttributes = Optional<
+	UserAttributes,
+	"id" | "created_on" | "modified_on"
+>;
 
 // We need to declare an interface for our model that is basically what our class would be
-interface UserInstance extends Model<UserAttributes, UserCreationAttributes>, UserAttributes {}
+interface UserInstance
+	extends Model<UserAttributes, UserCreationAttributes>,
+		UserAttributes {}
 
 export const UserModel = sequelize.define<UserInstance>(
 	"user",
@@ -26,24 +31,24 @@ export const UserModel = sequelize.define<UserInstance>(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		name: {
+		user_name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		email: {
+		user_email: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		password: {
+		user_password: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		photo: {
+		user_photo: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		role: {
-			type: DataTypes.ENUM("mahasiswa", "prodi", "jurusan", "tim_mbkm"),
+		user_role: {
+			type: DataTypes.ENUM("mahasiswa", "prodi", "jurusan", "akademik", "biro"),
 			allowNull: false,
 		},
 	},

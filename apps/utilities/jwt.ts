@@ -3,7 +3,7 @@ import { CONFIG } from "../config";
 
 export interface JwtPayloadTypes {
 	user_id: string;
-	role: "mahasiswa" | "prodi" | "jurusan" | "tim_mbkm";
+	role: "mahasiswa" | "prodi" | "jurusan" | "akademik" | "biro";
 }
 
 export function generateAccessToken(username: JwtPayloadTypes) {

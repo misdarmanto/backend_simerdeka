@@ -1,19 +1,14 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { Op } from "sequelize";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { hashPassword } from "../../utilities/scure_password";
-import { UserAttributes, UserModel } from "../../models/user";
+import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { v4 as uuidv4 } from "uuid";
-import { generateAccessToken } from "../../utilities/jwt";
+import { UserModel } from "../../models/user";
 
-export const register = async (req: any, res: Response) => {
-	const body = <UserAttributes>req.body;
-
+export const findOne = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
-		requireList: ["user_name", "user_email", "user_password", "user_role"],
-		requestData: body,
+		requireList: ["id"],
+		requestData: req.params,
 	});
 
 	if (emptyField) {
@@ -24,31 +19,22 @@ export const register = async (req: any, res: Response) => {
 
 	try {
 		const user = await UserModel.findOne({
-			raw: true,
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_email: { [Op.eq]: body.user_email },
+				user_id: { [Op.eq]: req.params.id },
 			},
+			attributes: ["user_id", "user_name", "user_email", "user_role"],
 		});
 
-		if (user) {
-			const message = `Email ${user.user_email} sudah terdaftar. Silahkan gunakan email lain.`;
+		if (!user) {
+			const message = `user not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.BAD_REQUEST).json(response);
+			return res.status(StatusCodes.FORBIDDEN).json(response);
 		}
 
-		body.user_password = hashPassword(body.user_password);
-		body.user_id = uuidv4();
-		await UserModel.create(body);
-
-		const token = generateAccessToken({
-			user_id: body.user_id,
-			role: body.user_role,
-		});
-
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = { token };
-		return res.status(StatusCodes.CREATED).json(response);
+		response.data = user;
+		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;

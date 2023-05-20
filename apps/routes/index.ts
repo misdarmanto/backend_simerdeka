@@ -10,11 +10,19 @@ export const route = (app: Express) => {
 
 	const userRouter = express.Router();
 	app.use("/users", userRouter);
-	userRouter.post("/register", (req: Request, res: Response) => auth.register(req, res));
+	userRouter.post("/register", (req: Request, res: Response) =>
+		auth.register(req, res)
+	);
 	userRouter.post("/login", (req: Request, res: Response) => auth.login(req, res));
 
+	userRouter.get("/me/:id", (req: Request, res: Response) => auth.findOne(req, res));
+
 	const registrationProgramRouter = express.Router();
-	app.use("/registration-programs", middleware.useAuthorization, registrationProgramRouter);
+	app.use(
+		"/registration-programs",
+		middleware.useAuthorization,
+		registrationProgramRouter
+	);
 	registrationProgramRouter.get("/all", (req: Request, res: Response) =>
 		registrationProgram.findAll(req, res)
 	);
@@ -48,5 +56,8 @@ export const route = (app: Express) => {
 	);
 	registrationLoRRouter.delete("/", (req: Request, res: Response) =>
 		registrationLoR.remove(req, res)
+	);
+	registrationLoRRouter.patch("/change-status", (req: Request, res: Response) =>
+		registrationLoR.changeAssignMentStatus(req, res)
 	);
 };

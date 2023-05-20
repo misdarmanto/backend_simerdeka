@@ -3,7 +3,10 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { RegistrationLoRAttributes, RegistrationLoRModel } from "../../models/registration-LoR";
+import {
+	RegistrationLoRAttributes,
+	RegistrationLoRModel,
+} from "../../models/registration-LoR";
 
 export const update = async (req: any, res: Response) => {
 	const body = <RegistrationLoRAttributes>req.body;
@@ -37,9 +40,9 @@ export const update = async (req: any, res: Response) => {
 		registrationLoR.dosen_wali = body.dosen_wali;
 		registrationLoR.surat_persetujuan_dosen_wali = body.surat_persetujuan_dosen_wali;
 		registrationLoR.program_name = body.program_name;
-		registrationLoR.program_correlation_description = body.program_correlation_description;
+		registrationLoR.program_correlation_description =
+			body.program_correlation_description;
 		registrationLoR.registration_status = body.registration_status;
-
 		await registrationLoR.save();
 
 		const response = <ResponseDataAttributes>ResponseData.default;
