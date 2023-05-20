@@ -2,38 +2,38 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
-export interface RegistrationProgramAttributes extends ZygoteAttributes {
-	registration_program_id: string;
-	user_id: string;
+export interface ProgramAttributes extends ZygoteAttributes {
+	program_id: string;
+	program_user_id: string;
 	program_name: string;
 	program_description: string;
 	program_owner: string;
 	program_type: string;
-	lecture_syllabus: string;
-	sks_conversion: number;
+	program_syllabus: string;
+	program_sks_conversion: number;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type RegistrationProgramCreationAttributes = Optional<
-	RegistrationProgramAttributes,
+type ProgramCreationAttributes = Optional<
+	ProgramAttributes,
 	"id" | "created_on" | "modified_on"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
-interface RegistrationProgramInstance
-	extends Model<RegistrationProgramAttributes, RegistrationProgramCreationAttributes>,
-		RegistrationProgramAttributes {}
+interface ProgramInstance
+	extends Model<ProgramAttributes, ProgramCreationAttributes>,
+		ProgramAttributes {}
 
-export const RegistrationProgramModel = sequelize.define<RegistrationProgramInstance>(
-	"registration_program",
+export const ProgramModel = sequelize.define<ProgramInstance>(
+	"program",
 	{
 		...ZygoteModel,
-		registration_program_id: {
+		program_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		user_id: {
+		program_user_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
@@ -53,11 +53,11 @@ export const RegistrationProgramModel = sequelize.define<RegistrationProgramInst
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		lecture_syllabus: {
+		program_syllabus: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		sks_conversion: {
+		program_sks_conversion: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
@@ -65,7 +65,7 @@ export const RegistrationProgramModel = sequelize.define<RegistrationProgramInst
 	{
 		...sequelize,
 		timestamps: false,
-		tableName: "registration_program",
+		tableName: "program",
 		deletedAt: false,
 		paranoid: true,
 		underscored: true,

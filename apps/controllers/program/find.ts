@@ -3,16 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
-import {
-	RegistrationProgramAttributes,
-	RegistrationProgramModel,
-} from "../../models/register-program";
+import { ProgramAttributes, ProgramModel } from "../../models/program";
 import { requestChecker } from "../../utilities/requestCheker";
 
 export const findAll = async (req: any, res: Response) => {
 	try {
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await RegistrationProgramModel.findAndCountAll({
+		const result = await ProgramModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
@@ -38,11 +35,11 @@ export const findAll = async (req: any, res: Response) => {
 };
 
 export const findOne = async (req: any, res: Response) => {
-	const query = <RegistrationProgramAttributes>req.query;
+	const params = <ProgramAttributes>req.params;
 
 	const emptyField = requestChecker({
-		requireList: ["registration_program_id"],
-		requestData: query,
+		requireList: ["id"],
+		requestData: req.params,
 	});
 
 	if (emptyField) {
@@ -52,10 +49,10 @@ export const findOne = async (req: any, res: Response) => {
 	}
 
 	try {
-		const registration = await RegistrationProgramModel.findOne({
+		const registration = await ProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				registration_program_id: { [Op.eq]: query.registration_program_id },
+				program_id: { [Op.eq]: params.id },
 			},
 		});
 

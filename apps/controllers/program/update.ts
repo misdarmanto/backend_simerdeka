@@ -2,26 +2,14 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
-import {
-	RegistrationProgramAttributes,
-	RegistrationProgramModel,
-} from "../../models/register-program";
 import { requestChecker } from "../../utilities/requestCheker";
-import { v4 as uuidv4 } from "uuid";
+import { ProgramAttributes, ProgramModel } from "../../models/program";
 
-export const create = async (req: any, res: Response) => {
-	const body = <RegistrationProgramAttributes>req.body;
+export const update = async (req: any, res: Response) => {
+	const body = <ProgramAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: [
-			"user_id",
-			"program_name",
-			"program_description",
-			"program_owner",
-			"program_type",
-			"lecture_syllabus",
-			"sks_conversion",
-		],
+		requireList: ["program_id"],
 		requestData: body,
 	});
 
@@ -32,25 +20,31 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		const registrationCheck = await RegistrationProgramModel.findOne({
+		const registration = await ProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: body.user_id },
+				program_id: { [Op.eq]: body.program_id },
 			},
 		});
 
-		if (registrationCheck) {
-			const message = "already registered";
+		if (!registration) {
+			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.BAD_REQUEST).json(response);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		body.registration_program_id = uuidv4();
+		registration.program_name = body.program_name;
+		registration.program_description = body.program_description;
+		registration.program_owner = body.program_owner;
+		registration.program_type = body.program_type;
+		registration.program_syllabus = body.program_syllabus;
+		registration.program_sks_conversion = body.program_sks_conversion;
 
-		await RegistrationProgramModel.create(body);
+		await registration.save();
+
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
-		return res.status(StatusCodes.CREATED).json(response);
+		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;

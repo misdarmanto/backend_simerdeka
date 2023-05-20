@@ -2,17 +2,14 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
+import { ProgramAttributes, ProgramModel } from "../../models/program";
 import { requestChecker } from "../../utilities/requestCheker";
-import {
-	RegistrationProgramAttributes,
-	RegistrationProgramModel,
-} from "../../models/register-program";
 
-export const update = async (req: any, res: Response) => {
-	const body = <RegistrationProgramAttributes>req.body;
+export const remove = async (req: any, res: Response) => {
+	const body = <ProgramAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["registration_program_id"],
+		requireList: ["program_id"],
 		requestData: body,
 	});
 
@@ -23,27 +20,27 @@ export const update = async (req: any, res: Response) => {
 	}
 
 	try {
-		const registration = await RegistrationProgramModel.findOne({
+		const registrationCheck = await ProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				registration_program_id: { [Op.eq]: body.registration_program_id },
+				program_id: { [Op.eq]: req.query.program_id },
 			},
 		});
 
-		if (!registration) {
+		if (!registrationCheck) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		registration.program_name = body.program_name;
-		registration.program_description = body.program_description;
-		registration.program_owner = body.program_owner;
-		registration.program_type = body.program_type;
-		registration.lecture_syllabus = body.lecture_syllabus;
-		registration.sks_conversion = body.sks_conversion;
-
-		await registration.save();
+		await ProgramModel.update(
+			{ deleted: 1 },
+			{
+				where: {
+					program_id: { [Op.eq]: body.program_id },
+				},
+			}
+		);
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
