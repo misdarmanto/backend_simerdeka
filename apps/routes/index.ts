@@ -4,6 +4,7 @@ import { middleware } from "../middlewares";
 import * as auth from "../controllers/auth";
 import * as program from "../controllers/program";
 import * as letterOfRecomendation from "../controllers/registration-LoR";
+import { semesterRoutes } from "./semester";
 
 export const route = (app: Express) => {
 	app.get("/", (req: Request, res: Response) => index(req, res));
@@ -25,6 +26,12 @@ export const route = (app: Express) => {
 	programRouter.post("/", (req: Request, res: Response) => program.create(req, res));
 	programRouter.patch("/", (req: Request, res: Response) => program.update(req, res));
 	programRouter.delete("/", (req: Request, res: Response) => program.remove(req, res));
+	programRouter.get("/my-programs", (req: Request, res: Response) =>
+		program.findAllMyProgram(req, res)
+	);
+	programRouter.get("/my-programs/detail/:id", (req: Request, res: Response) =>
+		program.findMyProgram(req, res)
+	);
 
 	const letterOfRecomendationRouter = express.Router();
 	app.use(
@@ -51,4 +58,6 @@ export const route = (app: Express) => {
 	letterOfRecomendationRouter.patch("/change-status", (req: Request, res: Response) =>
 		letterOfRecomendation.changeAssignMentStatus(req, res)
 	);
+
+	semesterRoutes(app);
 };

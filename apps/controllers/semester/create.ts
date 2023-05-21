@@ -1,22 +1,14 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { ProgramAttributes, ProgramModel } from "../../models/program";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
+import { SemesterAttributes, SemesterModel } from "../../models/semester";
 
 export const create = async (req: any, res: Response) => {
-	const body = <ProgramAttributes>req.body;
+	const body = <SemesterAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: [
-			"program_user_id",
-			"program_name",
-			"program_description",
-			"program_owner",
-			"program_type",
-			"program_syllabus",
-			"program_sks_conversion",
-		],
+		requireList: ["semester_created_by", "semester_name", "semester_type"],
 		requestData: body,
 	});
 
@@ -27,8 +19,8 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.program_id = uuidv4();
-		await ProgramModel.create(body);
+		body.semester_id = uuidv4();
+		await SemesterModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
 		return res.status(StatusCodes.CREATED).json(response);
