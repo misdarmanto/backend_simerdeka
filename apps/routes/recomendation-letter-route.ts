@@ -2,9 +2,9 @@ import express, { Express, Request, Response } from "express";
 import { middleware } from "../middlewares";
 import * as letterOfRecomendation from "../controllers/registration-LoR";
 
-export const letterOfRecomendationRoutes = (app: Express) => {
+export const RecomendationLetterRoutes = (app: Express) => {
 	const route = express.Router();
-	app.use("/registration-LoR", middleware.useAuthorization, route);
+	app.use("/recomendation-letter", middleware.useAuthorization, route);
 
 	route.get("/all", (req: Request, res: Response) =>
 		letterOfRecomendation.findAll(req, res)

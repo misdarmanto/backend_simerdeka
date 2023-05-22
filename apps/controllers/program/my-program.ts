@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
-import { ProgramModel } from "../../models/program";
+import { ProgramModel } from "../../models/akademik-program";
 import { requestChecker } from "../../utilities/requestCheker";
 
 export const findAllMyProgram = async (req: any, res: Response) => {
@@ -51,7 +51,7 @@ export const findMyProgram = async (req: any, res: Response) => {
 		const registration = await ProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				program_user_id: { [Op.eq]: req.header("x-user-id") },
+				// program_user_id: { [Op.eq]: req.header("x-user-id") },
 				program_id: { [Op.eq]: req.params.id },
 			},
 		});

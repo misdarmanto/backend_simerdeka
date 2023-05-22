@@ -4,13 +4,11 @@ import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface ProgramAttributes extends ZygoteAttributes {
 	program_id: string;
-	program_user_id: string;
+	program_created_by: string;
 	program_name: string;
 	program_description: string;
-	program_owner: string;
 	program_type: string;
-	program_syllabus: string;
-	program_sks_conversion: number;
+	program_jurusan_id: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -33,7 +31,7 @@ export const ProgramModel = sequelize.define<ProgramInstance>(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		program_user_id: {
+		program_created_by: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
@@ -45,21 +43,13 @@ export const ProgramModel = sequelize.define<ProgramInstance>(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		program_owner: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
 		program_type: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		program_syllabus: {
+		program_jurusan_id: {
 			type: DataTypes.STRING,
 			allowNull: true,
-		},
-		program_sks_conversion: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
 		},
 	},
 	{

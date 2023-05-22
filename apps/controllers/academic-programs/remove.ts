@@ -2,14 +2,14 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
-import { ProgramAttributes, ProgramModel } from "../../models/akademik-program";
 import { requestChecker } from "../../utilities/requestCheker";
+import { SemesterAttributes, SemesterModel } from "../../models/semester";
 
 export const remove = async (req: any, res: Response) => {
-	const body = <ProgramAttributes>req.body;
+	const body = <SemesterAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["program_id"],
+		requireList: ["semester_id"],
 		requestData: body,
 	});
 
@@ -20,24 +20,24 @@ export const remove = async (req: any, res: Response) => {
 	}
 
 	try {
-		const registrationCheck = await ProgramModel.findOne({
+		const semesterCheck = await SemesterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				program_id: { [Op.eq]: req.query.program_id },
+				semester_id: { [Op.eq]: req.body.semester_id },
 			},
 		});
 
-		if (!registrationCheck) {
+		if (!semesterCheck) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await ProgramModel.update(
+		await SemesterModel.update(
 			{ deleted: 1 },
 			{
 				where: {
-					program_id: { [Op.eq]: body.program_id },
+					semester_id: { [Op.eq]: body.semester_id },
 				},
 			}
 		);

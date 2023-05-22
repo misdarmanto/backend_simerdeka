@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { ProgramAttributes, ProgramModel } from "../../models/program";
+import { ProgramAttributes, ProgramModel } from "../../models/akademik-program";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
 
@@ -9,13 +9,11 @@ export const create = async (req: any, res: Response) => {
 	const body = <ProgramAttributes>req.body;
 	const emptyField = requestChecker({
 		requireList: [
-			"program_user_id",
+			"program_created_by",
 			"program_name",
 			"program_description",
-			"program_owner",
 			"program_type",
-			"program_syllabus",
-			"program_sks_conversion",
+			"program_jurusan_id",
 		],
 		requestData: body,
 	});

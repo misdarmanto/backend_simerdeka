@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { ProgramAttributes, ProgramModel } from "../../models/program";
+import { ProgramAttributes, ProgramModel } from "../../models/akademik-program";
 
 export const update = async (req: any, res: Response) => {
 	const body = <ProgramAttributes>req.body;
@@ -35,10 +35,7 @@ export const update = async (req: any, res: Response) => {
 
 		registration.program_name = body.program_name;
 		registration.program_description = body.program_description;
-		registration.program_owner = body.program_owner;
 		registration.program_type = body.program_type;
-		registration.program_syllabus = body.program_syllabus;
-		registration.program_sks_conversion = body.program_sks_conversion;
 
 		await registration.save();
 
