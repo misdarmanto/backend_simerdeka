@@ -1,31 +1,37 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { requestChecker } from "../../utilities/requestCheker";
-import { v4 as uuidv4 } from "uuid";
-import { ListJurusanAttributes, ListJurusanModel } from "../../models/list-jurusan";
-import { ListProdiAttributes, ListProdiModel } from "../../models/list-prodi";
 import { Op } from "sequelize";
+import { Pagination } from "../../utilities/pagination";
+import { requestChecker } from "../../utilities/requestCheker";
+import {
+	AcademicProgramAttributes,
+	AcademicProgramModel,
+} from "../../models/academic-program";
+import { SemesterModel } from "../../models/semester";
+import { ListOfMajorModel } from "../../models/list-of-major";
 
-export const createJurusan = async (req: any, res: Response) => {
-	const body = <ListJurusanAttributes>req.body;
-	const emptyField = requestChecker({
-		requireList: ["jurusan_name"],
-		requestData: body,
-	});
-
-	if (emptyField) {
-		const message = `invalid request parameter! require (${emptyField})`;
-		const response = <ResponseDataAttributes>ResponseData.error(message);
-		return res.status(StatusCodes.BAD_REQUEST).json(response);
-	}
-
+export const findAll = async (req: any, res: Response) => {
 	try {
-		body.jurusan_id = uuidv4();
-		await ListJurusanModel.create(body);
+		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
+		const result = await AcademicProgramModel.findAndCountAll({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				...(req.query.search && {
+					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
+				}),
+			},
+			order: [["id", "desc"]],
+			...(req.query.pagination == "true" && {
+				limit: page.limit,
+				offset: page.offset,
+			}),
+			include: [SemesterModel, ListOfMajorModel],
+		});
+
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = { message: "success" };
-		return res.status(StatusCodes.CREATED).json(response);
+		response.data = page.data(result);
+		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;
@@ -34,11 +40,12 @@ export const createJurusan = async (req: any, res: Response) => {
 	}
 };
 
-export const createProdi = async (req: any, res: Response) => {
-	const body = <ListProdiAttributes>req.body;
+export const findOne = async (req: any, res: Response) => {
+	const params = <AcademicProgramAttributes>req.params;
+
 	const emptyField = requestChecker({
-		requireList: ["prodi_name", "jurusan_id"],
-		requestData: body,
+		requireList: ["id"],
+		requestData: req.params,
 	});
 
 	if (emptyField) {
@@ -48,24 +55,22 @@ export const createProdi = async (req: any, res: Response) => {
 	}
 
 	try {
-		const jurusanCheck = await ListJurusanModel.findOne({
+		const AcademicProgramAttributes = await AcademicProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				jurusan_id: { [Op.eq]: body.jurusan_id },
+				academic_program_id: { [Op.eq]: params.id },
 			},
 		});
 
-		if (!jurusanCheck) {
+		if (!AcademicProgramAttributes) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		body.prodi_id = uuidv4();
-		await ListProdiModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = { message: "success" };
-		return res.status(StatusCodes.CREATED).json(response);
+		response.data = AcademicProgramAttributes;
+		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;

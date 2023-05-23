@@ -2,14 +2,17 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
-import { ProgramAttributes, ProgramModel } from "../../models/akademik-program";
 import { requestChecker } from "../../utilities/requestCheker";
+import {
+	AcademicProgramAttributes,
+	AcademicProgramModel,
+} from "../../models/academic-program";
 
-export const remove = async (req: any, res: Response) => {
-	const body = <ProgramAttributes>req.body;
+export const update = async (req: any, res: Response) => {
+	const body = <AcademicProgramAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["program_id"],
+		requireList: ["academic_program_id"],
 		requestData: body,
 	});
 
@@ -20,27 +23,24 @@ export const remove = async (req: any, res: Response) => {
 	}
 
 	try {
-		const registrationCheck = await ProgramModel.findOne({
+		const academicProgram = await AcademicProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				program_id: { [Op.eq]: req.query.program_id },
+				academic_program_id: { [Op.eq]: body.academic_program_id },
 			},
 		});
 
-		if (!registrationCheck) {
+		if (!academicProgram) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await ProgramModel.update(
-			{ deleted: 1 },
-			{
-				where: {
-					program_id: { [Op.eq]: body.program_id },
-				},
-			}
-		);
+		academicProgram.academic_program_name = body.academic_program_name;
+		academicProgram.major_id = body.major_id;
+		academicProgram.academic_program_type = body.academic_program_type;
+
+		await academicProgram.save();
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

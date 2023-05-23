@@ -4,18 +4,20 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
-import { SemesterAttributes, SemesterModel } from "../../models/semester";
-import { ListJurusanModel } from "../../models/list-jurusan";
-import { ListProdiAttributes, ListProdiModel } from "../../models/list-prodi";
+import { ListOfMajorModel } from "../../models/list-of-major";
+import {
+	ListOfStudyModel,
+	ListOfStudyProgramAttributes,
+} from "../../models/list-study-program";
 
 export const findAll = async (req: any, res: Response) => {
 	try {
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await ListJurusanModel.findAndCountAll({
+		const result = await ListOfMajorModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [{ jurusan_name: { [Op.like]: `%${req.query.search}%` } }],
+					[Op.or]: [{ major_name: { [Op.like]: `%${req.query.search}%` } }],
 				}),
 			},
 			order: [["id", "desc"]],
@@ -24,7 +26,7 @@ export const findAll = async (req: any, res: Response) => {
 				offset: page.offset,
 			}),
 
-			include: [ListProdiModel],
+			include: [ListOfStudyModel],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -38,9 +40,9 @@ export const findAll = async (req: any, res: Response) => {
 	}
 };
 
-export const findAllJurusan = async (req: any, res: Response) => {
+export const findAllMajor = async (req: any, res: Response) => {
 	try {
-		const allJurusan = await ListJurusanModel.findAll({
+		const allJurusan = await ListOfMajorModel.findAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
 			},
@@ -56,10 +58,10 @@ export const findAllJurusan = async (req: any, res: Response) => {
 	}
 };
 
-export const findAllProdi = async (req: any, res: Response) => {
-	const query = <ListProdiAttributes>req.query;
+export const findAllStudyProgram = async (req: any, res: Response) => {
+	const query = <ListOfStudyProgramAttributes>req.query;
 	const emptyField = requestChecker({
-		requireList: ["jurusan_id"],
+		requireList: ["major_id"],
 		requestData: query,
 	});
 
@@ -69,14 +71,14 @@ export const findAllProdi = async (req: any, res: Response) => {
 		return res.status(StatusCodes.BAD_REQUEST).json(response);
 	}
 	try {
-		const allProdi = await ListProdiModel.findAll({
+		const studyPrograms = await ListOfStudyModel.findAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				jurusan_id: query.jurusan_id,
+				major_id: query.major_id,
 			},
 		});
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = allProdi;
+		response.data = studyPrograms;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
