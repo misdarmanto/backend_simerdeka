@@ -3,12 +3,17 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { RegistrationLoRModel } from "../../models/registration-LoR";
+import {
+	RecomendationLetterAttributes,
+	RecomendationLetterModel,
+} from "../../models/recomendation-letter";
 
-export const changeAssignMentStatus = async (req: any, res: Response) => {
+export const update = async (req: any, res: Response) => {
+	const body = <RecomendationLetterAttributes>req.body;
+
 	const emptyField = requestChecker({
-		requireList: ["registration_lor_id"],
-		requestData: req.body,
+		requireList: ["recomendation_letter_id"],
+		requestData: body,
 	});
 
 	if (emptyField) {
@@ -18,40 +23,28 @@ export const changeAssignMentStatus = async (req: any, res: Response) => {
 	}
 
 	try {
-		const registrationLoR = await RegistrationLoRModel.findOne({
+		const recomendationLetter = await RecomendationLetterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				registration_lor_id: { [Op.eq]: req.body.registration_lor_id },
+				recomendation_letter_id: { [Op.eq]: body.recomendation_letter_id },
 			},
 		});
 
-		if (!registrationLoR) {
+		if (!recomendationLetter) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		switch (req.body.assign_to) {
-			case "mahasiswa":
-				registrationLoR.registration_lor_assign_to_mahasiswa = true;
-				break;
-			case "prodi":
-				registrationLoR.registration_lor_assign_to_prodi = true;
-				break;
-			case "jurusan":
-				registrationLoR.registration_lor_assign_to_jurusan = true;
-				break;
-			case "akademik":
-				registrationLoR.registration_lor_assign_to_akademik = true;
-				break;
-			case "biro":
-				registrationLoR.registration_lor_assign_to_biro = true;
-				break;
-			default:
-				break;
-		}
-
-		await registrationLoR.save();
+		// recomendationLetter.student_transkrip = body.student_transkrip;
+		// recomendationLetter.dosen_wali = body.dosen_wali;
+		// recomendationLetter.surat_persetujuan_dosen_wali =
+		// 	body.surat_persetujuan_dosen_wali;
+		// recomendationLetter.program_name = body.program_name;
+		// recomendationLetter.program_correlation_description =
+		// 	body.program_correlation_description;
+		// recomendationLetter.registration_status = body.registration_status;
+		await recomendationLetter.save();
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

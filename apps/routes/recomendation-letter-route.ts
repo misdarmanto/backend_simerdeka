@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import { middleware } from "../middlewares";
-import * as letterOfRecomendation from "../controllers/registration-LoR";
+import * as letterOfRecomendation from "../controllers/recomendation-letter";
 
 export const RecomendationLetterRoutes = (app: Express) => {
 	const route = express.Router();

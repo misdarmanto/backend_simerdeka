@@ -6,7 +6,7 @@ import { requestChecker } from "../../utilities/requestCheker";
 import {
 	AcademicProgramAttributes,
 	AcademicProgramModel,
-} from "../../models/academic-program";
+} from "../../models/program-for-academic";
 
 export const update = async (req: any, res: Response) => {
 	const body = <AcademicProgramAttributes>req.body;

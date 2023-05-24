@@ -4,15 +4,15 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
 import {
-	RegistrationLoRAttributes,
-	RegistrationLoRModel,
-} from "../../models/registration-LoR";
+	AcademicProgramAttributes,
+	AcademicProgramModel,
+} from "../../models/program-for-academic";
 
-export const update = async (req: any, res: Response) => {
-	const body = <RegistrationLoRAttributes>req.body;
+export const remove = async (req: any, res: Response) => {
+	const body = <AcademicProgramAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["registration_lor_id"],
+		requireList: ["academic_program_id"],
 		requestData: body,
 	});
 
@@ -23,27 +23,27 @@ export const update = async (req: any, res: Response) => {
 	}
 
 	try {
-		const registrationLoR = await RegistrationLoRModel.findOne({
+		const academicProgramCheck = await AcademicProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				registration_lor_id: { [Op.eq]: body.registration_lor_id },
+				academic_program_id: { [Op.eq]: req.query.academic_program_id },
 			},
 		});
 
-		if (!registrationLoR) {
+		if (!academicProgramCheck) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		registrationLoR.student_transkrip = body.student_transkrip;
-		registrationLoR.dosen_wali = body.dosen_wali;
-		registrationLoR.surat_persetujuan_dosen_wali = body.surat_persetujuan_dosen_wali;
-		registrationLoR.program_name = body.program_name;
-		registrationLoR.program_correlation_description =
-			body.program_correlation_description;
-		registrationLoR.registration_status = body.registration_status;
-		await registrationLoR.save();
+		await AcademicProgramModel.update(
+			{ deleted: 1 },
+			{
+				where: {
+					academic_program_id: { [Op.eq]: body.academic_program_id },
+				},
+			}
+		);
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

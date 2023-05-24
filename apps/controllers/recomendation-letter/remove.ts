@@ -4,15 +4,15 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
 import {
-	AcademicProgramAttributes,
-	AcademicProgramModel,
-} from "../../models/academic-program";
+	RecomendationLetterAttributes,
+	RecomendationLetterModel,
+} from "../../models/recomendation-letter";
 
 export const remove = async (req: any, res: Response) => {
-	const body = <AcademicProgramAttributes>req.body;
+	const body = <RecomendationLetterAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["academic_program_id"],
+		requireList: ["recomendation_letter_id"],
 		requestData: body,
 	});
 
@@ -23,24 +23,24 @@ export const remove = async (req: any, res: Response) => {
 	}
 
 	try {
-		const academicProgramCheck = await AcademicProgramModel.findOne({
+		const recomendationLetterCheck = await RecomendationLetterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				academic_program_id: { [Op.eq]: req.query.academic_program_id },
+				recomendation_letter_id: { [Op.eq]: req.query.recomendation_letter_id },
 			},
 		});
 
-		if (!academicProgramCheck) {
+		if (!recomendationLetterCheck) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await AcademicProgramModel.update(
+		await RecomendationLetterModel.update(
 			{ deleted: 1 },
 			{
 				where: {
-					academic_program_id: { [Op.eq]: body.academic_program_id },
+					recomendation_letter_id: { [Op.eq]: body.recomendation_letter_id },
 				},
 			}
 		);

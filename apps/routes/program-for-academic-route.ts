@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import { middleware } from "../middlewares";
-import * as academicProgram from "../controllers/academic-program";
+import * as academicProgram from "../controllers/program-for-academic";
 
 export const academicProgramRoutes = (app: Express) => {
 	const route = express.Router();

@@ -1,22 +1,18 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
+import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { v4 as uuidv4 } from "uuid";
 import {
 	AcademicProgramAttributes,
 	AcademicProgramModel,
-} from "../../models/academic-program";
+} from "../../models/program-for-academic";
 
-export const create = async (req: any, res: Response) => {
+export const update = async (req: any, res: Response) => {
 	const body = <AcademicProgramAttributes>req.body;
+
 	const emptyField = requestChecker({
-		requireList: [
-			"academic_program_created_by",
-			"academic_program_name",
-			"academic_program_type",
-			"major_id",
-		],
+		requireList: ["academic_program_id"],
 		requestData: body,
 	});
 
@@ -27,11 +23,28 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.academic_program_id = uuidv4();
-		await AcademicProgramModel.create(body);
+		const academicProgram = await AcademicProgramModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				academic_program_id: { [Op.eq]: body.academic_program_id },
+			},
+		});
+
+		if (!academicProgram) {
+			const message = `not found!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
+		}
+
+		academicProgram.academic_program_name = body.academic_program_name;
+		academicProgram.major_id = body.major_id;
+		academicProgram.academic_program_type = body.academic_program_type;
+
+		await academicProgram.save();
+
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
-		return res.status(StatusCodes.CREATED).json(response);
+		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;

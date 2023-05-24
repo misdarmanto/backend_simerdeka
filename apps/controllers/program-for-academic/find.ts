@@ -7,11 +7,24 @@ import { requestChecker } from "../../utilities/requestCheker";
 import {
 	AcademicProgramAttributes,
 	AcademicProgramModel,
-} from "../../models/academic-program";
+} from "../../models/program-for-academic";
 import { SemesterModel } from "../../models/semester";
 import { ListOfMajorModel } from "../../models/list-of-major";
 
 export const findAll = async (req: any, res: Response) => {
+	// const headers = <AcademicProgramAttributes>req.headers;
+
+	// const emptyField = requestChecker({
+	// 	requireList: ["x-user-id"],
+	// 	requestData: req.headers,
+	// });
+
+	// if (emptyField) {
+	// 	const message = `invalid request parameter! require (${emptyField})`;
+	// 	const response = <ResponseDataAttributes>ResponseData.error(message);
+	// 	return res.status(StatusCodes.BAD_REQUEST).json(response);
+	// }
+
 	try {
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await AcademicProgramModel.findAndCountAll({
@@ -19,6 +32,12 @@ export const findAll = async (req: any, res: Response) => {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
 					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
+				}),
+				...(req.header("x-user-role") === "major" && {
+					major_id: { [Op.eq]: req.header("x-major-id") },
+				}),
+				...(req.header("x-user-role") === "study_program" && {
+					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
 				}),
 			},
 			order: [["id", "desc"]],

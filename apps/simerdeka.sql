@@ -20,11 +20,12 @@ CREATE TABLE `academic_program` (
   `modified_on` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `deleted` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `academic_program` (`id`, `academic_program_id`, `academic_program_created_by`, `academic_program_name`, `academic_program_type`, `major_id`, `semester_id`, `created_on`, `modified_on`, `deleted`) VALUES
 (4,	'4f4e3d1a-ac3c-4fcf-a83e-ebdfca3cef21',	'akademik',	'ttyty',	'Studi Independen',	'5e36b9c2-85fa-4bf8-91bf-b8628fa8cff9',	'3e377112-952f-4eb4-a4e8-9c5ebf665d2e',	'2023-05-23 09:19:51',	NULL,	0),
-(5,	'7e426a90-284a-4372-b501-50e1ca8e5c2d',	'akademik',	'test',	'Studi Independen',	'a6c6f281-4257-42ed-87f1-dbb1acea8ac0',	'3e377112-952f-4eb4-a4e8-9c5ebf665d2e',	'2023-05-23 09:58:09',	NULL,	0);
+(5,	'7e426a90-284a-4372-b501-50e1ca8e5c2d',	'akademik',	'test',	'Studi Independen',	'a6c6f281-4257-42ed-87f1-dbb1acea8ac0',	'3e377112-952f-4eb4-a4e8-9c5ebf665d2e',	'2023-05-23 09:58:09',	NULL,	0),
+(6,	'f344b1fe-4fa6-4b6f-9529-03dad6c34d77',	'akademik',	'magang',	'Magang Bersertifikat',	'a6c6f281-4257-42ed-87f1-dbb1acea8ac0',	'a81acf07-f012-4cd8-8000-7ac8afe50597',	'2023-05-23 20:35:24',	NULL,	0);
 
 DROP TABLE IF EXISTS `list_of_major`;
 CREATE TABLE `list_of_major` (
@@ -96,39 +97,56 @@ INSERT INTO `list_of_study_program` (`id`, `study_program_id`, `study_program_na
 (39,	'8babdaa0-c3c4-476f-83a2-8b65d227fb0b',	'Program Studi Rekayasa Minyak dan Gas',	'a6c6f281-4257-42ed-87f1-dbb1acea8ac0',	'2023-05-22 22:57:04',	NULL,	0),
 (40,	'7d886ca9-6baa-421c-8b5d-0086509f31ee',	'Program Studi Instrumentasi dan Automasi',	'a6c6f281-4257-42ed-87f1-dbb1acea8ac0',	'2023-05-22 22:57:04',	NULL,	0);
 
-DROP TABLE IF EXISTS `registration_LoR`;
-CREATE TABLE `registration_LoR` (
+DROP TABLE IF EXISTS `program_for_major`;
+CREATE TABLE `program_for_major` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `registration_lor_id` text NOT NULL,
-  `user_id` text NOT NULL,
+  `program_major_id` text NOT NULL,
+  `program_major_created_by` text NOT NULL,
+  `program_major_name` text NOT NULL,
+  `program_major_type` text NOT NULL,
+  `major_id` text NOT NULL,
+  `study_program_id` text NOT NULL,
+  `semester_id` text NOT NULL,
+  `created_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp(),
+  `deleted` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+DROP TABLE IF EXISTS `recomendation_letter`;
+CREATE TABLE `recomendation_letter` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `recomendation_letter_id` text NOT NULL,
   `student_id` text NOT NULL,
-  `student_name` varchar(250) NOT NULL,
-  `student_nim` text NOT NULL,
-  `student_transkrip` text NOT NULL,
-  `dosen_wali` varchar(250) NOT NULL,
-  `surat_persetujuan_dosen_wali` text NOT NULL,
-  `program_name` text NOT NULL,
-  `program_correlation_description` text NOT NULL,
-  `registration_status` enum('waiting','accepted','rejected') DEFAULT 'waiting',
-  `registration_status_message` text DEFAULT NULL,
-  `registration_lor_assign_to_mahasiswa` bit(1) DEFAULT NULL,
-  `registration_lor_assign_to_prodi` bit(1) DEFAULT NULL,
-  `registration_lor_assign_to_jurusan` bit(1) DEFAULT NULL,
-  `registration_lor_assign_to_akademik` bit(1) DEFAULT NULL,
-  `registration_lor_assign_to_biro` bit(1) DEFAULT NULL,
+  `study_program_id` text NOT NULL,
+  `major_id` varchar(250) NOT NULL,
+  `recomendation_letter_student_transkrip` text NOT NULL,
+  `recomendation_letter_dosen_wali` varchar(250) NOT NULL,
+  `recomendation_letter_approval_letter` text NOT NULL,
+  `recomendation_letter_from_study_program` text DEFAULT NULL,
+  `recomendation_letter_from_major` text DEFAULT NULL,
+  `recomendation_letter_from_lp3m` text DEFAULT NULL,
+  `recomendation_letter_from_academic` text DEFAULT NULL,
+  `recomendation_letter_program_name` text NOT NULL,
+  `recomendation_letter_program_correlation` text NOT NULL,
+  `recomendation_letter_status` enum('waiting','accepted','rejected') DEFAULT 'waiting',
+  `recomendation_letter_status_message` text DEFAULT NULL,
+  `recomendation_letter_assign_to_student` bit(1) DEFAULT NULL,
+  `recomendation_letter_assign_to_study_program` bit(1) DEFAULT NULL,
+  `recomendation_letter_assign_to_major` bit(1) DEFAULT NULL,
+  `recomendation_letter_assign_to_academic` bit(1) DEFAULT NULL,
+  `recomendation_letter_assign_to_biro` bit(1) DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT current_timestamp(),
   `modified_on` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `deleted` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `registration_LoR` (`id`, `registration_lor_id`, `user_id`, `student_id`, `student_name`, `student_nim`, `student_transkrip`, `dosen_wali`, `surat_persetujuan_dosen_wali`, `program_name`, `program_correlation_description`, `registration_status`, `registration_status_message`, `registration_lor_assign_to_mahasiswa`, `registration_lor_assign_to_prodi`, `registration_lor_assign_to_jurusan`, `registration_lor_assign_to_akademik`, `registration_lor_assign_to_biro`, `created_on`, `modified_on`, `deleted`) VALUES
-(10,	'85eeae03-aaf1-44ca-a055-32723099e6b3',	'8cd17bb9-d727-4578-99c5-a223296d55b8',	'8cd17bb9-d727-4578-99c5-a223296d55b8',	'Budi',	'123344',	'http:example.com/file',	'Mariem',	'http:/example.com/file',	'test',	'text',	'waiting',	NULL,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	NULL,	NULL,	'2023-05-19 20:02:55',	'2023-05-20 13:45:07',	0),
-(11,	'424cc064-be87-4d87-9bc0-bc218c05be34',	'1684570450687',	'1684570450687',	'test 2',	'test 2',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=d651b493-3138-4cf6-b7d5-ee236e94f998',	'dosen 2',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=4ffdb07e-d1a7-4646-8554-12038f26e121',	'test 2',	'test 2',	'waiting',	NULL,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	NULL,	'2023-05-20 15:09:33',	'2023-05-20 10:11:00',	0),
-(12,	'd0e9ad5e-af20-4c22-86c6-3f7932847edf',	'1684591431920',	'1684591431920',	'test 3',	'test 3',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=67c2ee0e-70a6-4422-887a-d03f9aa8065b',	'dosen 2',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=b0a07b09-de44-4309-9916-65cd2e0967b5',	'test 3',	'sssssss',	'waiting',	NULL,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	NULL,	NULL,	'2023-05-20 20:29:46',	'2023-05-20 14:09:11',	0),
-(13,	'd2b6ca37-40ff-4c63-b707-75405f5ad5da',	'1684633446779',	'1684633446779',	'sda',	'sda',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=a3deec0e-8036-4c64-b5df-db83059511c0',	'dosen 2',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=cbe9e91a-ec9a-496c-acc9-c9e2c853d047',	'sd',	'sdsad',	'waiting',	NULL,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	NULL,	NULL,	'2023-05-21 07:53:46',	'2023-05-21 01:44:58',	0),
-(14,	'562246dd-065a-491f-adf1-3dda8f7a4f70',	'1684636958172',	'1684636958172',	'qwerty',	'qwerty',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=7a4e4373-5f7a-4e8d-af95-7e7ead2d0980',	'dosen 2',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=3b148f47-5df9-4a7b-bfe0-1cc0c6c18858',	'sdssssssssss',	'fcxd',	'waiting',	NULL,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	NULL,	'2023-05-21 07:53:46',	'2023-05-21 02:54:43',	0),
-(15,	'95f041de-742b-42bf-aa6b-25392091b137',	'1684811545741',	'1684811545741',	'tessssdddddddddddddd',	'tessssdddddddddddddd',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=07a92654-f1b2-4657-b390-45639fd3fefe',	'dosen 3',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=186b18ed-5ef3-4aee-860d-785b0e1a9e36',	'dsds',	'sdddd',	'waiting',	NULL,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	NULL,	NULL,	NULL,	'2023-05-23 10:11:27',	NULL,	0);
+INSERT INTO `recomendation_letter` (`id`, `recomendation_letter_id`, `student_id`, `study_program_id`, `major_id`, `recomendation_letter_student_transkrip`, `recomendation_letter_dosen_wali`, `recomendation_letter_approval_letter`, `recomendation_letter_from_study_program`, `recomendation_letter_from_major`, `recomendation_letter_from_lp3m`, `recomendation_letter_from_academic`, `recomendation_letter_program_name`, `recomendation_letter_program_correlation`, `recomendation_letter_status`, `recomendation_letter_status_message`, `recomendation_letter_assign_to_student`, `recomendation_letter_assign_to_study_program`, `recomendation_letter_assign_to_major`, `recomendation_letter_assign_to_academic`, `recomendation_letter_assign_to_biro`, `created_on`, `modified_on`, `deleted`) VALUES
+(22,	'9d2c4734-391b-401e-8b7e-6d63708ebb15',	'46cbc5cd-8f15-4777-a7c1-84767ec2342f',	'c01f3e37-cd2d-48ed-b5de-0c3505bb1ff6',	'a6c6f281-4257-42ed-87f1-dbb1acea8ac0',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=d4214ecc-61de-46cc-990f-2b0778550a85',	'dosen 2',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=05982940-a7af-43e0-981b-563dc78c59f4',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=c08a47ff-9354-4597-a0ed-bf7462116b73',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=12d57121-2dd6-4be8-a35f-67358475d862',	'',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=f19d371a-d8da-452f-a81f-3edf82af7923',	'test',	'dsds',	'accepted',	'Selamat, surat rekomendasi mu telah disetujui',	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	'2023-05-24 07:44:04',	'2023-05-24 01:00:12',	0),
+(23,	'6ab95ddb-caeb-4a28-a9fb-8ad05f243389',	'8cd17bb9-d727-4578-99c5-a223296d55b8',	'866f8f1c-f51c-4bfc-80f3-fc0b6d44b27e',	'ab74e972-8a59-4b34-8df6-0f860b5d60d6',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=5d3f1198-5d1a-46d2-a488-3c755bceefce',	'dosen 2',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=c8b02fb3-d357-4002-af1e-9c80c25c0a23',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=beace86c-eb11-4672-b75a-e5c0d5fa97ed',	'',	NULL,	NULL,	'test',	'dsd',	'waiting',	'Selamat, surat rekomendasi mu telah diteruskan ke LP3M',	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	NULL,	'2023-05-24 07:58:33',	'2023-05-24 01:03:16',	0),
+(24,	'547061d9-eb30-4781-8e70-d0168b38d301',	'46cbc5cd-8f15-4777-a7c1-84767ec2342f',	'c01f3e37-cd2d-48ed-b5de-0c3505bb1ff6',	'a6c6f281-4257-42ed-87f1-dbb1acea8ac0',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=9d908cc3-8f72-4235-a3f6-c21726a8b7d9',	'dosen 4',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=1bc2dc2e-73e1-459d-8690-d498301d99d6',	'https://firebasestorage.googleapis.com/v0/b/project-itera.appspot.com/o/request-Lor%2FTest%20simerdeka.pdf?alt=media&token=aafac97f-54c1-4980-99e6-391e7a0ec8fd',	NULL,	NULL,	NULL,	'tess',	'fss',	'rejected',	'sdsdsd',	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	CONV('1', 2, 10) + 0,	NULL,	NULL,	'2023-05-24 08:05:51',	'2023-05-24 01:35:46',	0);
 
 DROP TABLE IF EXISTS `semester`;
 CREATE TABLE `semester` (
@@ -141,11 +159,33 @@ CREATE TABLE `semester` (
   `modified_on` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `deleted` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `semester` (`id`, `semester_id`, `semester_created_by`, `semester_name`, `semester_type`, `created_on`, `modified_on`, `deleted`) VALUES
 (1,	'3e377112-952f-4eb4-a4e8-9c5ebf665d2e',	'akademik',	'semester 6 mbkm',	'ganjil',	'2023-05-21 16:28:54',	'2023-05-21 23:28:54',	0),
-(4,	'a81acf07-f012-4cd8-8000-7ac8afe50597',	'akademik',	'semester 7',	'ganjil',	'2023-05-23 10:11:27',	NULL,	0);
+(4,	'a81acf07-f012-4cd8-8000-7ac8afe50597',	'akademik',	'semester 7',	'ganjil',	'2023-05-23 10:11:27',	NULL,	0),
+(5,	'da543eca-1f61-4ece-93fe-9b20c826021c',	'academic',	'8',	'genap',	'2023-05-23 20:35:24',	NULL,	0);
+
+DROP TABLE IF EXISTS `student`;
+CREATE TABLE `student` (
+  `id` int(11) DEFAULT NULL,
+  `student_id` text NOT NULL,
+  `student_name` varchar(200) NOT NULL,
+  `student_nim` varchar(200) NOT NULL,
+  `student_email` varchar(200) NOT NULL,
+  `major_id` text NOT NULL,
+  `major_name` text NOT NULL,
+  `study_program_id` text NOT NULL,
+  `study_program_name` text NOT NULL,
+  `created_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `modified_on` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `deleted` tinyint(4) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `student` (`id`, `student_id`, `student_name`, `student_nim`, `student_email`, `major_id`, `major_name`, `study_program_id`, `study_program_name`, `created_on`, `modified_on`, `deleted`) VALUES
+(1,	'46cbc5cd-8f15-4777-a7c1-84767ec2342f',	'Mahasiswa T.Telekomunikasi',	'1254343434',	'mahasiswa@mail.com',	'a6c6f281-4257-42ed-87f1-dbb1acea8ac0',	'JTIP',	'c01f3e37-cd2d-48ed-b5de-0c3505bb1ff6',	'T.Telekomunikasi',	'2023-05-24 00:08:04',	'2023-05-24 07:08:04',	NULL),
+(2,	'8cd17bb9-d727-4578-99c5-a223296d55b8',	'Mahasiswa Matematika',	'124545444',	'budi.mahasiswa@mail.com',	'ab74e972-8a59-4b34-8df6-0f860b5d60d6',	'SAINS',	'866f8f1c-f51c-4bfc-80f3-fc0b6d44b27e',	'Matematika',	'2023-05-24 00:08:37',	'2023-05-24 07:08:37',	NULL),
+(3,	'8cd17bb9-d727-4578-99c5ssadsa',	'Mahasiswa Teknik Geomatika',	'1323232223',	'Yono.mahasiswa@mail.com',	'5e36b9c2-85fa-4bf8-91bf-b8628fa8cff9',	'JTIK',	'80769fad-7287-49b1-be85-0811a0dd2ecf',	'Teknik Geomatika',	'2023-05-24 00:09:06',	'2023-05-24 07:09:06',	NULL);
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -170,4 +210,4 @@ INSERT INTO `user` (`id`, `user_id`, `user_name`, `user_email`, `user_password`,
 (11,	'2f982ddf-2092-45da-99d1-933718d78b13',	'Nana',	'nana.akademik@mail.com',	'cf7c906bfbb48e72288fc016bac0e6ed58b0dc2a',	'akademik',	NULL,	'2023-05-19 20:02:55',	NULL,	0),
 (12,	'dff45105-a6b5-4d78-8953-2499d0251115',	'Rudi',	'rudi.biro@mail.com',	'cf7c906bfbb48e72288fc016bac0e6ed58b0dc2a',	'biro',	NULL,	'2023-05-19 20:02:55',	NULL,	0);
 
--- 2023-05-23 05:11:47
+-- 2023-05-24 01:38:42

@@ -1,15 +1,22 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { RegistrationLoRAttributes, RegistrationLoRModel } from "../../models/registration-LoR";
+import { v4 as uuidv4 } from "uuid";
+import {
+	AcademicProgramAttributes,
+	AcademicProgramModel,
+} from "../../models/program-for-academic";
 
-export const remove = async (req: any, res: Response) => {
-	const body = <RegistrationLoRAttributes>req.body;
-
+export const create = async (req: any, res: Response) => {
+	const body = <AcademicProgramAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["registration_lor_id"],
+		requireList: [
+			"academic_program_created_by",
+			"academic_program_name",
+			"academic_program_type",
+			"major_id",
+		],
 		requestData: body,
 	});
 
@@ -20,27 +27,11 @@ export const remove = async (req: any, res: Response) => {
 	}
 
 	try {
-		const registrationCheck = await RegistrationLoRModel.findOne({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				registration_lor_id: { [Op.eq]: req.query.registration_lor_id },
-			},
-		});
-
-		if (!registrationCheck) {
-			const message = `not found!`;
-			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.NOT_FOUND).json(response);
-		}
-
-		await RegistrationLoRModel.update(
-			{ deleted: 1 },
-			{ where: { registration_lor_id: { [Op.eq]: body.registration_lor_id } } }
-		);
-
+		body.academic_program_id = uuidv4();
+		await AcademicProgramModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
-		return res.status(StatusCodes.OK).json(response);
+		return res.status(StatusCodes.CREATED).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;

@@ -1,28 +1,23 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
 import {
-	RegistrationLoRAttributes,
-	RegistrationLoRModel,
-} from "../../models/registration-LoR";
+	ProgramForMajorAttributes,
+	ProgramForMajorModel,
+} from "../../models/program-for-major";
 
 export const create = async (req: any, res: Response) => {
-	const body = <RegistrationLoRAttributes>req.body;
-
+	const body = <ProgramForMajorAttributes>req.body;
 	const emptyField = requestChecker({
 		requireList: [
-			"user_id",
-			"student_id",
-			"student_name",
-			"student_nim",
-			"student_transkrip",
-			"dosen_wali",
-			"surat_persetujuan_dosen_wali",
-			"program_name",
-			"program_correlation_description",
+			"program_major_created_by",
+			"program_major_name",
+			"program_major_type",
+			"major_id",
+			"study_program_id",
+			"semester_id",
 		],
 		requestData: body,
 	});
@@ -34,25 +29,8 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		const registrationCheck = await RegistrationLoRModel.findOne({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: body.user_id },
-				student_id: { [Op.eq]: body.student_id },
-			},
-		});
-
-		if (registrationCheck) {
-			const message = "already registered";
-			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.BAD_REQUEST).json(response);
-		}
-
-		body.registration_lor_id = uuidv4();
-		body.registration_lor_assign_to_mahasiswa = true;
-		body.registration_lor_assign_to_prodi = true;
-
-		await RegistrationLoRModel.create(body);
+		body.program_major_id = uuidv4();
+		await ProgramForMajorModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
 		return res.status(StatusCodes.CREATED).json(response);
