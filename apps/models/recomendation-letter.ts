@@ -5,11 +5,6 @@ import { StudentModel } from "./student";
 
 export interface RecomendationLetterAttributes extends ZygoteAttributes {
 	recomendation_letter_id: string;
-	study_program_id: string;
-	major_id: string;
-	student_id: string;
-	// student_name: string;
-	// student_nim: string;
 	recomendation_letter_student_transkrip: string;
 	recomendation_letter_dosen_wali: string;
 	recomendation_letter_approval_letter: string;
@@ -26,6 +21,9 @@ export interface RecomendationLetterAttributes extends ZygoteAttributes {
 	recomendation_letter_assign_to_major: boolean;
 	recomendation_letter_assign_to_academic: boolean;
 	recomendation_letter_assign_to_biro: boolean;
+	study_program_id: string;
+	major_id: string;
+	student_id: string;
 }
 
 // we're telling the Model that 'id' is optional
