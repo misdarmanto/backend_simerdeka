@@ -6,7 +6,7 @@ import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
 import { ListOfMajorModel } from "../../models/list-of-major";
 import {
-	ListOfStudyModel,
+	ListOfStudyModelProgram,
 	ListOfStudyProgramAttributes,
 } from "../../models/list-study-program";
 
@@ -26,7 +26,7 @@ export const findAll = async (req: any, res: Response) => {
 				offset: page.offset,
 			}),
 
-			include: [ListOfStudyModel],
+			include: [ListOfStudyModelProgram],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -71,7 +71,7 @@ export const findAllStudyProgram = async (req: any, res: Response) => {
 		return res.status(StatusCodes.BAD_REQUEST).json(response);
 	}
 	try {
-		const studyPrograms = await ListOfStudyModel.findAll({
+		const studyPrograms = await ListOfStudyModelProgram.findAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				major_id: query.major_id,

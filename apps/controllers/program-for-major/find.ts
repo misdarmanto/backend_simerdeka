@@ -10,7 +10,7 @@ import {
 	ProgramForMajorAttributes,
 	ProgramForMajorModel,
 } from "../../models/program-for-major";
-import { ListOfStudyModel } from "../../models/list-study-program";
+import { ListOfStudyModelProgram } from "../../models/list-study-program";
 
 export const findAll = async (req: any, res: Response) => {
 	// const headers = <ProgramForMajorAttributes>req.headers;
@@ -41,7 +41,7 @@ export const findAll = async (req: any, res: Response) => {
 				limit: page.limit,
 				offset: page.offset,
 			}),
-			include: [SemesterModel, ListOfMajorModel, ListOfStudyModel],
+			include: [SemesterModel, ListOfMajorModel, ListOfStudyModelProgram],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;

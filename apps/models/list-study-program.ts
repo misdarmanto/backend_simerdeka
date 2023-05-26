@@ -20,7 +20,7 @@ interface ListOfStudyProgramInstance
 	extends Model<ListOfStudyProgramAttributes, ListOfStudyProgramCreationAttributes>,
 		ListOfStudyProgramAttributes {}
 
-export const ListOfStudyModel = sequelize.define<ListOfStudyProgramInstance>(
+export const ListOfStudyModelProgram = sequelize.define<ListOfStudyProgramInstance>(
 	"list_of_study_program",
 	{
 		...ZygoteModel,

@@ -4,44 +4,37 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
-import { SemesterModel } from "../../models/semester";
-import { ListOfMajorModel } from "../../models/list-of-major";
 import {
-	ProgramForMajorAttributes,
-	ProgramForMajorModel,
-} from "../../models/program-for-major";
-import { ListOfStudyModel } from "../../models/list-study-program";
+	ReportParticipationAttributes,
+	ReportParticipationModel,
+} from "../../models/report-participation";
+import { StudentModel } from "../../models/student";
 
 export const findAll = async (req: any, res: Response) => {
-	// const headers = <ProgramForMajorAttributes>req.headers;
-
-	// const emptyField = requestChecker({
-	// 	requireList: ["x-user-id"],
-	// 	requestData: req.headers,
-	// });
-
-	// if (emptyField) {
-	// 	const message = `invalid request parameter! require (${emptyField})`;
-	// 	const response = <ResponseDataAttributes>ResponseData.error(message);
-	// 	return res.status(StatusCodes.BAD_REQUEST).json(response);
-	// }
-
 	try {
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await ProgramForMajorModel.findAndCountAll({
+		const result = await ReportParticipationModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
 					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
 				}),
-				major_id: { [Op.eq]: req.header("x-major-id") },
+				...(req.header("x-user-role") === "student" && {
+					student_id: { [Op.eq]: req.header("x-user-id") },
+				}),
+				...(req.header("x-user-role") === "study_program" && {
+					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
+				}),
+				...(req.header("x-user-role") === "major" && {
+					major_id: { [Op.eq]: req.header("x-major-id") },
+				}),
 			},
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
 				limit: page.limit,
 				offset: page.offset,
 			}),
-			include: [SemesterModel, ListOfMajorModel, ListOfStudyModel],
+			include: [StudentModel],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -56,7 +49,7 @@ export const findAll = async (req: any, res: Response) => {
 };
 
 export const findOne = async (req: any, res: Response) => {
-	const params = <ProgramForMajorAttributes>req.params;
+	const params = <ReportParticipationAttributes>req.params;
 
 	const emptyField = requestChecker({
 		requireList: ["id"],
@@ -70,21 +63,30 @@ export const findOne = async (req: any, res: Response) => {
 	}
 
 	try {
-		const ProgramForMajorChek = await ProgramForMajorModel.findOne({
+		const reportParticipation = await ReportParticipationModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				program_major_id: { [Op.eq]: params.id },
+				report_participation_id: { [Op.eq]: params.id },
+				...(req.header("x-user-role") === "student" && {
+					student_id: { [Op.eq]: req.header("x-user-id") },
+				}),
+				...(req.header("x-user-role") === "study_program" && {
+					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
+				}),
+				...(req.header("x-user-role") === "major" && {
+					major_id: { [Op.eq]: req.header("x-major-id") },
+				}),
 			},
 		});
 
-		if (!ProgramForMajorChek) {
+		if (!reportParticipation) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = ProgramForMajorChek;
+		response.data = reportParticipation;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);

@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
-import { ListOfStudyModel } from "./list-study-program";
+import { ListOfStudyModelProgram } from "./list-study-program";
 
 export interface ListOfMajorAttributes extends ZygoteAttributes {
 	major_id: string;
@@ -45,7 +45,7 @@ export const ListOfMajorModel = sequelize.define<ListOfMajorInstance>(
 	}
 );
 
-ListOfMajorModel.hasMany(ListOfStudyModel, {
+ListOfMajorModel.hasMany(ListOfStudyModelProgram, {
 	sourceKey: "major_id",
 	foreignKey: "major_id",
 });

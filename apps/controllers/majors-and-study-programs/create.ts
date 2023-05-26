@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ListOfMajorAttributes, ListOfMajorModel } from "../../models/list-of-major";
 import { Op } from "sequelize";
 import {
-	ListOfStudyModel,
+	ListOfStudyModelProgram,
 	ListOfStudyProgramAttributes,
 } from "../../models/list-study-program";
 
@@ -51,7 +51,7 @@ export const createStudyProgram = async (req: any, res: Response) => {
 	}
 
 	try {
-		const CheckMajor = await ListOfStudyModel.findOne({
+		const CheckMajor = await ListOfStudyModelProgram.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				major_id: { [Op.eq]: body.major_id },
@@ -65,7 +65,7 @@ export const createStudyProgram = async (req: any, res: Response) => {
 		}
 
 		body.study_program_id = uuidv4();
-		await ListOfStudyModel.create(body);
+		await ListOfStudyModelProgram.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
 		return res.status(StatusCodes.CREATED).json(response);

@@ -1,15 +1,17 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
-import { ListOfStudyModel } from "./list-study-program";
+import { ListOfStudyModelProgram } from "./list-study-program";
+import { ListOfMajorModel } from "./list-of-major";
+import { StudentModel } from "./student";
 
 export interface ReportParticipationAttributes extends ZygoteAttributes {
-	study_program_id: string;
-	major_id: string;
-	student_id: string;
 	report_participation_id: string;
 	report_participation_letter: string;
 	report_participation_status: "waiting" | "accepted" | "rejected";
+	study_program_id: string;
+	major_id: string;
+	student_id: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -66,7 +68,17 @@ export const ReportParticipationModel = sequelize.define<ReportParticipationInst
 	}
 );
 
-ReportParticipationModel.hasMany(ListOfStudyModel, {
+ReportParticipationModel.hasMany(StudentModel, {
 	sourceKey: "student_id",
 	foreignKey: "student_id",
+});
+
+ReportParticipationModel.hasOne(ListOfStudyModelProgram, {
+	sourceKey: "study_program_id",
+	foreignKey: "study_program_id",
+});
+
+ReportParticipationModel.hasOne(ListOfMajorModel, {
+	sourceKey: "major_id",
+	foreignKey: "major_id",
 });

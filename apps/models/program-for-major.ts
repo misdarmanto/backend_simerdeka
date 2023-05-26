@@ -3,7 +3,7 @@ import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 import { SemesterModel } from "./semester";
 import { ListOfMajorModel } from "./list-of-major";
-import { ListOfStudyModel } from "./list-study-program";
+import { ListOfStudyModelProgram } from "./list-study-program";
 
 export interface ProgramForMajorAttributes extends ZygoteAttributes {
 	program_major_id: string;
@@ -82,7 +82,7 @@ ProgramForMajorModel.hasOne(ListOfMajorModel, {
 	foreignKey: "major_id",
 });
 
-ProgramForMajorModel.hasOne(ListOfStudyModel, {
+ProgramForMajorModel.hasOne(ListOfStudyModelProgram, {
 	sourceKey: "study_program_id",
 	foreignKey: "study_program_id",
 });

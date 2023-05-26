@@ -6,6 +6,7 @@ import { userRoutes } from "./user-router";
 import { majorsAndStudyPrograms } from "./majors-and-study-programs";
 import { academicProgramRoutes } from "./program-for-academic-route";
 import { programForMajorRoutes } from "./program-for-major-route";
+import { reportParticipationRoutes } from "./report-participation-route";
 
 export const route = (app: Express) => {
 	app.get("/", (req: Request, res: Response) => index(req, res));
@@ -15,4 +16,5 @@ export const route = (app: Express) => {
 	semesterRoutes(app);
 	majorsAndStudyPrograms(app);
 	programForMajorRoutes(app);
+	reportParticipationRoutes(app);
 };
