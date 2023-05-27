@@ -31,25 +31,26 @@ export const login = async (req: any, res: Response) => {
 		});
 
 		if (!user) {
-			const message = "Akun tidak ditemukan. Silahkan lakukan pendaftaran terlebih dahulu!";
+			const message =
+				"Akun tidak ditemukan. Silahkan lakukan pendaftaran terlebih dahulu!";
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		if (hashPassword(body.user_password) !== user?.user_password) {
-			const message = "kombinasi email dan password tidak ditemukan!";
-			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.UNAUTHORIZED).json(response);
-		}
+		// if (hashPassword(body.user_password) !== user?.user_password) {
+		// 	const message = "kombinasi email dan password tidak ditemukan!";
+		// 	const response = <ResponseDataAttributes>ResponseData.error(message);
+		// 	return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		// }
 
-		const token = generateAccessToken({
-			user_id: user.user_id,
-			role: body.user_role,
-		});
+		// const token = generateAccessToken({
+		// 	user_id: user.user_id,
+		// 	role: body.user_role,
+		// });
 
-		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = { token };
-		return res.status(StatusCodes.OK).json(response);
+		// const response = <ResponseDataAttributes>ResponseData.default;
+		// response.data = { token };
+		// return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;

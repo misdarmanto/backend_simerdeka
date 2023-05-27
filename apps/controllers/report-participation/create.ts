@@ -15,7 +15,6 @@ export const create = async (req: any, res: Response) => {
 			"x-user-id",
 			"x-study-program-id",
 			"x-major-id",
-			"report_participation_id",
 			"report_participation_letter",
 		],
 		requestData: { ...req.body, ...req.headers },

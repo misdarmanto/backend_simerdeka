@@ -3,16 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import {
-	ReportParticipationAttributes,
-	ReportParticipationModel,
-} from "../../models/report-participation";
+import { SemesterAttributes, SemesterModel } from "../../models/semester";
 
-export const update = async (req: any, res: Response) => {
-	const body = <ReportParticipationAttributes>req.body;
+export const remove = async (req: any, res: Response) => {
+	const body = <SemesterAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["report_participation_id"],
+		requireList: ["semester_id"],
 		requestData: body,
 	});
 
@@ -23,39 +20,27 @@ export const update = async (req: any, res: Response) => {
 	}
 
 	try {
-		const reportParticipation = await ReportParticipationModel.findOne({
+		const semesterCheck = await SemesterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				report_participation_id: { [Op.eq]: body.report_participation_id },
+				semester_id: { [Op.eq]: req.body.semester_id },
 			},
 		});
 
-		if (!reportParticipation) {
+		if (!semesterCheck) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		const newData: ReportParticipationAttributes = {
-			...(req.body.report_participation_letter && {
-				report_participation_letter: body.report_participation_letter,
-			}),
-			...(req.body.report_participation_status && {
-				report_participation_status: body.report_participation_status,
-			}),
-
-			...(req.body.report_participation_status_message && {
-				report_participation_status_message:
-					body.report_participation_status_message,
-			}),
-		};
-
-		await ReportParticipationModel.update(newData, {
-			where: {
-				deleted: { [Op.eq]: 0 },
-				report_participation_id: { [Op.eq]: body.report_participation_id },
-			},
-		});
+		await SemesterModel.update(
+			{ deleted: 1 },
+			{
+				where: {
+					semester_id: { [Op.eq]: body.semester_id },
+				},
+			}
+		);
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

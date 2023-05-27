@@ -6,9 +6,10 @@ export interface UserAttributes extends ZygoteAttributes {
 	user_id: string;
 	user_name: string;
 	user_email: string;
-	user_password: string;
-	user_photo: string;
-	user_role: "mahasiswa" | "prodi" | "jurusan" | "akademik" | "biro";
+	user_is_registered: boolean;
+	user_role: "student" | "study_program" | "major" | "lp3m" | "academic";
+	major_id: string;
+	study_program_id: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -39,16 +40,20 @@ export const UserModel = sequelize.define<UserInstance>(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		user_password: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		user_photo: {
-			type: DataTypes.STRING,
+		user_is_registered: {
+			type: DataTypes.BOOLEAN,
 			allowNull: true,
 		},
 		user_role: {
-			type: DataTypes.ENUM("mahasiswa", "prodi", "jurusan", "akademik", "biro"),
+			type: DataTypes.ENUM("student", "study_program", "major", "lp3m", "academic"),
+			allowNull: false,
+		},
+		major_id: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		study_program_id: {
+			type: DataTypes.STRING,
 			allowNull: false,
 		},
 	},

@@ -8,6 +8,7 @@ import { StudentModel } from "./student";
 export interface ReportParticipationAttributes extends ZygoteAttributes {
 	report_participation_id: string;
 	report_participation_letter: string;
+	report_participation_status_message: string;
 	report_participation_status: "waiting" | "accepted" | "rejected";
 	study_program_id: string;
 	major_id: string;
@@ -37,6 +38,10 @@ export const ReportParticipationModel = sequelize.define<ReportParticipationInst
 		report_participation_letter: {
 			type: DataTypes.STRING,
 			allowNull: false,
+		},
+		report_participation_status_message: {
+			type: DataTypes.STRING,
+			allowNull: true,
 		},
 		report_participation_status: {
 			type: DataTypes.ENUM("waiting", "accepted", "rejected"),
@@ -68,7 +73,7 @@ export const ReportParticipationModel = sequelize.define<ReportParticipationInst
 	}
 );
 
-ReportParticipationModel.hasMany(StudentModel, {
+ReportParticipationModel.hasOne(StudentModel, {
 	sourceKey: "student_id",
 	foreignKey: "student_id",
 });

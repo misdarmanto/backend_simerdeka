@@ -4,32 +4,16 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
-import {
-	ReportParticipationAttributes,
-	ReportParticipationModel,
-} from "../../models/report-participation";
-import { StudentModel } from "../../models/student";
-import { majorsAndStudyPrograms } from "../../routes/majors-and-study-programs";
-import { ListOfStudyModelProgram } from "../../models/list-study-program";
-import { ListOfMajorModel } from "../../models/list-of-major";
+import { UserAttributes, UserModel } from "../../models/user";
 
 export const findAll = async (req: any, res: Response) => {
 	try {
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await ReportParticipationModel.findAndCountAll({
+		const result = await UserModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
-				}),
-				...(req.header("x-user-role") === "student" && {
-					student_id: { [Op.eq]: req.header("x-user-id") },
-				}),
-				...(req.header("x-user-role") === "study_program" && {
-					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
-				}),
-				...(req.header("x-user-role") === "major" && {
-					major_id: { [Op.eq]: req.header("x-major-id") },
+					[Op.or]: [{ user_name: { [Op.like]: `%${req.query.search}%` } }],
 				}),
 			},
 			order: [["id", "desc"]],
@@ -37,7 +21,6 @@ export const findAll = async (req: any, res: Response) => {
 				limit: page.limit,
 				offset: page.offset,
 			}),
-			include: [StudentModel, ListOfStudyModelProgram, ListOfMajorModel],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -52,11 +35,9 @@ export const findAll = async (req: any, res: Response) => {
 };
 
 export const findOne = async (req: any, res: Response) => {
-	const params = <ReportParticipationAttributes>req.params;
-
 	const emptyField = requestChecker({
-		requireList: ["id"],
-		requestData: req.params,
+		requireList: ["x-user-id"],
+		requestData: req.headers,
 	});
 
 	if (emptyField) {
@@ -66,32 +47,23 @@ export const findOne = async (req: any, res: Response) => {
 	}
 
 	try {
-		const reportParticipation = await ReportParticipationModel.findOne({
+		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				report_participation_id: { [Op.eq]: params.id },
-				...(req.header("x-user-role") === "student" && {
-					student_id: { [Op.eq]: req.header("x-user-id") },
-				}),
-				...(req.header("x-user-role") === "study_program" && {
-					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
-				}),
-				...(req.header("x-user-role") === "major" && {
-					major_id: { [Op.eq]: req.header("x-major-id") },
-				}),
+				user_id: { [Op.eq]: req.header("x-user-id") },
+				// study_program_id: { [Op.eq]: req.header("x-study-program-id") },
+				// major_id: { [Op.eq]: req.header("x-major-id") },
 			},
-
-			include: [StudentModel, ListOfStudyModelProgram, ListOfMajorModel],
 		});
 
-		if (!reportParticipation) {
+		if (!user) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = reportParticipation;
+		response.data = user;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);

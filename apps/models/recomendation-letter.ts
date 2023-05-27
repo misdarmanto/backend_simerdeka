@@ -19,8 +19,8 @@ export interface RecomendationLetterAttributes extends ZygoteAttributes {
 	recomendation_letter_assign_to_student: boolean;
 	recomendation_letter_assign_to_study_program: boolean;
 	recomendation_letter_assign_to_major: boolean;
+	recomendation_letter_assign_to_lp3m: boolean;
 	recomendation_letter_assign_to_academic: boolean;
-	recomendation_letter_assign_to_biro: boolean;
 	study_program_id: string;
 	major_id: string;
 	student_id: string;
@@ -115,11 +115,11 @@ export const RecomendationLetterModel = sequelize.define<RecomendationLetterInst
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 		},
-		recomendation_letter_assign_to_academic: {
+		recomendation_letter_assign_to_lp3m: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 		},
-		recomendation_letter_assign_to_biro: {
+		recomendation_letter_assign_to_academic: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 		},

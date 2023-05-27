@@ -37,18 +37,18 @@ export const register = async (req: any, res: Response) => {
 			return res.status(StatusCodes.BAD_REQUEST).json(response);
 		}
 
-		body.user_password = hashPassword(body.user_password);
-		body.user_id = uuidv4();
-		await UserModel.create(body);
+		// body.user_password = hashPassword(body.user_password);
+		// body.user_id = uuidv4();
+		// await UserModel.create(body);
 
-		const token = generateAccessToken({
-			user_id: body.user_id,
-			role: body.user_role,
-		});
+		// const token = generateAccessToken({
+		// 	user_id: body.user_id,
+		// 	role: body.user_role,
+		// });
 
-		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = { token };
-		return res.status(StatusCodes.CREATED).json(response);
+		// const response = <ResponseDataAttributes>ResponseData.default;
+		// response.data = { token };
+		// return res.status(StatusCodes.CREATED).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;
