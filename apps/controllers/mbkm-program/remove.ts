@@ -1,14 +1,18 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
+import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { v4 as uuidv4 } from "uuid";
-import { SemesterAttributes, SemesterModel } from "../../models/semester";
+import {
+	AcademicProgramAttributes,
+	AcademicProgramModel,
+} from "../../models/program-for-academic";
 
-export const create = async (req: any, res: Response) => {
-	const body = <SemesterAttributes>req.body;
+export const remove = async (req: any, res: Response) => {
+	const body = <AcademicProgramAttributes>req.body;
+
 	const emptyField = requestChecker({
-		requireList: ["semester_created_by", "semester_name"],
+		requireList: ["academic_program_id"],
 		requestData: body,
 	});
 
@@ -19,11 +23,31 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.semester_id = uuidv4();
-		await SemesterModel.create(body);
+		const academicProgramCheck = await AcademicProgramModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				academic_program_id: { [Op.eq]: req.query.academic_program_id },
+			},
+		});
+
+		if (!academicProgramCheck) {
+			const message = `not found!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
+		}
+
+		await AcademicProgramModel.update(
+			{ deleted: 1 },
+			{
+				where: {
+					academic_program_id: { [Op.eq]: body.academic_program_id },
+				},
+			}
+		);
+
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
-		return res.status(StatusCodes.CREATED).json(response);
+		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;

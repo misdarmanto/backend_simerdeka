@@ -6,7 +6,7 @@ export interface SemesterAttributes extends ZygoteAttributes {
 	semester_id: string;
 	semester_created_by: string;
 	semester_name: string;
-	semester_type: "ganjil" | "genap";
+	semester_status: "active" | "non-active";
 }
 
 // we're telling the Model that 'id' is optional
@@ -37,9 +37,10 @@ export const SemesterModel = sequelize.define<SemesterInstance>(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		semester_type: {
-			type: DataTypes.ENUM("ganjil", "genap"),
-			allowNull: false,
+		semester_status: {
+			type: DataTypes.ENUM("active", "non-active"),
+			allowNull: true,
+			defaultValue: "active",
 		},
 	},
 	{

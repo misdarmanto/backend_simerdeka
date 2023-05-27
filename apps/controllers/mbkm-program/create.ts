@@ -3,12 +3,17 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
-import { SemesterAttributes, SemesterModel } from "../../models/semester";
+import { MbkmProgramAttributes, MbkmProgramModel } from "../../models/mbkm-program";
 
 export const create = async (req: any, res: Response) => {
-	const body = <SemesterAttributes>req.body;
+	const body = <MbkmProgramAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["semester_created_by", "semester_name"],
+		requireList: [
+			"mbkm_program_created_by",
+			"mbkm_program_name",
+			"mbkm_program_category",
+			"semester_id",
+		],
 		requestData: body,
 	});
 
@@ -19,8 +24,8 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.semester_id = uuidv4();
-		await SemesterModel.create(body);
+		body.mbkm_program_id = uuidv4();
+		await MbkmProgramModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
 		return res.status(StatusCodes.CREATED).json(response);
