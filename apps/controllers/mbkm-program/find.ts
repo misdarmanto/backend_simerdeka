@@ -19,6 +19,12 @@ export const findAll = async (req: any, res: Response) => {
 				...(req.query.semester_id && {
 					semester_id: { [Op.eq]: req.query.semester_id },
 				}),
+				...(req.header("x-user-role") === "major" && {
+					major_id: { [Op.eq]: req.header("x-major-id") },
+				}),
+				...(req.header("x-user-role") === "study_program" && {
+					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
+				}),
 			},
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
@@ -58,6 +64,15 @@ export const findOne = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				mbkm_program_id: { [Op.eq]: params.id },
+				...(req.query.semester_id && {
+					semester_id: { [Op.eq]: req.query.semester_id },
+				}),
+				...(req.header("x-user-role") === "major" && {
+					major_id: { [Op.eq]: req.header("x-major-id") },
+				}),
+				...(req.header("x-user-role") === "study_program" && {
+					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
+				}),
 			},
 		});
 

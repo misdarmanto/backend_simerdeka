@@ -3,13 +3,10 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import {
-	AcademicProgramAttributes,
-	AcademicProgramModel,
-} from "../../models/program-for-academic";
+import { MbkmProgramAttributes, MbkmProgramModel } from "../../models/mbkm-program";
 
 export const remove = async (req: any, res: Response) => {
-	const body = <AcademicProgramAttributes>req.body;
+	const body = <MbkmProgramAttributes>req.body;
 
 	const emptyField = requestChecker({
 		requireList: ["academic_program_id"],
@@ -23,10 +20,10 @@ export const remove = async (req: any, res: Response) => {
 	}
 
 	try {
-		const academicProgramCheck = await AcademicProgramModel.findOne({
+		const academicProgramCheck = await MbkmProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				academic_program_id: { [Op.eq]: req.query.academic_program_id },
+				mbkm_program_id: { [Op.eq]: req.query.mbkm_program_id },
 			},
 		});
 
@@ -36,11 +33,11 @@ export const remove = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await AcademicProgramModel.update(
+		await MbkmProgramModel.update(
 			{ deleted: 1 },
 			{
 				where: {
-					academic_program_id: { [Op.eq]: body.academic_program_id },
+					mbkm_program_id: { [Op.eq]: body.mbkm_program_id },
 				},
 			}
 		);

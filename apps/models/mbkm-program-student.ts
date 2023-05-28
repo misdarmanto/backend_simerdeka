@@ -2,14 +2,14 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 import { SemesterModel } from "./semester";
-import { ListOfMajorModel } from "./list-of-major";
-import { ListOfStudyModelProgram } from "./list-study-program";
+import { UserModel } from "./user";
+import { MbkmProgramModel } from "./mbkm-program";
 
-export interface ProgramForMajorAttributes extends ZygoteAttributes {
-	program_major_id: string;
-	program_major_created_by: string;
-	program_major_name: string;
-	program_major_type: string;
+export interface MbkmProgramStudentAttributes extends ZygoteAttributes {
+	mbkm_program_student_id: string;
+	mbkm_program_student_sks: number;
+	mbkm_program_id: string;
+	student_id: string;
 	major_id: string;
 	study_program_id: string;
 	semester_id: string;
@@ -17,35 +17,35 @@ export interface ProgramForMajorAttributes extends ZygoteAttributes {
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type ProgramForMajorCreationAttributes = Optional<
-	ProgramForMajorAttributes,
+type MbkmProgramStudentCreationAttributes = Optional<
+	MbkmProgramStudentAttributes,
 	"id" | "created_on" | "modified_on"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
-interface ProgramForMajorInstance
-	extends Model<ProgramForMajorAttributes, ProgramForMajorCreationAttributes>,
-		ProgramForMajorAttributes {}
+interface MbkmProgramStudentInstance
+	extends Model<MbkmProgramStudentAttributes, MbkmProgramStudentCreationAttributes>,
+		MbkmProgramStudentAttributes {}
 
-export const ProgramForMajorModel = sequelize.define<ProgramForMajorInstance>(
-	"program_for_major",
+export const MbkmProgramStudentModel = sequelize.define<MbkmProgramStudentInstance>(
+	"mbkm_program_student",
 	{
 		...ZygoteModel,
-		program_major_id: {
+		mbkm_program_student_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		program_major_created_by: {
+		mbkm_program_student_sks: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		program_major_name: {
+		mbkm_program_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		program_major_type: {
+		student_id: {
 			type: DataTypes.STRING,
-			allowNull: true,
+			allowNull: false,
 		},
 		major_id: {
 			type: DataTypes.STRING,
@@ -63,7 +63,7 @@ export const ProgramForMajorModel = sequelize.define<ProgramForMajorInstance>(
 	{
 		...sequelize,
 		timestamps: false,
-		tableName: "program_for_major",
+		tableName: "mbkm_program_student",
 		deletedAt: false,
 		paranoid: true,
 		underscored: true,
@@ -72,17 +72,17 @@ export const ProgramForMajorModel = sequelize.define<ProgramForMajorInstance>(
 	}
 );
 
-ProgramForMajorModel.hasOne(SemesterModel, {
+MbkmProgramStudentModel.hasOne(SemesterModel, {
 	sourceKey: "semester_id",
 	foreignKey: "semester_id",
 });
 
-ProgramForMajorModel.hasOne(ListOfMajorModel, {
-	sourceKey: "major_id",
-	foreignKey: "major_id",
+MbkmProgramStudentModel.hasOne(UserModel, {
+	sourceKey: "student_id",
+	foreignKey: "user_id",
 });
 
-ProgramForMajorModel.hasOne(ListOfStudyModelProgram, {
-	sourceKey: "study_program_id",
-	foreignKey: "study_program_id",
+MbkmProgramStudentModel.hasOne(MbkmProgramModel, {
+	sourceKey: "mbkm_program_id",
+	foreignKey: "mbkm_program_id",
 });

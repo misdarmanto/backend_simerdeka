@@ -4,19 +4,17 @@ import { semesterRoutes } from "./semester-route";
 import { RecomendationLetterRoutes } from "./recomendation-letter-route";
 import { userRoutes } from "./user-router";
 import { majorsAndStudyPrograms } from "./majors-and-study-programs";
-import { academicProgramRoutes } from "./program-for-academic-route";
-import { programForMajorRoutes } from "./program-for-major-route";
 import { reportParticipationRoutes } from "./report-participation-route";
-import { mbkmProgramRoutes } from "./mbkm-prograg";
+import { mbkmProgramRoutes } from "./mbkm-program";
+import { mbkmProgramStudentRoutes } from "./mbkm-program-student";
 
 export const route = (app: Express) => {
 	app.get("/", (req: Request, res: Response) => index(req, res));
 	userRoutes(app);
 	RecomendationLetterRoutes(app);
-	academicProgramRoutes(app);
 	semesterRoutes(app);
 	majorsAndStudyPrograms(app);
-	programForMajorRoutes(app);
 	reportParticipationRoutes(app);
 	mbkmProgramRoutes(app);
+	mbkmProgramStudentRoutes(app);
 };

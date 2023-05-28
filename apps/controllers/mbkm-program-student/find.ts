@@ -4,34 +4,28 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
-import {
-	AcademicProgramAttributes,
-	AcademicProgramModel,
-} from "../../models/program-for-academic";
 import { SemesterModel } from "../../models/semester";
-import { ListOfMajorModel } from "../../models/list-of-major";
+import {
+	MbkmProgramStudentAttributes,
+	MbkmProgramStudentModel,
+} from "../../models/mbkm-program-student";
+import { UserModel } from "../../models/user";
+import { MbkmProgramModel } from "../../models/mbkm-program";
 
 export const findAll = async (req: any, res: Response) => {
-	// const headers = <AcademicProgramAttributes>req.headers;
-
-	// const emptyField = requestChecker({
-	// 	requireList: ["x-user-id"],
-	// 	requestData: req.headers,
-	// });
-
-	// if (emptyField) {
-	// 	const message = `invalid request parameter! require (${emptyField})`;
-	// 	const response = <ResponseDataAttributes>ResponseData.error(message);
-	// 	return res.status(StatusCodes.BAD_REQUEST).json(response);
-	// }
-
 	try {
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await AcademicProgramModel.findAndCountAll({
+		const result = await MbkmProgramStudentModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
 					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
+				}),
+				...(req.query.semester_id && {
+					semester_id: { [Op.eq]: req.query.semester_id },
+				}),
+				...(req.header("x-user-role") === "student" && {
+					student_id: { [Op.eq]: req.header("x-user-id") },
 				}),
 				...(req.header("x-user-role") === "major" && {
 					major_id: { [Op.eq]: req.header("x-major-id") },
@@ -45,7 +39,7 @@ export const findAll = async (req: any, res: Response) => {
 				limit: page.limit,
 				offset: page.offset,
 			}),
-			include: [SemesterModel, ListOfMajorModel],
+			include: [MbkmProgramModel, SemesterModel, UserModel],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -60,7 +54,7 @@ export const findAll = async (req: any, res: Response) => {
 };
 
 export const findOne = async (req: any, res: Response) => {
-	const params = <AcademicProgramAttributes>req.params;
+	const params = <MbkmProgramStudentAttributes>req.params;
 
 	const emptyField = requestChecker({
 		requireList: ["id"],
@@ -74,21 +68,30 @@ export const findOne = async (req: any, res: Response) => {
 	}
 
 	try {
-		const AcademicProgramAttributes = await AcademicProgramModel.findOne({
+		const MbkmProgram = await MbkmProgramStudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				academic_program_id: { [Op.eq]: params.id },
+				mbkm_program_id: { [Op.eq]: params.id },
+				...(req.query.semester_id && {
+					semester_id: { [Op.eq]: req.query.semester_id },
+				}),
+				...(req.header("x-user-role") === "major" && {
+					major_id: { [Op.eq]: req.header("x-major-id") },
+				}),
+				...(req.header("x-user-role") === "study_program" && {
+					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
+				}),
 			},
 		});
 
-		if (!AcademicProgramAttributes) {
+		if (!MbkmProgram) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = AcademicProgramAttributes;
+		response.data = MbkmProgram;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);

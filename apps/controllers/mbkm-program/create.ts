@@ -13,6 +13,8 @@ export const create = async (req: any, res: Response) => {
 			"mbkm_program_name",
 			"mbkm_program_category",
 			"semester_id",
+			"major_id",
+			"study_program_id",
 		],
 		requestData: body,
 	});

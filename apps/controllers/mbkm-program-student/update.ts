@@ -3,16 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import {
-	AcademicProgramAttributes,
-	AcademicProgramModel,
-} from "../../models/program-for-academic";
+import { MbkmProgramAttributes, MbkmProgramModel } from "../../models/mbkm-program";
 
 export const update = async (req: any, res: Response) => {
-	const body = <AcademicProgramAttributes>req.body;
+	const body = <MbkmProgramAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["academic_program_id"],
+		requireList: ["mbkm_program_id"],
 		requestData: body,
 	});
 
@@ -23,24 +20,20 @@ export const update = async (req: any, res: Response) => {
 	}
 
 	try {
-		const academicProgram = await AcademicProgramModel.findOne({
+		const mbkmProgram = await MbkmProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				academic_program_id: { [Op.eq]: body.academic_program_id },
+				mbkm_program_id: { [Op.eq]: body.mbkm_program_id },
 			},
 		});
 
-		if (!academicProgram) {
+		if (!mbkmProgram) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		academicProgram.academic_program_name = body.academic_program_name;
-		academicProgram.major_id = body.major_id;
-		academicProgram.academic_program_type = body.academic_program_type;
-
-		await academicProgram.save();
+		await mbkmProgram.save();
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

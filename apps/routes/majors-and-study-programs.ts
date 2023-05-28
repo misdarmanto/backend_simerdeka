@@ -15,6 +15,9 @@ export const majorsAndStudyPrograms = (app: Express) => {
 	router.get("/study-programs", (req: Request, res: Response) =>
 		academicPrograms.findAllStudyProgram(req, res)
 	);
+	router.get("/study-programs/major", (req: Request, res: Response) =>
+		academicPrograms.findStudyProgramByMajor(req, res)
+	);
 	router.post("/study-programs", (req: Request, res: Response) =>
 		academicPrograms.createStudyProgram(req, res)
 	);

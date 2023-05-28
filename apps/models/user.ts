@@ -8,6 +8,11 @@ export interface UserAttributes extends ZygoteAttributes {
 	user_email: string;
 	user_is_registered: boolean;
 	user_role: "student" | "study_program" | "major" | "lp3m" | "academic";
+	// user_registration_status:
+	// 	| "none"
+	// 	| "recomendation-letter"
+	// 	| "report-participation"
+	// 	| "done";
 	major_id: string;
 	study_program_id: string;
 }
@@ -44,6 +49,16 @@ export const UserModel = sequelize.define<UserInstance>(
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 		},
+		// user_registration_status: {
+		// 	type: DataTypes.ENUM(
+		// 		"none",
+		// 		"recomendation-letter",
+		// 		"report-participation",
+		// 		"done"
+		// 	),
+		// 	allowNull: true,
+		// 	defaultValue: "none",
+		// },
 		user_role: {
 			type: DataTypes.ENUM("student", "study_program", "major", "lp3m", "academic"),
 			allowNull: false,

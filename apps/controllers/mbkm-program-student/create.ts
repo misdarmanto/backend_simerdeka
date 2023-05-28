@@ -4,18 +4,20 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
 import {
-	AcademicProgramAttributes,
-	AcademicProgramModel,
-} from "../../models/program-for-academic";
+	MbkmProgramStudentAttributes,
+	MbkmProgramStudentModel,
+} from "../../models/mbkm-program-student";
 
 export const create = async (req: any, res: Response) => {
-	const body = <AcademicProgramAttributes>req.body;
+	const body = <MbkmProgramStudentAttributes>req.body;
 	const emptyField = requestChecker({
 		requireList: [
-			"academic_program_created_by",
-			"academic_program_name",
-			"academic_program_type",
+			"mbkm_program_student_sks",
+			"mbkm_program_id",
+			"student_id",
 			"major_id",
+			"study_program_id",
+			"semester_id",
 		],
 		requestData: body,
 	});
@@ -27,8 +29,8 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.academic_program_id = uuidv4();
-		await AcademicProgramModel.create(body);
+		body.mbkm_program_student_id = uuidv4();
+		await MbkmProgramStudentModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
 		return res.status(StatusCodes.CREATED).json(response);

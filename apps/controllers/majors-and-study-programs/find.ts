@@ -59,6 +59,24 @@ export const findAllMajor = async (req: any, res: Response) => {
 };
 
 export const findAllStudyProgram = async (req: any, res: Response) => {
+	try {
+		const studyPrograms = await ListOfStudyModelProgram.findAll({
+			where: {
+				deleted: { [Op.eq]: 0 },
+			},
+		});
+		const response = <ResponseDataAttributes>ResponseData.default;
+		response.data = studyPrograms;
+		return res.status(StatusCodes.OK).json(response);
+	} catch (error: any) {
+		console.log(error.message);
+		const message = `unable to process request! error ${error.message}`;
+		const response = <ResponseDataAttributes>ResponseData.error(message);
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
+	}
+};
+
+export const findStudyProgramByMajor = async (req: any, res: Response) => {
 	const query = <ListOfStudyProgramAttributes>req.query;
 	const emptyField = requestChecker({
 		requireList: ["major_id"],

@@ -5,6 +5,9 @@ export const userRoutes = (app: Express) => {
 	const route = express.Router();
 	app.use("/users", route);
 	route.get("/all", (req: Request, res: Response) => user.findAll(req, res));
+	route.get("/students/registered", (req: Request, res: Response) =>
+		user.findAllStudent(req, res)
+	);
 	route.get("/", (req: Request, res: Response) => user.findOne(req, res));
 	route.post("/", (req: Request, res: Response) => user.create(req, res));
 	// route.post("/register", (req: Request, res: Response) => auth.register(req, res));

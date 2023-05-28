@@ -4,15 +4,15 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
 import {
-	AcademicProgramAttributes,
-	AcademicProgramModel,
-} from "../../models/program-for-academic";
+	ReportParticipationAttributes,
+	ReportParticipationModel,
+} from "../../models/report-participation";
 
 export const remove = async (req: any, res: Response) => {
-	const body = <AcademicProgramAttributes>req.body;
+	const body = <ReportParticipationAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["academic_program_id"],
+		requireList: ["report_participation_id"],
 		requestData: body,
 	});
 
@@ -23,10 +23,10 @@ export const remove = async (req: any, res: Response) => {
 	}
 
 	try {
-		const academicProgramCheck = await AcademicProgramModel.findOne({
+		const academicProgramCheck = await ReportParticipationModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				academic_program_id: { [Op.eq]: req.query.academic_program_id },
+				report_participation_id: { [Op.eq]: req.query.report_participation_id },
 			},
 		});
 
@@ -36,11 +36,11 @@ export const remove = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await AcademicProgramModel.update(
+		await ReportParticipationModel.update(
 			{ deleted: 1 },
 			{
 				where: {
-					academic_program_id: { [Op.eq]: body.academic_program_id },
+					report_participation_id: { [Op.eq]: body.report_participation_id },
 				},
 			}
 		);

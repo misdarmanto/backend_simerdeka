@@ -7,6 +7,7 @@ import {
 	ReportParticipationAttributes,
 	ReportParticipationModel,
 } from "../../models/report-participation";
+import { UserModel } from "../../models/user";
 
 export const update = async (req: any, res: Response) => {
 	const body = <ReportParticipationAttributes>req.body;
@@ -43,7 +44,6 @@ export const update = async (req: any, res: Response) => {
 			...(req.body.report_participation_status && {
 				report_participation_status: body.report_participation_status,
 			}),
-
 			...(req.body.report_participation_status_message && {
 				report_participation_status_message:
 					body.report_participation_status_message,
