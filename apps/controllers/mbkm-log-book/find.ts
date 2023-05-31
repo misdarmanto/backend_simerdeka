@@ -4,51 +4,16 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
-import { UserModel } from "../../models/user";
+import { MbkmLogBookAttributes, MbkmLogBookModel } from "../../models/mbkm-log-book";
 
 export const findAll = async (req: any, res: Response) => {
 	try {
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await UserModel.findAndCountAll({
+		const result = await MbkmLogBookModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [{ user_name: { [Op.like]: `%${req.query.search}%` } }],
-				}),
-			},
-			order: [["id", "desc"]],
-			...(req.query.pagination == "true" && {
-				limit: page.limit,
-				offset: page.offset,
-			}),
-		});
-
-		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = page.data(result);
-		return res.status(StatusCodes.OK).json(response);
-	} catch (error: any) {
-		console.log(error.message);
-		const message = `unable to process request! error ${error.message}`;
-		const response = <ResponseDataAttributes>ResponseData.error(message);
-		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
-	}
-};
-
-export const findAllStudent = async (req: any, res: Response) => {
-	try {
-		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await UserModel.findAndCountAll({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				user_is_registered: { [Op.eq]: true },
-				...(req.query.search && {
-					[Op.or]: [{ user_name: { [Op.like]: `%${req.query.search}%` } }],
-				}),
-				...(req.header("x-user-role") === "major" && {
-					major_id: { [Op.eq]: req.header("x-major-id") },
-				}),
-				...(req.header("x-user-role") === "study_program" && {
-					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
+					[Op.or]: [{ semester_name: { [Op.like]: `%${req.query.search}%` } }],
 				}),
 			},
 			order: [["id", "desc"]],
@@ -70,9 +35,11 @@ export const findAllStudent = async (req: any, res: Response) => {
 };
 
 export const findOne = async (req: any, res: Response) => {
+	const params = <MbkmLogBookAttributes>req.params;
+
 	const emptyField = requestChecker({
-		requireList: ["x-user-id"],
-		requestData: req.headers,
+		requireList: ["id"],
+		requestData: req.params,
 	});
 
 	if (emptyField) {
@@ -82,23 +49,21 @@ export const findOne = async (req: any, res: Response) => {
 	}
 
 	try {
-		const user = await UserModel.findOne({
+		const mbkmLogBook = await MbkmLogBookModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				// study_program_id: { [Op.eq]: req.header("x-study-program-id") },
-				// major_id: { [Op.eq]: req.header("x-major-id") },
+				mbkm_log_book_id: { [Op.eq]: params.id },
 			},
 		});
 
-		if (!user) {
+		if (!mbkmLogBook) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = user;
+		response.data = mbkmLogBook;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);

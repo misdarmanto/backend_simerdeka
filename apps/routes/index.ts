@@ -7,6 +7,7 @@ import { majorsAndStudyPrograms } from "./majors-and-study-programs";
 import { reportParticipationRoutes } from "./report-participation-route";
 import { mbkmProgramRoutes } from "./mbkm-program";
 import { mbkmProgramStudentRoutes } from "./mbkm-program-student";
+import { sksConvertionRoutes } from "./sks-convertion-route";
 
 export const route = (app: Express) => {
 	app.get("/", (req: Request, res: Response) => index(req, res));
@@ -17,4 +18,6 @@ export const route = (app: Express) => {
 	reportParticipationRoutes(app);
 	mbkmProgramRoutes(app);
 	mbkmProgramStudentRoutes(app);
+	sksConvertionRoutes(app);
+	mbkmProgramRoutes(app);
 };

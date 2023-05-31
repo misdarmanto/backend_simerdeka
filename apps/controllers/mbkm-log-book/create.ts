@@ -3,18 +3,28 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
-import { SemesterAttributes, SemesterModel } from "../../models/semester";
-import { UserAttributes, UserModel } from "../../models/user";
+import { MbkmLogBookAttributes, MbkmLogBookModel } from "../../models/mbkm-log-book";
 
 export const create = async (req: any, res: Response) => {
-	const body = <UserAttributes>req.body;
+	const body = <MbkmLogBookAttributes>req.body;
+	const emptyField = requestChecker({
+		requireList: [
+			"mbkm_log_book_week",
+			"mbkm_log_book_student_id",
+			"mbkm_log_book_file",
+		],
+		requestData: body,
+	});
+
+	if (emptyField) {
+		const message = `invalid request parameter! require (${emptyField})`;
+		const response = <ResponseDataAttributes>ResponseData.error(message);
+		return res.status(StatusCodes.BAD_REQUEST).json(response);
+	}
 
 	try {
-		const users = req.body.users.map((user: UserAttributes) => ({
-			...user,
-			user_id: uuidv4(),
-		}));
-		await UserModel.bulkCreate(users);
+		body.mbkm_log_book_id = uuidv4();
+		await MbkmLogBookModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
 		return res.status(StatusCodes.CREATED).json(response);

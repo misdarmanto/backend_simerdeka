@@ -3,18 +3,34 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
-import { SemesterAttributes, SemesterModel } from "../../models/semester";
-import { UserAttributes, UserModel } from "../../models/user";
+import { SksConvertionAttributes, SksConvertionModel } from "../../models/sks-convertion";
 
 export const create = async (req: any, res: Response) => {
-	const body = <UserAttributes>req.body;
+	const body = <SksConvertionAttributes>req.body;
+	// const emptyField = requestChecker({
+	// 	requireList: [
+	// 		"sks_convertion_total",
+	// 		"sks_convertion_student_id",
+	// 		"sks_convertion_program_id",
+	// 	],
+	// 	requestData: body,
+	// });
+
+	// if (emptyField) {
+	// 	const message = `invalid request parameter! require (${emptyField})`;
+	// 	const response = <ResponseDataAttributes>ResponseData.error(message);
+	// 	return res.status(StatusCodes.BAD_REQUEST).json(response);
+	// }
 
 	try {
-		const users = req.body.users.map((user: UserAttributes) => ({
-			...user,
-			user_id: uuidv4(),
-		}));
-		await UserModel.bulkCreate(users);
+		const listSks = req.body.map((item: SksConvertionAttributes) => {
+			return {
+				...item,
+				sks_convertion_id: uuidv4(),
+			};
+		});
+
+		await SksConvertionModel.bulkCreate(listSks);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
 		return res.status(StatusCodes.CREATED).json(response);

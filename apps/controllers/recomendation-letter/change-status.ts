@@ -58,19 +58,19 @@ export const changeAssignMentStatus = async (req: any, res: Response) => {
 				break;
 			case "major":
 				recomendationLetter.recomendation_letter_assign_to_major = true;
-				recomendationLetter.recomendation_letter_from_study_program =
-					req.body.approval_letter;
-
 				recomendationLetter.recomendation_letter_status_message =
 					defaultMessage + " jurusan";
+
+				recomendationLetter.recomendation_letter_from_study_program =
+					req.body.approval_letter;
 				break;
 			case "lp3m":
 				recomendationLetter.recomendation_letter_assign_to_lp3m = true;
-				recomendationLetter.recomendation_letter_from_major =
-					req.body.approval_letter;
-
 				recomendationLetter.recomendation_letter_status_message =
 					defaultMessage + " LP3M";
+
+				recomendationLetter.recomendation_letter_from_major =
+					req.body.approval_letter;
 				break;
 			case "academic":
 				recomendationLetter.recomendation_letter_assign_to_academic = true;

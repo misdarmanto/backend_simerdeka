@@ -49,16 +49,6 @@ export const UserModel = sequelize.define<UserInstance>(
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 		},
-		// user_registration_status: {
-		// 	type: DataTypes.ENUM(
-		// 		"none",
-		// 		"recomendation-letter",
-		// 		"report-participation",
-		// 		"done"
-		// 	),
-		// 	allowNull: true,
-		// 	defaultValue: "none",
-		// },
 		user_role: {
 			type: DataTypes.ENUM("student", "study_program", "major", "lp3m", "academic"),
 			allowNull: false,

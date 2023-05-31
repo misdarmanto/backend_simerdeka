@@ -4,58 +4,30 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
-import { UserModel } from "../../models/user";
+import { SksConvertionAttributes, SksConvertionModel } from "../../models/sks-convertion";
+import { StudentModel } from "../../models/student";
+import { MbkmProgramModel } from "../../models/mbkm-program";
 
 export const findAll = async (req: any, res: Response) => {
 	try {
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await UserModel.findAndCountAll({
+		const result = await SksConvertionModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				...(req.query.search && {
-					[Op.or]: [{ user_name: { [Op.like]: `%${req.query.search}%` } }],
-				}),
 			},
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
 				limit: page.limit,
 				offset: page.offset,
 			}),
-		});
+			attributes: [
+				"sks_convertion_id",
+				"sks_convertion_total",
+				"sks_convertion_student_id",
+				"sks_convertion_mbkm_program_id",
+			],
 
-		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = page.data(result);
-		return res.status(StatusCodes.OK).json(response);
-	} catch (error: any) {
-		console.log(error.message);
-		const message = `unable to process request! error ${error.message}`;
-		const response = <ResponseDataAttributes>ResponseData.error(message);
-		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
-	}
-};
-
-export const findAllStudent = async (req: any, res: Response) => {
-	try {
-		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await UserModel.findAndCountAll({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				user_is_registered: { [Op.eq]: true },
-				...(req.query.search && {
-					[Op.or]: [{ user_name: { [Op.like]: `%${req.query.search}%` } }],
-				}),
-				...(req.header("x-user-role") === "major" && {
-					major_id: { [Op.eq]: req.header("x-major-id") },
-				}),
-				...(req.header("x-user-role") === "study_program" && {
-					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
-				}),
-			},
-			order: [["id", "desc"]],
-			...(req.query.pagination == "true" && {
-				limit: page.limit,
-				offset: page.offset,
-			}),
+			include: [StudentModel, MbkmProgramModel],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -70,9 +42,11 @@ export const findAllStudent = async (req: any, res: Response) => {
 };
 
 export const findOne = async (req: any, res: Response) => {
+	const params = <SksConvertionAttributes>req.params;
+
 	const emptyField = requestChecker({
-		requireList: ["x-user-id"],
-		requestData: req.headers,
+		requireList: ["id"],
+		requestData: req.params,
 	});
 
 	if (emptyField) {
@@ -82,23 +56,70 @@ export const findOne = async (req: any, res: Response) => {
 	}
 
 	try {
-		const user = await UserModel.findOne({
+		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
+		const result = await SksConvertionModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				// study_program_id: { [Op.eq]: req.header("x-study-program-id") },
-				// major_id: { [Op.eq]: req.header("x-major-id") },
+				sks_convertion_mbkm_program_id: { [Op.eq]: params.id },
 			},
+			order: [["id", "desc"]],
+			...(req.query.pagination == "true" && {
+				limit: page.limit,
+				offset: page.offset,
+			}),
+			attributes: [
+				"sks_convertion_id",
+				"sks_convertion_total",
+				"sks_convertion_student_id",
+				"sks_convertion_mbkm_program_id",
+			],
+
+			include: [StudentModel, MbkmProgramModel],
 		});
 
-		if (!user) {
-			const message = `not found!`;
-			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.NOT_FOUND).json(response);
-		}
+		const response = <ResponseDataAttributes>ResponseData.default;
+		response.data = page.data(result);
+		return res.status(StatusCodes.OK).json(response);
+	} catch (error: any) {
+		console.log(error.message);
+		const message = `unable to process request! error ${error.message}`;
+		const response = <ResponseDataAttributes>ResponseData.error(message);
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
+	}
+};
+
+export const findStudent = async (req: any, res: Response) => {
+	const params = <SksConvertionAttributes>req.params;
+
+	const emptyField = requestChecker({
+		requireList: ["id"],
+		requestData: req.params,
+	});
+
+	if (emptyField) {
+		const message = `invalid request parameter! require (${emptyField})`;
+		const response = <ResponseDataAttributes>ResponseData.error(message);
+		return res.status(StatusCodes.BAD_REQUEST).json(response);
+	}
+
+	try {
+		const result = await SksConvertionModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				sks_convertion_student_id: { [Op.eq]: params.id },
+			},
+			attributes: [
+				"sks_convertion_id",
+				"sks_convertion_total",
+				"sks_convertion_student_id",
+				"sks_convertion_mbkm_program_id",
+			],
+
+			include: [StudentModel, MbkmProgramModel],
+		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = user;
+		response.data = result;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
