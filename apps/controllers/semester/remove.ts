@@ -3,14 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { SemesterAttributes, SemesterModel } from "../../models/semester";
+import { SemesterModel } from "../../models/semester";
+import { UserModel } from "../../models/user";
 
 export const remove = async (req: any, res: Response) => {
-	const body = <SemesterAttributes>req.body;
-
 	const emptyField = requestChecker({
 		requireList: ["semester_id"],
-		requestData: body,
+		requestData: req.query,
 	});
 
 	if (emptyField) {
@@ -20,15 +19,29 @@ export const remove = async (req: any, res: Response) => {
 	}
 
 	try {
+		const user = await UserModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				user_id: { [Op.eq]: req.header("x-user-id") },
+				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
+			},
+		});
+
+		if (!user) {
+			const message = `access denied!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		}
+
 		const semesterCheck = await SemesterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				semester_id: { [Op.eq]: req.body.semester_id },
+				semester_id: { [Op.eq]: req.query.semester_id },
 			},
 		});
 
 		if (!semesterCheck) {
-			const message = `not found!`;
+			const message = `semester not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
@@ -37,10 +50,22 @@ export const remove = async (req: any, res: Response) => {
 			{ deleted: 1 },
 			{
 				where: {
-					semester_id: { [Op.eq]: body.semester_id },
+					semester_id: { [Op.eq]: req.query.semester_id },
 				},
 			}
 		);
+
+		const newSemester = await SemesterModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+			},
+			order: [["semester_status", "asc"]],
+		});
+
+		if (newSemester) {
+			newSemester.semester_status = "active";
+			newSemester.save();
+		}
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

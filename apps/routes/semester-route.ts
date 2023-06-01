@@ -5,7 +5,7 @@ import * as semester from "../controllers/semester";
 export const semesterRoutes = (app: Express) => {
 	const router = express.Router();
 	app.use("/semesters", middleware.useAuthorization, router);
-	router.get("/all", (req: Request, res: Response) => semester.findAll(req, res));
+	router.get("/", (req: Request, res: Response) => semester.findAll(req, res));
 	router.get("/detail/:id", (req: Request, res: Response) =>
 		semester.findOne(req, res)
 	);

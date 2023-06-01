@@ -15,8 +15,11 @@ export const findAll = async (req: any, res: Response) => {
 				...(req.query.search && {
 					[Op.or]: [{ semester_name: { [Op.like]: `%${req.query.search}%` } }],
 				}),
+				...(req.query.semester_status && {
+					semester_status: { [Op.eq]: "active" },
+				}),
 			},
-			order: [["id", "desc"]],
+			order: [["semester_status", "asc"]],
 			...(req.query.pagination == "true" && {
 				limit: page.limit,
 				offset: page.offset,

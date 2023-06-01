@@ -9,9 +9,11 @@ export interface MbkmProgramAttributes extends ZygoteAttributes {
 	mbkm_program_name: string;
 	mbkm_program_category: string;
 	mbkm_program_syllabus: string;
-	major_id: string;
-	study_program_id: string;
-	semester_id: string;
+	mbkm_program_department_id: string;
+	mbkm_program_department_name: string;
+	mbkm_program_study_program_id: string;
+	mbkm_program_study_program_name: string;
+	mbkm_program_semester_id: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -50,15 +52,23 @@ export const MbkmProgramModel = sequelize.define<MbkmProgramInstance>(
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		major_id: {
+		mbkm_program_department_id: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		study_program_id: {
+		mbkm_program_department_name: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		semester_id: {
+		mbkm_program_study_program_id: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		mbkm_program_study_program_name: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		mbkm_program_semester_id: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
@@ -76,6 +86,6 @@ export const MbkmProgramModel = sequelize.define<MbkmProgramInstance>(
 );
 
 MbkmProgramModel.hasOne(SemesterModel, {
-	sourceKey: "semester_id",
+	sourceKey: "mbkm_program_semester_id",
 	foreignKey: "semester_id",
 });
