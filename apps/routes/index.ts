@@ -13,6 +13,7 @@ import { studyProgramRoutes } from "./study-program";
 import { departmentRoutes } from "./department-route";
 import { academicRoutes } from "./academic-route";
 import { lp3mRoutes } from "./lp3m-route";
+import { summaryRoutes } from "./summary";
 
 export const route = (app: Express) => {
 	app.get("/", (req: Request, res: Response) => index(req, res));
@@ -30,4 +31,5 @@ export const route = (app: Express) => {
 	departmentRoutes(app);
 	academicRoutes(app);
 	lp3mRoutes(app);
+	summaryRoutes(app);
 };
