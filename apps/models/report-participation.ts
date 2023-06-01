@@ -10,9 +10,9 @@ export interface ReportParticipationAttributes extends ZygoteAttributes {
 	report_participation_letter: string;
 	report_participation_status_message: string;
 	report_participation_status: "waiting" | "accepted" | "rejected";
-	study_program_id: string;
-	major_id: string;
-	student_id: string;
+	report_participation_study_program_id: string;
+	report_participation_department_id: string;
+	report_participation_student_id: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -48,15 +48,15 @@ export const ReportParticipationModel = sequelize.define<ReportParticipationInst
 			allowNull: true,
 			defaultValue: "waiting",
 		},
-		student_id: {
+		report_participation_student_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		major_id: {
+		report_participation_department_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		study_program_id: {
+		report_participation_study_program_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
@@ -74,16 +74,6 @@ export const ReportParticipationModel = sequelize.define<ReportParticipationInst
 );
 
 ReportParticipationModel.hasOne(StudentModel, {
-	sourceKey: "student_id",
+	sourceKey: "report_participation_student_id",
 	foreignKey: "student_id",
-});
-
-ReportParticipationModel.hasOne(ListOfStudyModelProgram, {
-	sourceKey: "study_program_id",
-	foreignKey: "study_program_id",
-});
-
-ReportParticipationModel.hasOne(ListOfMajorModel, {
-	sourceKey: "major_id",
-	foreignKey: "major_id",
 });

@@ -4,9 +4,9 @@ import * as letterOfRecomendation from "../controllers/recomendation-letter";
 
 export const RecomendationLetterRoutes = (app: Express) => {
 	const route = express.Router();
-	app.use("/recomendation-letter", middleware.useAuthorization, route);
+	app.use("/recomendation-letters", middleware.useAuthorization, route);
 
-	route.get("/all", (req: Request, res: Response) =>
+	route.get("/", (req: Request, res: Response) =>
 		letterOfRecomendation.findAll(req, res)
 	);
 	route.get("/detail/:id", (req: Request, res: Response) =>

@@ -7,10 +7,11 @@ export interface StudentAttributes extends ZygoteAttributes {
 	student_name: string;
 	student_nim: string;
 	student_email: string;
-	major_id: string;
-	major_name: string;
-	study_program_id: string;
-	study_program_name: string;
+	student_is_registered: boolean;
+	student_department_id: string;
+	student_department_name: string;
+	student_study_program_id: string;
+	student_study_program_name: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -45,19 +46,24 @@ export const StudentModel = sequelize.define<StudentInstance>(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		major_id: {
+		student_is_registered: {
+			type: DataTypes.BOOLEAN,
+			allowNull: true,
+			defaultValue: false,
+		},
+		student_department_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		major_name: {
+		student_department_name: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		study_program_id: {
+		student_study_program_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		study_program_name: {
+		student_study_program_name: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},

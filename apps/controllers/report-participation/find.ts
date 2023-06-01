@@ -9,12 +9,34 @@ import {
 	ReportParticipationModel,
 } from "../../models/report-participation";
 import { StudentModel } from "../../models/student";
-import { majorsAndStudyPrograms } from "../../routes/majors-and-study-programs";
-import { ListOfStudyModelProgram } from "../../models/list-study-program";
-import { ListOfMajorModel } from "../../models/list-of-major";
+import { UserModel } from "../../models/user";
 
 export const findAll = async (req: any, res: Response) => {
+	const emptyField = requestChecker({
+		requireList: ["x-user-id"],
+		requestData: req.headers,
+	});
+
+	if (emptyField) {
+		const message = `invalid request parameter! require (${emptyField})`;
+		const response = <ResponseDataAttributes>ResponseData.error(message);
+		return res.status(StatusCodes.BAD_REQUEST).json(response);
+	}
+
 	try {
+		const user = await UserModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				user_id: { [Op.eq]: req.header("x-user-id") },
+			},
+		});
+
+		if (!user) {
+			const message = `user not registered!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		}
+
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await ReportParticipationModel.findAndCountAll({
 			where: {
@@ -22,14 +44,18 @@ export const findAll = async (req: any, res: Response) => {
 				...(req.query.search && {
 					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
 				}),
-				...(req.header("x-user-role") === "student" && {
-					student_id: { [Op.eq]: req.header("x-user-id") },
+				...(user.user_role === "student" && {
+					report_participation_student_id: { [Op.eq]: user.user_id },
 				}),
-				...(req.header("x-user-role") === "study_program" && {
-					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
+				...(user.user_role === "study_program" && {
+					report_participation_study_program_id: {
+						[Op.eq]: user.user_id,
+					},
 				}),
-				...(req.header("x-user-role") === "major" && {
-					major_id: { [Op.eq]: req.header("x-major-id") },
+				...(user.user_role === "department" && {
+					report_participation_department_id: {
+						[Op.eq]: user.user_id,
+					},
 				}),
 			},
 			order: [["id", "desc"]],
@@ -37,7 +63,7 @@ export const findAll = async (req: any, res: Response) => {
 				limit: page.limit,
 				offset: page.offset,
 			}),
-			include: [StudentModel, ListOfStudyModelProgram, ListOfMajorModel],
+			include: [StudentModel],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -66,22 +92,39 @@ export const findOne = async (req: any, res: Response) => {
 	}
 
 	try {
+		const user = await UserModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				user_id: { [Op.eq]: req.header("x-user-id") },
+			},
+		});
+
+		if (!user) {
+			const message = `student not found!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
+		}
+
 		const reportParticipation = await ReportParticipationModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				report_participation_id: { [Op.eq]: params.id },
-				...(req.header("x-user-role") === "student" && {
-					student_id: { [Op.eq]: req.header("x-user-id") },
+				...(user.user_role === "student" && {
+					report_participation_student_id: { [Op.eq]: user.user_id },
 				}),
-				...(req.header("x-user-role") === "study_program" && {
-					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
+				...(user.user_role === "study_program" && {
+					report_participation_study_program_id: {
+						[Op.eq]: user.user_id,
+					},
 				}),
-				...(req.header("x-user-role") === "major" && {
-					major_id: { [Op.eq]: req.header("x-major-id") },
+				...(user.user_role === "department" && {
+					report_participation_department_id: {
+						[Op.eq]: user.user_id,
+					},
 				}),
 			},
 
-			include: [StudentModel, ListOfStudyModelProgram, ListOfMajorModel],
+			include: [StudentModel],
 		});
 
 		if (!reportParticipation) {

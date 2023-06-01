@@ -5,7 +5,7 @@ import * as reportParticipation from "../controllers/report-participation";
 export const reportParticipationRoutes = (app: Express) => {
 	const route = express.Router();
 	app.use("/report-participations", middleware.useAuthorization, route);
-	route.get("/all", (req: Request, res: Response) =>
+	route.get("/", (req: Request, res: Response) =>
 		reportParticipation.findAll(req, res)
 	);
 	route.get("/detail/:id", (req: Request, res: Response) =>

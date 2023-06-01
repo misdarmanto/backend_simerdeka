@@ -13,8 +13,8 @@ export const update = async (req: any, res: Response) => {
 	const body = <ReportParticipationAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["report_participation_id"],
-		requestData: body,
+		requireList: ["report_participation_id", "x-user-id"],
+		requestData: { ...req.body, ...req.headers },
 	});
 
 	if (emptyField) {
@@ -24,6 +24,20 @@ export const update = async (req: any, res: Response) => {
 	}
 
 	try {
+		const user = await UserModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				user_id: { [Op.eq]: req.header("x-user-id") },
+				user_role: { [Op.eq]: "academic" },
+			},
+		});
+
+		if (!user) {
+			const message = `access denied!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		}
+
 		const reportParticipation = await ReportParticipationModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },

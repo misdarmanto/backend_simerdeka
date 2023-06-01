@@ -2,56 +2,45 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
-export interface UserAttributes extends ZygoteAttributes {
-	user_id: string;
-	user_name: string;
-	user_email: string;
-	user_role: "student" | "study_program" | "department" | "lp3m" | "academic";
+export interface Lp3mAttributes extends ZygoteAttributes {
+	lp3m_id: string;
+	lp3m_name: string;
+	lp3m_email: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type UserCreationAttributes = Optional<
-	UserAttributes,
+type Lp3mCreationAttributes = Optional<
+	Lp3mAttributes,
 	"id" | "created_on" | "modified_on"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
-interface UserInstance
-	extends Model<UserAttributes, UserCreationAttributes>,
-		UserAttributes {}
+interface Lp3mInstance
+	extends Model<Lp3mAttributes, Lp3mCreationAttributes>,
+		Lp3mAttributes {}
 
-export const UserModel = sequelize.define<UserInstance>(
-	"user",
+export const Lp3mModel = sequelize.define<Lp3mInstance>(
+	"lp3m",
 	{
 		...ZygoteModel,
-		user_id: {
+		lp3m_id: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		user_name: {
+		lp3m_name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		user_email: {
+		lp3m_email: {
 			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		user_role: {
-			type: DataTypes.ENUM(
-				"student",
-				"study_program",
-				"department",
-				"lp3m",
-				"academic"
-			),
 			allowNull: false,
 		},
 	},
 	{
 		...sequelize,
 		timestamps: false,
-		tableName: "user",
+		tableName: "lp3m",
 		deletedAt: false,
 		paranoid: true,
 		underscored: true,

@@ -7,6 +7,8 @@ import {
 	RecomendationLetterAttributes,
 	RecomendationLetterModel,
 } from "../../models/recomendation-letter";
+import { StudentModel } from "../../models/student";
+import { Op } from "sequelize";
 
 export const create = async (req: any, res: Response) => {
 	const body = <RecomendationLetterAttributes>req.body;
@@ -14,8 +16,6 @@ export const create = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
 		requireList: [
 			"x-user-id",
-			"x-study-program-id",
-			"x-major-id",
 			"recomendation_letter_student_transkrip",
 			"recomendation_letter_dosen_wali",
 			"recomendation_letter_approval_letter",
@@ -32,9 +32,22 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.student_id = req.header("x-user-id");
-		body.major_id = req.header("x-major-id");
-		body.study_program_id = req.header("x-study-program-id");
+		const student = await StudentModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				student_id: { [Op.eq]: req.header("x-user-id") },
+			},
+		});
+
+		if (!student) {
+			const message = `student not found!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
+		}
+
+		body.recomendation_letter_student_id = student.student_id;
+		body.recomendation_letter_department_id = student.student_department_id;
+		body.recomendation_letter_study_program_id = student.student_study_program_id;
 		body.recomendation_letter_id = uuidv4();
 		body.recomendation_letter_assign_to_student = true;
 		body.recomendation_letter_assign_to_study_program = true;

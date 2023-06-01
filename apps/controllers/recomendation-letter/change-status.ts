@@ -3,13 +3,18 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { RecomendationLetterModel } from "../../models/recomendation-letter";
+import {
+	RecomendationLetterAttributes,
+	RecomendationLetterModel,
+} from "../../models/recomendation-letter";
 import { UserModel } from "../../models/user";
 
 export const changeAssignMentStatus = async (req: any, res: Response) => {
+	const body = <RecomendationLetterAttributes>req.body;
+
 	const emptyField = requestChecker({
-		requireList: ["student_id", "recomendation_letter_id"],
-		requestData: req.body,
+		requireList: ["recomendation_letter_id", "x-user-id"],
+		requestData: { ...req.body, ...req.headers },
 	});
 
 	if (emptyField) {
@@ -18,84 +23,64 @@ export const changeAssignMentStatus = async (req: any, res: Response) => {
 		return res.status(StatusCodes.BAD_REQUEST).json(response);
 	}
 
+	console.log(body);
+
 	try {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.body.student_id },
+				user_id: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
-		if (!user) {
-			const message = `not found!`;
+		if (user === null || user.user_role === "student") {
+			const message = `access denied!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.NOT_FOUND).json(response);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
 		const recomendationLetter = await RecomendationLetterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				recomendation_letter_id: { [Op.eq]: req.body.recomendation_letter_id },
+				recomendation_letter_id: { [Op.eq]: body.recomendation_letter_id },
 			},
 		});
 
 		if (!recomendationLetter) {
-			const message = `not found!`;
+			const message = `recomentdation letter not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
-		}
-
-		const defaultMessage = "surat rekomendasi telah diteruskan ke";
-
-		switch (req.body.assign_to) {
-			case "student":
-				recomendationLetter.recomendation_letter_assign_to_student = true;
-				break;
-			case "study_program":
-				recomendationLetter.recomendation_letter_assign_to_study_program = true;
-				recomendationLetter.recomendation_letter_status_message =
-					"Sedang menunggu persetujuan prodi";
-				break;
-			case "major":
-				recomendationLetter.recomendation_letter_assign_to_major = true;
-				recomendationLetter.recomendation_letter_status_message =
-					defaultMessage + " jurusan";
-
-				recomendationLetter.recomendation_letter_from_study_program =
-					req.body.approval_letter;
-				break;
-			case "lp3m":
-				recomendationLetter.recomendation_letter_assign_to_lp3m = true;
-				recomendationLetter.recomendation_letter_status_message =
-					defaultMessage + " LP3M";
-
-				recomendationLetter.recomendation_letter_from_major =
-					req.body.approval_letter;
-				break;
-			case "academic":
-				recomendationLetter.recomendation_letter_assign_to_academic = true;
-				recomendationLetter.recomendation_letter_from_academic =
-					req.body.approval_letter;
-				recomendationLetter.recomendation_letter_status_message =
-					defaultMessage + " Akademik";
-				break;
-			case "done":
-				recomendationLetter.recomendation_letter_from_academic =
-					req.body.approval_letter;
-				recomendationLetter.recomendation_letter_status = "accepted";
-				recomendationLetter.recomendation_letter_status_message =
-					"Selamat, surat rekomendasi mu telah disetujui";
-				user.user_is_registered = true;
-				await user.save();
-				break;
-			default:
-				break;
 		}
 
 		if ("status" in req.body) {
 			recomendationLetter.recomendation_letter_status = req.body.status;
 			recomendationLetter.recomendation_letter_status_message =
 				req.body.status_message;
+		}
+
+		const approvalLetter = body.recomendation_letter_approval_letter;
+
+		console.log(approvalLetter);
+		switch (user.user_role) {
+			case "study_program":
+				recomendationLetter.recomendation_letter_assign_to_department = true;
+				recomendationLetter.recomendation_letter_from_study_program =
+					approvalLetter;
+				break;
+			case "department":
+				recomendationLetter.recomendation_letter_assign_to_lp3m = true;
+				recomendationLetter.recomendation_letter_from_department = approvalLetter;
+				break;
+			case "lp3m":
+				recomendationLetter.recomendation_letter_assign_to_academic = true;
+				recomendationLetter.recomendation_letter_from_lp3m = approvalLetter;
+				break;
+			case "academic":
+				recomendationLetter.recomendation_letter_status = "accepted";
+				recomendationLetter.recomendation_letter_from_academic = approvalLetter;
+				break;
+			default:
+				break;
 		}
 
 		await recomendationLetter.save();
