@@ -8,6 +8,8 @@ import {
 	ReportParticipationModel,
 } from "../../models/report-participation";
 import { UserModel } from "../../models/user";
+import { StudentModel } from "../../models/student";
+import { StudyProgramModel } from "../../models/study-program";
 
 export const update = async (req: any, res: Response) => {
 	const body = <ReportParticipationAttributes>req.body;
@@ -70,6 +72,38 @@ export const update = async (req: any, res: Response) => {
 				report_participation_id: { [Op.eq]: body.report_participation_id },
 			},
 		});
+
+		console.log(req.body.report_participation_status);
+		if (req.body.report_participation_status === "accepted") {
+			const student = await StudentModel.findOne({
+				where: {
+					deleted: { [Op.eq]: 0 },
+					student_id: {
+						[Op.eq]: reportParticipation.report_participation_student_id,
+					},
+				},
+			});
+
+			const studyProgram = await StudyProgramModel.findOne({
+				where: {
+					deleted: { [Op.eq]: 0 },
+					study_program_id: {
+						[Op.eq]:
+							reportParticipation.report_participation_study_program_id,
+					},
+				},
+			});
+
+			if (student) {
+				student.student_is_registered = true;
+				student.save();
+			}
+
+			if (studyProgram) {
+				studyProgram.study_program_is_registered = true;
+				studyProgram.save();
+			}
+		}
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

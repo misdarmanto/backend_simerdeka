@@ -17,6 +17,11 @@ export const findAll = async (req: any, res: Response) => {
 						{ study_program_name: { [Op.like]: `%${req.query.search}%` } },
 					],
 				}),
+				...(req.query.registered && {
+					study_program_is_registered: {
+						[Op.eq]: true,
+					},
+				}),
 			},
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
@@ -53,6 +58,11 @@ export const findOne = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				study_program_id: { [Op.eq]: req.params.id },
+				...(req.query.registered && {
+					study_program_is_registered: {
+						[Op.eq]: true,
+					},
+				}),
 			},
 		});
 
