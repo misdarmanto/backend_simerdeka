@@ -1,20 +1,17 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { requestChecker } from "../../utilities/requestCheker";
-import { v4 as uuidv4 } from "uuid";
-import {
-	ReportParticipationAttributes,
-	ReportParticipationModel,
-} from "../../models/report-participation";
-import { StudentModel } from "../../models/student";
 import { Op } from "sequelize";
-import { RecomendationLetterModel } from "../../models/recomendation-letter";
+import { requestChecker } from "../../utilities/requestCheker";
+import { UserModel } from "../../models/user";
+import { LogBookAttributes, LogBookModel } from "../../models/log-book";
+import { StudentModel } from "../../models/student";
 
-export const create = async (req: any, res: Response) => {
-	const body = <ReportParticipationAttributes>req.body;
+export const update = async (req: any, res: Response) => {
+	const body = <LogBookAttributes>req.body;
+
 	const emptyField = requestChecker({
-		requireList: ["x-user-id", "report_participation_letter"],
+		requireList: ["log_book_id", "x-user-id"],
 		requestData: { ...req.body, ...req.headers },
 	});
 
@@ -33,34 +30,57 @@ export const create = async (req: any, res: Response) => {
 		});
 
 		if (!student) {
-			const message = `student not found!`;
-			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.NOT_FOUND).json(response);
-		}
-
-		const recomendationLetter = await RecomendationLetterModel.findOne({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				recomendation_letter_student_id: { [Op.eq]: student.student_id },
-				recomendation_letter_status: { [Op.eq]: "accepted" },
-			},
-		});
-
-		if (!recomendationLetter) {
-			const message = `recommendation letter not registered`;
+			const message = `access denied!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		body.report_participation_id = uuidv4();
-		body.report_participation_student_id = student.student_id;
-		body.report_participation_study_program_id = student.student_study_program_id;
-		body.report_participation_department_id = student.student_department_id;
-		await ReportParticipationModel.create(body);
+		const user = await UserModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				user_id: { [Op.eq]: req.header("x-user-id") },
+				user_role: { [Op.eq]: "student" },
+			},
+		});
+
+		if (!user) {
+			const message = `access denied!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		}
+
+		const logBook = await LogBookModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				log_book_id: { [Op.eq]: body.log_book_id },
+			},
+		});
+
+		if (!logBook) {
+			const message = `not found!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
+		}
+
+		const newData = {
+			...(body.log_book_report_week && {
+				log_book_report_week: body.log_book_report_week,
+			}),
+			...(body.log_book_report_file && {
+				log_book_report_file: body.log_book_report_file,
+			}),
+		};
+
+		await LogBookModel.update(newData, {
+			where: {
+				deleted: { [Op.eq]: 0 },
+				log_book_id: { [Op.eq]: body.log_book_id },
+			},
+		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
-		return res.status(StatusCodes.CREATED).json(response);
+		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;

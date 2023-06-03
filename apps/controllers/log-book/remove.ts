@@ -3,14 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { SemesterAttributes, SemesterModel } from "../../models/semester";
+import { LogBookModel } from "../../models/log-book";
+import { StudentModel } from "../../models/student";
 
 export const remove = async (req: any, res: Response) => {
-	const body = <SemesterAttributes>req.body;
-
 	const emptyField = requestChecker({
-		requireList: ["semester_id"],
-		requestData: body,
+		requireList: ["log_book_id"],
+		requestData: req.query,
 	});
 
 	if (emptyField) {
@@ -20,24 +19,37 @@ export const remove = async (req: any, res: Response) => {
 	}
 
 	try {
-		const semesterCheck = await SemesterModel.findOne({
+		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				semester_id: { [Op.eq]: req.body.semester_id },
+				student_id: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
-		if (!semesterCheck) {
+		if (!student) {
+			const message = `access denied!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		}
+
+		const logBook = await LogBookModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				log_book_id: { [Op.eq]: req.query.log_book_id },
+			},
+		});
+
+		if (!logBook) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await SemesterModel.update(
+		await LogBookModel.update(
 			{ deleted: 1 },
 			{
 				where: {
-					semester_id: { [Op.eq]: body.semester_id },
+					log_book_id: { [Op.eq]: req.query.log_book_id },
 				},
 			}
 		);

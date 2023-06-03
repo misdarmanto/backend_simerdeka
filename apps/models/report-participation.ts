@@ -1,8 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
-import { ListOfStudyModelProgram } from "./list-study-program";
-import { ListOfMajorModel } from "./list-of-major";
 import { StudentModel } from "./student";
 
 export interface ReportParticipationAttributes extends ZygoteAttributes {
