@@ -5,7 +5,7 @@ import * as mbkmProgram from "../controllers/mbkm-program";
 export const mbkmProgramRoutes = (app: Express) => {
 	const route = express.Router();
 	app.use("/mbkm-programs", middleware.useAuthorization, route);
-	route.get("/all", (req: Request, res: Response) => mbkmProgram.findAll(req, res));
+	route.get("/", (req: Request, res: Response) => mbkmProgram.findAll(req, res));
 	route.get("/detail/:id", (req: Request, res: Response) =>
 		mbkmProgram.findOne(req, res)
 	);

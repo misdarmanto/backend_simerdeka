@@ -1,15 +1,19 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { MbkmProgramAttributes, MbkmProgramModel } from "../../models/mbkm-program";
+import { v4 as uuidv4 } from "uuid";
 import { UserModel } from "../../models/user";
+import { Op } from "sequelize";
+import {
+	MbkmProgramParticipationAttributes,
+	MbkmProgramParticipationModel,
+} from "../../models/mbkm-program-participation";
 
-export const remove = async (req: any, res: Response) => {
+export const create = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
-		requireList: ["mbkm_program_id"],
-		requestData: req.query,
+		requireList: ["x-user-id"],
+		requestData: req.headers,
 	});
 
 	if (emptyField) {
@@ -33,31 +37,23 @@ export const remove = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		const mbkmProgram = await MbkmProgramModel.findOne({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				mbkm_program_id: { [Op.eq]: req.query.mbkm_program_id },
-			},
-		});
+		let mbkmProgramParticipationList: MbkmProgramParticipationAttributes[] = [];
 
-		if (!mbkmProgram) {
-			const message = `not found!`;
-			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.NOT_FOUND).json(response);
+		if (Array.isArray(req.body)) {
+			const result = req.body.map((item: MbkmProgramParticipationAttributes) => {
+				const newData: MbkmProgramParticipationAttributes = {
+					...item,
+					mbkm_program_participation_id: uuidv4(),
+				};
+				return newData;
+			});
+			mbkmProgramParticipationList = result;
 		}
 
-		await MbkmProgramModel.update(
-			{ deleted: 1 },
-			{
-				where: {
-					mbkm_program_id: { [Op.eq]: req.query.mbkm_program_id },
-				},
-			}
-		);
-
+		await MbkmProgramParticipationModel.bulkCreate(mbkmProgramParticipationList);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
-		return res.status(StatusCodes.OK).json(response);
+		return res.status(StatusCodes.CREATED).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;

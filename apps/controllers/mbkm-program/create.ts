@@ -16,11 +16,7 @@ export const create = async (req: any, res: Response) => {
 			"mbkm_program_name",
 			"mbkm_program_category",
 			"mbkm_program_semester_id",
-			"mbkm_program_department_id",
 			"mbkm_program_syllabus",
-			"mbkm_program_department_name",
-			"mbkm_program_study_program_id",
-			"mbkm_program_study_program_name",
 		],
 		requestData: { ...req.body, ...req.headers },
 	});

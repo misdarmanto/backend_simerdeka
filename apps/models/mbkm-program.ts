@@ -9,10 +9,6 @@ export interface MbkmProgramAttributes extends ZygoteAttributes {
 	mbkm_program_name: string;
 	mbkm_program_category: string;
 	mbkm_program_syllabus: string;
-	mbkm_program_department_id: string;
-	mbkm_program_department_name: string;
-	mbkm_program_study_program_id: string;
-	mbkm_program_study_program_name: string;
 	mbkm_program_semester_id: string;
 }
 
@@ -49,22 +45,6 @@ export const MbkmProgramModel = sequelize.define<MbkmProgramInstance>(
 			allowNull: true,
 		},
 		mbkm_program_syllabus: {
-			type: DataTypes.STRING,
-			allowNull: true,
-		},
-		mbkm_program_department_id: {
-			type: DataTypes.STRING,
-			allowNull: true,
-		},
-		mbkm_program_department_name: {
-			type: DataTypes.STRING,
-			allowNull: true,
-		},
-		mbkm_program_study_program_id: {
-			type: DataTypes.STRING,
-			allowNull: true,
-		},
-		mbkm_program_study_program_name: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
