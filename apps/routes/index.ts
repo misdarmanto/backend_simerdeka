@@ -14,6 +14,7 @@ import { academicRoutes } from "./academic-route";
 import { lp3mRoutes } from "./lp3m-route";
 import { summaryRoutes } from "./summary";
 import { logBookRoute } from "./log-book-route";
+import { mataKuliahRoute } from "./mata-kuliah-route";
 
 export const route = (app: Express) => {
 	app.get("/", (req: Request, res: Response) => index(req, res));
@@ -32,4 +33,5 @@ export const route = (app: Express) => {
 	lp3mRoutes(app);
 	summaryRoutes(app);
 	logBookRoute(app);
+	mataKuliahRoute(app);
 };

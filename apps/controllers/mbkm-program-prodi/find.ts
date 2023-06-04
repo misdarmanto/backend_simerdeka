@@ -4,10 +4,12 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
-import { SemesterModel } from "../../models/semester";
 import { MbkmProgramAttributes, MbkmProgramModel } from "../../models/mbkm-program";
-import { MbkmProgramParticipationModel } from "../../models/mbkm-program-participation";
+import { MbkmProgramProdiModel } from "../../models/mbkm-program-prodi";
 import { UserModel } from "../../models/user";
+import { SemesterModel } from "../../models/semester";
+import { StudyProgramModel } from "../../models/study-program";
+import { DepartmentModel } from "../../models/department";
 
 export const findAll = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
@@ -36,34 +38,45 @@ export const findAll = async (req: any, res: Response) => {
 		}
 
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await MbkmProgramParticipationModel.findAndCountAll({
+		const result = await MbkmProgramProdiModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
 					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
 				}),
+				...(req.query.program_id && {
+					mbkm_program_prodi_program_id: {
+						[Op.eq]: req.query.program_id,
+					},
+				}),
 				...(req.query.semester_id && {
-					mbkm_program_participation_semester_id: {
+					mbkm_program_prodi_semester_id: {
 						[Op.eq]: req.query.semester_id,
 					},
 				}),
 				...(user?.user_role === "study_program" && {
-					mbkm_program_participation_study_program_id: {
+					mbkm_program_prodi_study_program_id: {
 						[Op.eq]: user.user_id,
 					},
 				}),
 				...(user?.user_role === "department" && {
-					mbkm_program_participation_department_id: {
+					mbkm_program_prodi_department_id: {
 						[Op.eq]: user.user_id,
 					},
 				}),
 			},
+
+			include: [
+				SemesterModel,
+				StudyProgramModel,
+				DepartmentModel,
+				MbkmProgramModel,
+			],
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
 				limit: page.limit,
 				offset: page.offset,
 			}),
-			include: [SemesterModel],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -105,27 +118,32 @@ export const findOne = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		const result = await MbkmProgramParticipationModel.findOne({
+		const result = await MbkmProgramProdiModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkm_program_participation_id: { [Op.eq]: params.id },
+				mbkm_program_prodi_id: { [Op.eq]: params.id },
 				...(req.query.semester_id && {
-					mbkm_program_participation_semester_id: {
+					mbkm_program_prodi_semester_id: {
 						[Op.eq]: req.query.semester_id,
 					},
 				}),
 				...(user?.user_role === "study_program" && {
-					mbkm_program_participation_study_program_id: {
+					mbkm_program_prodi_study_program_id: {
 						[Op.eq]: user.user_id,
 					},
 				}),
 				...(user?.user_role === "department" && {
-					mbkm_program_participation_department_id: {
+					mbkm_program_prodi_department_id: {
 						[Op.eq]: user.user_id,
 					},
 				}),
 			},
-			include: [SemesterModel],
+			include: [
+				SemesterModel,
+				StudyProgramModel,
+				DepartmentModel,
+				MbkmProgramModel,
+			],
 		});
 
 		if (!result) {

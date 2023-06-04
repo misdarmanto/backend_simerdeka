@@ -1,19 +1,15 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { requestChecker } from "../../utilities/requestCheker";
-import { v4 as uuidv4 } from "uuid";
-import { UserModel } from "../../models/user";
 import { Op } from "sequelize";
-import {
-	MbkmProgramParticipationAttributes,
-	MbkmProgramParticipationModel,
-} from "../../models/mbkm-program-participation";
+import { requestChecker } from "../../utilities/requestCheker";
+import { LogBookModel } from "../../models/log-book";
+import { StudentModel } from "../../models/student";
 
-export const create = async (req: any, res: Response) => {
+export const remove = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
-		requireList: ["x-user-id"],
-		requestData: req.headers,
+		requireList: ["log_book_id"],
+		requestData: req.query,
 	});
 
 	if (emptyField) {
@@ -23,37 +19,44 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		const user = await UserModel.findOne({
+		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
+				student_id: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
-		if (!user) {
+		if (!student) {
 			const message = `access denied!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		let mbkmProgramParticipationList: MbkmProgramParticipationAttributes[] = [];
+		const logBook = await LogBookModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				log_book_id: { [Op.eq]: req.query.log_book_id },
+			},
+		});
 
-		if (Array.isArray(req.body)) {
-			const result = req.body.map((item: MbkmProgramParticipationAttributes) => {
-				const newData: MbkmProgramParticipationAttributes = {
-					...item,
-					mbkm_program_participation_id: uuidv4(),
-				};
-				return newData;
-			});
-			mbkmProgramParticipationList = result;
+		if (!logBook) {
+			const message = `not found!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await MbkmProgramParticipationModel.bulkCreate(mbkmProgramParticipationList);
+		await LogBookModel.update(
+			{ deleted: 1 },
+			{
+				where: {
+					log_book_id: { [Op.eq]: req.query.log_book_id },
+				},
+			}
+		);
+
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
-		return res.status(StatusCodes.CREATED).json(response);
+		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;
