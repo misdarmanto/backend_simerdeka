@@ -93,7 +93,7 @@ export const findOne = async (req: any, res: Response) => {
 		});
 
 		if (!user) {
-			const message = `student not found!`;
+			const message = `user not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}

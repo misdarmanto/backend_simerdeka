@@ -4,6 +4,8 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
 import { StudentAttributes, StudentModel } from "../../models/student";
+import { StudyProgramModel } from "../../models/study-program";
+import { Op } from "sequelize";
 
 export const create = async (req: any, res: Response) => {
 	const body = <StudentAttributes>req.body;
@@ -33,6 +35,18 @@ export const create = async (req: any, res: Response) => {
 		// 	user_id: uuidv4(),
 		// }));
 		// await UserModel.bulkCreate(users);
+		// const studyProgram = await StudyProgramModel.findOne({
+		// 	where: {
+		// 		deleted: { [Op.eq]: 0 },
+		// 		study_program_id: { [Op.eq]: req.header("x-user-id") },
+		// 	},
+		// });
+
+		// if (!studyProgram) {
+		// 	const message = `access denied!`;
+		// 	const response = <ResponseDataAttributes>ResponseData.error(message);
+		// 	return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		// }
 
 		body.student_id = uuidv4();
 		await StudentModel.create(body);

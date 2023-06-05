@@ -4,14 +4,14 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
 import { Op } from "sequelize";
-import { MataKuliahAttributes, MataKuliahModel } from "../../models/matkul";
 import { UserModel } from "../../models/user";
-import { StudyProgramModel } from "../../models/study-program";
+import { TranskripAttributes, TranskripModel } from "../../models/transkrip";
+import { StudentModel } from "../../models/student";
 
 export const create = async (req: any, res: Response) => {
-	const body = <MataKuliahAttributes>req.body;
+	const body = <TranskripAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["x-user-id", "mataKuliahName", "mataKuliahSksTotal"],
+		requireList: ["x-user-id", "transkripStudentId"],
 		requestData: { ...req.body, ...req.headers },
 	});
 
@@ -22,25 +22,40 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		const studyProgram = await StudyProgramModel.findOne({
+		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				study_program_id: { [Op.eq]: req.header("x-user-id") },
+				user_id: { [Op.eq]: req.header("x-user-id") },
+				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
 			},
 		});
 
-		if (!studyProgram) {
+		if (!user) {
 			const message = `access denied!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		body.mataKuliahId = uuidv4();
-		body.mataKuliahStudyProgramId = studyProgram.study_program_id;
-		body.mataKuliahStudyProgramName = studyProgram.study_program_name;
-		body.mataKuliahDepartmentId = studyProgram.study_program_department_id;
-		body.mataKuliahDepartmentName = studyProgram.study_program_department_name;
-		await MataKuliahModel.create(body);
+		const student = await StudentModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				student_id: { [Op.eq]: body.transkripStudentId },
+				student_is_registered: { [Op.eq]: true },
+			},
+		});
+
+		if (!student) {
+			const message = `student not found!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.NOT_FOUND).json(response);
+		}
+
+		body.transkripId = uuidv4();
+		body.transkripStudentId = student.student_id;
+		body.transkripMataKuliahId = body.transkripMataKuliahId;
+		body.transkripStudyProgramId = student.student_study_program_id;
+		body.transkripDepartmentId = student.student_department_id;
+		await TranskripModel.create(body);
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

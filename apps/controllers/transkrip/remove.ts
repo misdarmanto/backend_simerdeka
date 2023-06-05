@@ -3,13 +3,12 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { StudentAttributes, StudentModel } from "../../models/student";
+import { UserModel } from "../../models/user";
+import { TranskripModel } from "../../models/transkrip";
 
 export const remove = async (req: any, res: Response) => {
-	const body = <StudentAttributes>req.body;
-
 	const emptyField = requestChecker({
-		requireList: ["student_id"],
+		requireList: ["id"],
 		requestData: req.query,
 	});
 
@@ -20,24 +19,38 @@ export const remove = async (req: any, res: Response) => {
 	}
 
 	try {
-		const student = await StudentModel.findOne({
+		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.query.student_id },
+				user_id: { [Op.eq]: req.header("x-user-id") },
+				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
 			},
 		});
 
-		if (!student) {
+		if (!user) {
+			const message = `access denied!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		}
+
+		const transkrip = await TranskripModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				transkripId: { [Op.eq]: req.query.id },
+			},
+		});
+
+		if (!transkrip) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await StudentModel.update(
+		await TranskripModel.update(
 			{ deleted: 1 },
 			{
 				where: {
-					student_id: { [Op.eq]: body.student_id },
+					transkripId: { [Op.eq]: req.query.id },
 				},
 			}
 		);

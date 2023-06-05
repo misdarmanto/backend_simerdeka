@@ -6,10 +6,20 @@ import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
 import { StudentModel } from "../../models/student";
 import { UserModel } from "../../models/user";
-import { MbkmProgramModel } from "../../models/mbkm-program";
-import { TranskripModel } from "../../models/transkrip";
+import { TranskripAttributes, TranskripModel } from "../../models/transkrip";
 
 export const findAll = async (req: any, res: Response) => {
+	const emptyField = requestChecker({
+		requireList: ["x-user-id"],
+		requestData: req.headers,
+	});
+
+	if (emptyField) {
+		const message = `invalid request parameter! require (${emptyField})`;
+		const response = <ResponseDataAttributes>ResponseData.error(message);
+		return res.status(StatusCodes.BAD_REQUEST).json(response);
+	}
+
 	try {
 		const user = await UserModel.findOne({
 			where: {
@@ -19,51 +29,34 @@ export const findAll = async (req: any, res: Response) => {
 		});
 
 		if (!user) {
-			const message = `student not found!`;
+			const message = `user not registered!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
-			return res.status(StatusCodes.NOT_FOUND).json(response);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		console.log(req.query);
-
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await StudentModel.findAndCountAll({
+		const result = await TranskripModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				...(req.query.search && {
-					[Op.or]: [{ student_name: { [Op.like]: `%${req.query.search}%` } }],
-				}),
-
-				student_is_registered: {
-					[Op.eq]: true,
-				},
-
-				// ...(req.query.registered && {}),
-				...(req.query.mbkm_program_id && {
-					student_mbkm_program_id: {
-						[Op.eq]:
-							req.query.mbkm_program_id === "null"
-								? null
-								: req.query.mbkm_program_id,
-					},
-				}),
-				...(req.query.transkrip_id && {
-					student_transkrip_id: {
-						[Op.eq]: req.query.transkrip_id || null,
-					},
+				// ...(req.query.search && {
+				// 	[Op.or]: [
+				// 		{ log_book_student_name: { [Op.like]: `%${req.query.search}%` } },
+				// 	],
+				// }),
+				...(user.user_role === "student" && {
+					transkripStudentId: { [Op.eq]: user.user_id },
 				}),
 				...(user.user_role === "study_program" && {
-					student_study_program_id: {
+					transkripStudyProgramId: {
 						[Op.eq]: user.user_id,
 					},
 				}),
 				...(user.user_role === "department" && {
-					student_department_id: {
+					transkripDepartmentId: {
 						[Op.eq]: user.user_id,
 					},
 				}),
 			},
-			include: [MbkmProgramModel, TranskripModel],
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
 				limit: page.limit,
@@ -83,6 +76,8 @@ export const findAll = async (req: any, res: Response) => {
 };
 
 export const findOne = async (req: any, res: Response) => {
+	const params = <TranskripAttributes>req.params;
+
 	const emptyField = requestChecker({
 		requireList: ["id"],
 		requestData: req.params,
@@ -103,55 +98,39 @@ export const findOne = async (req: any, res: Response) => {
 		});
 
 		if (!user) {
-			const message = `student not found!`;
+			const message = `user not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		const student = await StudentModel.findOne({
+		const transkrip = await TranskripModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.params.id },
-				student_is_registered: {
-					[Op.eq]: true,
-				},
-				// ...(req.query.registered && {
-				// 	student_is_registered: {
-				// 		[Op.eq]: true,
-				// 	},
-				// }),
-				...(req.query.mbkm_program_id && {
-					student_mbkm_program_id: {
-						[Op.eq]: req.query.mbkm_program_id,
-					},
-				}),
-				...(req.query.transkrip_id && {
-					student_transkrip_id: {
-						[Op.eq]: req.query.transkrip_id,
-					},
+				transkripId: { [Op.eq]: params.id },
+				...(user.user_role === "student" && {
+					transkripStudentId: { [Op.eq]: user.user_id },
 				}),
 				...(user.user_role === "study_program" && {
-					student_study_program_id: {
+					transkripStudyProgramId: {
 						[Op.eq]: user.user_id,
 					},
 				}),
 				...(user.user_role === "department" && {
-					student_department_id: {
+					transkripDepartmentId: {
 						[Op.eq]: user.user_id,
 					},
 				}),
 			},
-			include: [MbkmProgramModel, TranskripModel],
 		});
 
-		if (!student) {
-			const message = `student not found!`;
+		if (!transkrip) {
+			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = student;
+		response.data = transkrip;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);

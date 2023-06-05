@@ -121,7 +121,7 @@ export const findOne = async (req: any, res: Response) => {
 		const result = await MbkmProgramProdiModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkm_program_prodi_id: { [Op.eq]: params.id },
+				mbkm_program_prodi_program_id: { [Op.eq]: params.id },
 				...(req.query.semester_id && {
 					mbkm_program_prodi_semester_id: {
 						[Op.eq]: req.query.semester_id,

@@ -3,14 +3,16 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { StudentAttributes, StudentModel } from "../../models/student";
+import { UserModel } from "../../models/user";
+import { StudentModel } from "../../models/student";
+import { TranskripAttributes, TranskripModel } from "../../models/transkrip";
 
-export const remove = async (req: any, res: Response) => {
-	const body = <StudentAttributes>req.body;
+export const update = async (req: any, res: Response) => {
+	const body = <TranskripAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["student_id"],
-		requestData: req.query,
+		requireList: ["log_book_id", "x-user-id"],
+		requestData: { ...req.body, ...req.headers },
 	});
 
 	if (emptyField) {
@@ -23,21 +25,49 @@ export const remove = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.query.student_id },
+				student_id: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
 		if (!student) {
+			const message = `access denied!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		}
+
+		const user = await UserModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				user_id: { [Op.eq]: req.header("x-user-id") },
+				user_role: { [Op.eq]: "student" },
+			},
+		});
+
+		if (!user) {
+			const message = `access denied!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		}
+
+		const transkrip = await TranskripModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				transkripId: { [Op.eq]: body.transkripId },
+			},
+		});
+
+		if (!transkrip) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await StudentModel.update(
-			{ deleted: 1 },
+		await TranskripModel.update(
+			{},
 			{
 				where: {
-					student_id: { [Op.eq]: body.student_id },
+					deleted: { [Op.eq]: 0 },
+					transkripId: { [Op.eq]: body.transkripId },
 				},
 			}
 		);
