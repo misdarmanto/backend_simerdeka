@@ -11,7 +11,7 @@ import { StudentModel } from "../../models/student";
 export const create = async (req: any, res: Response) => {
 	const body = <TranskripAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["x-user-id", "transkripStudentId"],
+		requireList: ["x-user-id", "transkripStudentId", "transkripMataKuliahId"],
 		requestData: { ...req.body, ...req.headers },
 	});
 
@@ -26,7 +26,7 @@ export const create = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				user_id: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
+				user_role: { [Op.eq]: "study_program" },
 			},
 		});
 

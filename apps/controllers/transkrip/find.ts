@@ -7,6 +7,8 @@ import { requestChecker } from "../../utilities/requestCheker";
 import { StudentModel } from "../../models/student";
 import { UserModel } from "../../models/user";
 import { TranskripAttributes, TranskripModel } from "../../models/transkrip";
+import { MbkmProgramModel } from "../../models/mbkm-program";
+import { MataKuliahModel } from "../../models/matkul";
 
 export const findAll = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
@@ -38,11 +40,6 @@ export const findAll = async (req: any, res: Response) => {
 		const result = await TranskripModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				// ...(req.query.search && {
-				// 	[Op.or]: [
-				// 		{ log_book_student_name: { [Op.like]: `%${req.query.search}%` } },
-				// 	],
-				// }),
 				...(user.user_role === "student" && {
 					transkripStudentId: { [Op.eq]: user.user_id },
 				}),
@@ -62,6 +59,8 @@ export const findAll = async (req: any, res: Response) => {
 				limit: page.limit,
 				offset: page.offset,
 			}),
+
+			include: [MataKuliahModel],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;

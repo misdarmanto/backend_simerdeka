@@ -103,7 +103,7 @@ StudentModel.hasOne(MbkmProgramModel, {
 	foreignKey: "mbkm_program_id",
 });
 
-StudentModel.hasOne(TranskripModel, {
+StudentModel.hasMany(TranskripModel, {
 	sourceKey: "student_transkrip_id",
 	foreignKey: "transkrip_id",
 });

@@ -1,6 +1,8 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
+import { StudentModel } from "./student";
+import { MataKuliahModel } from "./matkul";
 
 export interface TranskripAttributes extends ZygoteAttributes {
 	transkripId: string;
@@ -63,3 +65,13 @@ export const TranskripModel = sequelize.define<TranskripInstance>(
 		engine: "InnoDB",
 	}
 );
+
+// TranskripModel.hasOne(StudentModel, {
+// 	sourceKey: "transkrip_student_id",
+// 	foreignKey: "student_id",
+// });
+
+TranskripModel.hasOne(MataKuliahModel, {
+	sourceKey: "transkripMataKuliahId",
+	foreignKey: "mata_kuliah_id",
+});
