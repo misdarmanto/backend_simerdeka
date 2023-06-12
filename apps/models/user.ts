@@ -3,17 +3,17 @@ import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface UserAttributes extends ZygoteAttributes {
-	user_id: string;
-	user_name: string;
-	user_email: string;
-	user_role: "student" | "study_program" | "department" | "lp3m" | "academic";
+	userId: string;
+	userName: string;
+	userEmail: string;
+	userRole: "student" | "study_program" | "department" | "lp3m" | "academic";
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type UserCreationAttributes = Optional<
 	UserAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -25,19 +25,19 @@ export const UserModel = sequelize.define<UserInstance>(
 	"user",
 	{
 		...ZygoteModel,
-		user_id: {
+		userId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		user_name: {
+		userName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		user_email: {
+		userEmail: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		user_role: {
+		userRole: {
 			type: DataTypes.ENUM(
 				"student",
 				"study_program",
