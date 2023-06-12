@@ -9,7 +9,7 @@ export const create = async (req: any, res: Response) => {
 	const body = <Lp3mAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["lp3m_name", "lp3m_email"],
+		requireList: ["lp3mName", "lp3mEmail"],
 		requestData: body,
 	});
 
@@ -20,7 +20,7 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.lp3m_id = uuidv4();
+		body.lp3mId = uuidv4();
 		await Lp3mModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

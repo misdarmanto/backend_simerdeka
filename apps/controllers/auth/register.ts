@@ -12,7 +12,7 @@ export const register = async (req: any, res: Response) => {
 	const body = <UserAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["user_name", "user_email", "user_password", "user_role"],
+		requireList: ["userName", "userEmail", "userPassword", "userRole"],
 		requestData: body,
 	});
 
@@ -27,12 +27,12 @@ export const register = async (req: any, res: Response) => {
 			raw: true,
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_email: { [Op.eq]: body.user_email },
+				userEmail: { [Op.eq]: body.userEmail },
 			},
 		});
 
 		if (user) {
-			const message = `Email ${user.user_email} sudah terdaftar. Silahkan gunakan email lain.`;
+			const message = `Email ${user.userEmail} sudah terdaftar. Silahkan gunakan email lain.`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.BAD_REQUEST).json(response);
 		}

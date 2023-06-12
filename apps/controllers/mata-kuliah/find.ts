@@ -24,7 +24,7 @@ export const findAll = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -41,14 +41,14 @@ export const findAll = async (req: any, res: Response) => {
 				...(req.query.search && {
 					[Op.or]: [{ mataKuliahName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
-				...(user.user_role === "study_program" && {
+				...(user.userRole === "study_program" && {
 					mataKuliahStudyProgramId: {
-						[Op.eq]: user.user_id,
+						[Op.eq]: user.userId,
 					},
 				}),
-				...(user.user_role === "department" && {
+				...(user.userRole === "department" && {
 					mataKuliahDepartmentId: {
-						[Op.eq]: user.user_id,
+						[Op.eq]: user.userId,
 					},
 				}),
 			},
@@ -88,7 +88,7 @@ export const findOne = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -102,14 +102,14 @@ export const findOne = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				mataKuliahId: { [Op.eq]: params.id },
-				...(user.user_role === "study_program" && {
+				...(user.userRole === "study_program" && {
 					mataKuliahStudyProgramId: {
-						[Op.eq]: user.user_id,
+						[Op.eq]: user.userId,
 					},
 				}),
-				...(user.user_role === "department" && {
+				...(user.userRole === "department" && {
 					mataKuliahDepartmentId: {
-						[Op.eq]: user.user_id,
+						[Op.eq]: user.userId,
 					},
 				}),
 			},

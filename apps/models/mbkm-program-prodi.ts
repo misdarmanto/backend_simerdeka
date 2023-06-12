@@ -7,21 +7,21 @@ import { DepartmentModel } from "./department";
 import { MbkmProgramModel } from "./mbkm-program";
 
 export interface MbkmProgramProdiAttributes extends ZygoteAttributes {
-	mbkm_program_prodi_id: string;
-	mbkm_program_prodi_program_id: string;
-	mbkm_program_prodi_program_name: string;
-	mbkm_program_prodi_study_program_id: string;
-	mbkm_program_prodi_study_program_name: string;
-	mbkm_program_prodi_department_id: string;
-	mbkm_program_prodi_department_name: string;
-	mbkm_program_prodi_semester_id: string;
+	mbkmProgramProdiId: string;
+	mbkmProgramProdiProgramId: string;
+	mbkmProgramProdiProgramName: string;
+	mbkmProgramProdiStudyProgramId: string;
+	mbkmProgramProdiStudyProgramName: string;
+	mbkmProgramProdiDepartmentId: string;
+	mbkmProgramProdiDepartmentName: string;
+	mbkmProgramProdiSemesterId: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type MbkmProgramProdiCreationAttributes = Optional<
 	MbkmProgramProdiAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -33,35 +33,35 @@ export const MbkmProgramProdiModel = sequelize.define<MbkmProgramProdiInstance>(
 	"mbkm_program_prodi",
 	{
 		...ZygoteModel,
-		mbkm_program_prodi_id: {
+		mbkmProgramProdiId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		mbkm_program_prodi_program_id: {
+		mbkmProgramProdiProgramId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		mbkm_program_prodi_program_name: {
+		mbkmProgramProdiProgramName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		mbkm_program_prodi_study_program_id: {
+		mbkmProgramProdiStudyProgramId: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		mbkm_program_prodi_study_program_name: {
+		mbkmProgramProdiStudyProgramName: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		mbkm_program_prodi_department_id: {
+		mbkmProgramProdiDepartmentId: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		mbkm_program_prodi_department_name: {
+		mbkmProgramProdiDepartmentName: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		mbkm_program_prodi_semester_id: {
+		mbkmProgramProdiSemesterId: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
@@ -79,21 +79,21 @@ export const MbkmProgramProdiModel = sequelize.define<MbkmProgramProdiInstance>(
 );
 
 MbkmProgramProdiModel.hasOne(MbkmProgramModel, {
-	sourceKey: "mbkm_program_prodi_program_id",
+	sourceKey: "mbkmProgramProdiProgramId",
 	foreignKey: "mbkm_program_id",
 });
 
 MbkmProgramProdiModel.hasOne(SemesterModel, {
-	sourceKey: "mbkm_program_prodi_semester_id",
+	sourceKey: "mbkmProgramProdiSemesterId",
 	foreignKey: "semester_id",
 });
 
 MbkmProgramProdiModel.hasOne(StudyProgramModel, {
-	sourceKey: "mbkm_program_prodi_study_program_id",
+	sourceKey: "mbkmProgramProdiStudyProgramId",
 	foreignKey: "study_program_id",
 });
 
 MbkmProgramProdiModel.hasOne(DepartmentModel, {
-	sourceKey: "mbkm_program_prodi_department_id",
+	sourceKey: "mbkmProgramProdiDepartmentId",
 	foreignKey: "department_id",
 });

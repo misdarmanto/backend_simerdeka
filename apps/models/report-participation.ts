@@ -4,20 +4,20 @@ import { ZygoteAttributes, ZygoteModel } from "./zygote";
 import { StudentModel } from "./student";
 
 export interface ReportParticipationAttributes extends ZygoteAttributes {
-	report_participation_id: string;
-	report_participation_letter: string;
-	report_participation_status_message: string;
-	report_participation_status: "waiting" | "accepted" | "rejected";
-	report_participation_study_program_id: string;
-	report_participation_department_id: string;
-	report_participation_student_id: string;
+	reportParticipationId: string;
+	reportParticipationLetter: string;
+	reportParticipationStatusMessage: string;
+	reportParticipationStatus: "waiting" | "accepted" | "rejected";
+	reportParticipationStudyProgramId: string;
+	reportParticipationDepartmentId: string;
+	reportParticipationStudentId: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type ReportParticipationCreationAttributes = Optional<
 	ReportParticipationAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -29,32 +29,32 @@ export const ReportParticipationModel = sequelize.define<ReportParticipationInst
 	"report_participation",
 	{
 		...ZygoteModel,
-		report_participation_id: {
+		reportParticipationId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		report_participation_letter: {
+		reportParticipationLetter: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		report_participation_status_message: {
+		reportParticipationStatusMessage: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		report_participation_status: {
+		reportParticipationStatus: {
 			type: DataTypes.ENUM("waiting", "accepted", "rejected"),
 			allowNull: true,
 			defaultValue: "waiting",
 		},
-		report_participation_student_id: {
+		reportParticipationStudentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		report_participation_department_id: {
+		reportParticipationDepartmentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		report_participation_study_program_id: {
+		reportParticipationStudyProgramId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
@@ -72,6 +72,6 @@ export const ReportParticipationModel = sequelize.define<ReportParticipationInst
 );
 
 ReportParticipationModel.hasOne(StudentModel, {
-	sourceKey: "report_participation_student_id",
+	sourceKey: "reportParticipationStudentId",
 	foreignKey: "student_id",
 });

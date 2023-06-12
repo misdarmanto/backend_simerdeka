@@ -3,17 +3,17 @@ import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface DepartmentAttributes extends ZygoteAttributes {
-	department_id: string;
-	department_name: string;
-	department_email: string;
-	department_is_registered: boolean;
+	departmentId: string;
+	departmentName: string;
+	departmentEmail: string;
+	departmentIsRegistered: boolean;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type DepartmentCreationAttributes = Optional<
 	DepartmentAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -25,19 +25,19 @@ export const DepartmentModel = sequelize.define<DepartmentInstance>(
 	"department",
 	{
 		...ZygoteModel,
-		department_id: {
+		departmentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		department_name: {
+		departmentName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		department_email: {
+		departmentEmail: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		department_is_registered: {
+		departmentIsRegistered: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,

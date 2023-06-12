@@ -52,7 +52,7 @@ export const findOne = async (req: any, res: Response) => {
 		const result = await DepartmentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				department_id: { [Op.eq]: req.params.id },
+				departmentId: { [Op.eq]: req.params.id },
 			},
 		});
 

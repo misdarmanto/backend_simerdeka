@@ -4,19 +4,19 @@ import { ZygoteAttributes, ZygoteModel } from "./zygote";
 import { SemesterModel } from "./semester";
 
 export interface MbkmProgramAttributes extends ZygoteAttributes {
-	mbkm_program_id: string;
-	mbkm_program_created_by: string;
-	mbkm_program_name: string;
-	mbkm_program_category: string;
-	mbkm_program_syllabus: string;
-	mbkm_program_semester_id: string;
+	mbkmProgramId: string;
+	mbkmProgramCreatedBy: string;
+	mbkmProgramName: string;
+	mbkmProgramCategory: string;
+	mbkmProgramSyllabus: string;
+	mbkmProgramSemesterId: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type MbkmProgramCreationAttributes = Optional<
 	MbkmProgramAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -28,27 +28,27 @@ export const MbkmProgramModel = sequelize.define<MbkmProgramInstance>(
 	"mbkm_program",
 	{
 		...ZygoteModel,
-		mbkm_program_id: {
+		mbkmProgramId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		mbkm_program_created_by: {
+		mbkmProgramCreatedBy: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		mbkm_program_name: {
+		mbkmProgramName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		mbkm_program_category: {
+		mbkmProgramCategory: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		mbkm_program_syllabus: {
+		mbkmProgramSyllabus: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		mbkm_program_semester_id: {
+		mbkmProgramSemesterId: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
@@ -66,6 +66,6 @@ export const MbkmProgramModel = sequelize.define<MbkmProgramInstance>(
 );
 
 MbkmProgramModel.hasOne(SemesterModel, {
-	sourceKey: "mbkm_program_semester_id",
+	sourceKey: "mbkmProgramSemesterId",
 	foreignKey: "semester_id",
 });

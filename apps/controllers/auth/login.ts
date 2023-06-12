@@ -11,7 +11,7 @@ export const login = async (req: any, res: Response) => {
 	const body = <UserAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["user_email", "user_password"],
+		requireList: ["userEmail", "userPassword"],
 		requestData: body,
 	});
 
@@ -26,7 +26,7 @@ export const login = async (req: any, res: Response) => {
 			raw: true,
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_email: { [Op.eq]: body.user_email },
+				userEmail: { [Op.eq]: body.userEmail },
 			},
 		});
 

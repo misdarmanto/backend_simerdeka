@@ -3,16 +3,16 @@ import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface AcademicAttributes extends ZygoteAttributes {
-	academic_id: string;
-	academic_name: string;
-	academic_email: string;
+	academicId: string;
+	academicName: string;
+	academicEmail: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type AcademicCreationAttributes = Optional<
 	AcademicAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -24,15 +24,15 @@ export const AcademicModel = sequelize.define<AcademicInstance>(
 	"academic",
 	{
 		...ZygoteModel,
-		academic_id: {
+		academicId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		academic_name: {
+		academicName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		academic_email: {
+		academicEmail: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
