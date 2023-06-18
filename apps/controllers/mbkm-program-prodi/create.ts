@@ -26,8 +26,8 @@ export const create = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
+				userId: { [Op.eq]: req.header("x-user-id") },
+				[Op.or]: [{ userRole: "academic" }, { userRole: "lp3m" }],
 			},
 		});
 
@@ -43,7 +43,7 @@ export const create = async (req: any, res: Response) => {
 			const result = req.body.map((item: MbkmProgramProdiAttributes) => {
 				const newData: MbkmProgramProdiAttributes = {
 					...item,
-					mbkm_program_prodi_id: uuidv4(),
+					mbkmProgramProdiId: uuidv4(),
 				};
 				return newData;
 			});

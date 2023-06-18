@@ -4,7 +4,6 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
-import { StudentModel } from "../../models/student";
 import { UserModel } from "../../models/user";
 import { MataKuliahAttributes, MataKuliahModel } from "../../models/matkul";
 

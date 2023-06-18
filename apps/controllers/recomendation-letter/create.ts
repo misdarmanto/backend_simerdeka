@@ -16,11 +16,11 @@ export const create = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
 		requireList: [
 			"x-user-id",
-			"recomendation_letter_student_transkrip",
-			"recomendation_letter_dosen_wali",
-			"recomendation_letter_approval_letter",
-			"recomendation_letter_program_name",
-			"recomendation_letter_program_correlation",
+			"recomendationLetterStudentTranskrip",
+			"recomendationLetterDosenWali",
+			"recomendationLetterApprovalLetter",
+			"recomendationLetterProgramName",
+			"recomendationLetterProgramCorrelation",
 		],
 		requestData: { ...req.body, ...req.headers },
 	});
@@ -35,7 +35,7 @@ export const create = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.header("x-user-id") },
+				studentId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -45,12 +45,12 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		body.recomendation_letter_student_id = student.student_id;
-		body.recomendation_letter_department_id = student.student_department_id;
-		body.recomendation_letter_study_program_id = student.student_study_program_id;
-		body.recomendation_letter_id = uuidv4();
-		body.recomendation_letter_assign_to_student = true;
-		body.recomendation_letter_assign_to_study_program = true;
+		body.recomendationLetterStudentId = student.studentId;
+		body.recomendationLetterDepartmentId = student.studentDepartmentId;
+		body.recomendationLetterStudyProgramId = student.studentStudyProgramId;
+		body.recomendationLetterId = uuidv4();
+		body.recomendationLetterAssignToStudent = true;
+		body.recomendationLetterAssignToStudyProgram = true;
 
 		await RecomendationLetterModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
