@@ -16,7 +16,7 @@ export interface MataKuliahAttributes extends ZygoteAttributes {
 // when creating an instance of the model (such as using Model.create()).
 type MataKuliahCreationAttributes = Optional<
 	MataKuliahAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be

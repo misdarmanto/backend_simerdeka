@@ -12,12 +12,12 @@ export const create = async (req: any, res: Response) => {
 	const body = <MbkmProgramStudentAttributes>req.body;
 	const emptyField = requestChecker({
 		requireList: [
-			"mbkm_program_student_sks",
-			"mbkm_program_id",
-			"student_id",
-			"major_id",
-			"study_program_id",
-			"semester_id",
+			"mbkmProgramStudentSks",
+			"mbkmProgramId",
+			"studentId",
+			"majorId",
+			"studyProgramId",
+			"semesterId",
 		],
 		requestData: body,
 	});

@@ -21,10 +21,10 @@ export const findAll = async (req: any, res: Response) => {
 				offset: page.offset,
 			}),
 			attributes: [
-				"sks_convertion_id",
-				"sks_convertion_total",
-				"sks_convertion_student_id",
-				"sks_convertion_mbkm_program_id",
+				"sksConvertion_id",
+				"sksConvertion_total",
+				"sksConvertion_student_id",
+				"sksConvertionMbkmProgramId",
 			],
 
 			include: [StudentModel, MbkmProgramModel],
@@ -60,7 +60,7 @@ export const findOne = async (req: any, res: Response) => {
 		const result = await SksConvertionModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				sks_convertion_mbkm_program_id: { [Op.eq]: params.id },
+				sksConvertionMbkmProgramId: { [Op.eq]: params.id },
 			},
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
@@ -68,10 +68,10 @@ export const findOne = async (req: any, res: Response) => {
 				offset: page.offset,
 			}),
 			attributes: [
-				"sks_convertion_id",
-				"sks_convertion_total",
-				"sks_convertion_student_id",
-				"sks_convertion_mbkm_program_id",
+				"sksConvertion_id",
+				"sksConvertion_total",
+				"sksConvertion_student_id",
+				"sksConvertionMbkmProgramId",
 			],
 
 			include: [StudentModel, MbkmProgramModel],
@@ -106,13 +106,13 @@ export const findStudent = async (req: any, res: Response) => {
 		const result = await SksConvertionModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				sks_convertion_student_id: { [Op.eq]: params.id },
+				sksConvertionStudentId: { [Op.eq]: params.id },
 			},
 			attributes: [
-				"sks_convertion_id",
-				"sks_convertion_total",
-				"sks_convertion_student_id",
-				"sks_convertion_mbkm_program_id",
+				"sksConvertion_id",
+				"sksConvertion_total",
+				"sksConvertion_student_id",
+				"sksConvertionMbkmProgramId",
 			],
 
 			include: [StudentModel, MbkmProgramModel],

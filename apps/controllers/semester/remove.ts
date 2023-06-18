@@ -8,7 +8,7 @@ import { UserModel } from "../../models/user";
 
 export const remove = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
-		requireList: ["semester_id"],
+		requireList: ["semesterId"],
 		requestData: req.query,
 	});
 
@@ -22,8 +22,8 @@ export const remove = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
+				userId: { [Op.eq]: req.header("x-user-id") },
+				[Op.or]: [{ userRole: "academic" }, { userRole: "lp3m" }],
 			},
 		});
 
@@ -36,7 +36,7 @@ export const remove = async (req: any, res: Response) => {
 		const semesterCheck = await SemesterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				semester_id: { [Op.eq]: req.query.semester_id },
+				semesterId: { [Op.eq]: req.query.semesterId },
 			},
 		});
 
@@ -50,7 +50,7 @@ export const remove = async (req: any, res: Response) => {
 			{ deleted: 1 },
 			{
 				where: {
-					semester_id: { [Op.eq]: req.query.semester_id },
+					semesterId: { [Op.eq]: req.query.semesterId },
 				},
 			}
 		);
@@ -59,11 +59,11 @@ export const remove = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 			},
-			order: [["semester_status", "asc"]],
+			order: [["semesterStatus", "asc"]],
 		});
 
 		if (newSemester) {
-			newSemester.semester_status = "active";
+			newSemester.semesterStatus = "active";
 			newSemester.save();
 		}
 

@@ -9,7 +9,7 @@ export const update = async (req: any, res: Response) => {
 	const body = <MbkmProgramAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["mbkm_program_id"],
+		requireList: ["mbkmProgramId"],
 		requestData: body,
 	});
 
@@ -23,7 +23,7 @@ export const update = async (req: any, res: Response) => {
 		const mbkmProgram = await MbkmProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkm_program_id: { [Op.eq]: body.mbkm_program_id },
+				mbkmProgramId: { [Op.eq]: body.mbkmProgramId },
 			},
 		});
 

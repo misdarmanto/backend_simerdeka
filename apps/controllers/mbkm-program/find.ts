@@ -14,10 +14,10 @@ export const findAll = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
+					[Op.or]: [{ programName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
-				...(req.query.semester_id && {
-					semester_id: { [Op.eq]: req.query.semester_id },
+				...(req.query.semesterId && {
+					semesterId: { [Op.eq]: req.query.semesterId },
 				}),
 			},
 			order: [["id", "desc"]],
@@ -57,9 +57,9 @@ export const findOne = async (req: any, res: Response) => {
 		const MbkmProgram = await MbkmProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkm_program_id: { [Op.eq]: params.id },
-				...(req.query.semester_id && {
-					semester_id: { [Op.eq]: req.query.semester_id },
+				mbkmProgramId: { [Op.eq]: params.id },
+				...(req.query.semesterId && {
+					semesterId: { [Op.eq]: req.query.semesterId },
 				}),
 			},
 			include: [SemesterModel],

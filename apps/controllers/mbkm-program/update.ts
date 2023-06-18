@@ -25,7 +25,7 @@ export const update = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				userId: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
+				[Op.or]: [{ userRole: "academic" }, { userRole: "lp3m" }],
 			},
 		});
 

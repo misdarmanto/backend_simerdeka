@@ -14,7 +14,7 @@ export const findAll = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -31,35 +31,35 @@ export const findAll = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [{ student_name: { [Op.like]: `%${req.query.search}%` } }],
+					[Op.or]: [{ studentName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
 
-				student_is_registered: {
+				studentIsRegistered: {
 					[Op.eq]: true,
 				},
 
 				// ...(req.query.registered && {}),
-				...(req.query.mbkm_program_id && {
-					student_mbkm_program_id: {
+				...(req.query.mbkmProgramId && {
+					studentMmProgramId: {
 						[Op.eq]:
-							req.query.mbkm_program_id === "null"
+							req.query.mbkmProgramId === "null"
 								? null
-								: req.query.mbkm_program_id,
+								: req.query.mbkmProgramId,
 					},
 				}),
-				...(req.query.transkrip_id && {
-					student_transkrip_id: {
-						[Op.eq]: req.query.transkrip_id || null,
+				...(req.query.transkripId && {
+					studentTranskripId: {
+						[Op.eq]: req.query.transkripId || null,
 					},
 				}),
-				...(user.user_role === "study_program" && {
-					student_study_program_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "study_program" && {
+					studentStudyProgramId: {
+						[Op.eq]: user.userId,
 					},
 				}),
-				...(user.user_role === "department" && {
-					student_department_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "department" && {
+					studentDepartmentId: {
+						[Op.eq]: user.userId,
 					},
 				}),
 			},
@@ -98,7 +98,7 @@ export const findOne = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -111,8 +111,8 @@ export const findOne = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.params.id },
-				student_is_registered: {
+				studentId: { [Op.eq]: req.params.id },
+				studentIsRegistered: {
 					[Op.eq]: true,
 				},
 				// ...(req.query.registered && {
@@ -120,24 +120,24 @@ export const findOne = async (req: any, res: Response) => {
 				// 		[Op.eq]: true,
 				// 	},
 				// }),
-				...(req.query.mbkm_program_id && {
-					student_mbkm_program_id: {
-						[Op.eq]: req.query.mbkm_program_id,
+				...(req.query.mbkmProgramId && {
+					studentMbkmProgramId: {
+						[Op.eq]: req.query.mbkmProgramId,
 					},
 				}),
-				...(req.query.transkrip_id && {
-					student_transkrip_id: {
-						[Op.eq]: req.query.transkrip_id,
+				...(req.query.transkripId && {
+					studentTranskripId: {
+						[Op.eq]: req.query.transkripId,
 					},
 				}),
-				...(user.user_role === "study_program" && {
-					student_study_program_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "study_program" && {
+					studentStudyProgramId: {
+						[Op.eq]: user.userId,
 					},
 				}),
-				...(user.user_role === "department" && {
-					student_department_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "department" && {
+					studentDepartmentId: {
+						[Op.eq]: user.userId,
 					},
 				}),
 			},

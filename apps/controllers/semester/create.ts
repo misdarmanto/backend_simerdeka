@@ -10,7 +10,7 @@ import { Op } from "sequelize";
 export const create = async (req: any, res: Response) => {
 	const body = <SemesterAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["semester_created_by", "semester_name"],
+		requireList: ["semesterCreatedBy", "semesterName"],
 		requestData: body,
 	});
 
@@ -24,8 +24,8 @@ export const create = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
+				userId: { [Op.eq]: req.header("x-user-id") },
+				[Op.or]: [{ userRole: "academic" }, { userRole: "lp3m" }],
 			},
 		});
 
@@ -36,15 +36,15 @@ export const create = async (req: any, res: Response) => {
 		}
 
 		await SemesterModel.update(
-			{ semester_status: "non-active" },
+			{ semesterStatus: "non-active" },
 			{
 				where: {
-					semester_status: { [Op.eq]: "active" },
+					semesterStatus: { [Op.eq]: "active" },
 				},
 			}
 		);
 
-		body.semester_id = uuidv4();
+		body.semesterId = uuidv4();
 		await SemesterModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
