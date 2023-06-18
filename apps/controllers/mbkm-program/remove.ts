@@ -8,7 +8,7 @@ import { UserModel } from "../../models/user";
 
 export const remove = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
-		requireList: ["mbkm_program_id"],
+		requireList: ["mbkmProgramId"],
 		requestData: req.query,
 	});
 
@@ -22,7 +22,7 @@ export const remove = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
 			},
 		});
@@ -36,7 +36,7 @@ export const remove = async (req: any, res: Response) => {
 		const mbkmProgram = await MbkmProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkm_program_id: { [Op.eq]: req.query.mbkm_program_id },
+				mbkmProgramId: { [Op.eq]: req.query.mbkmProgramId },
 			},
 		});
 
@@ -50,7 +50,7 @@ export const remove = async (req: any, res: Response) => {
 			{ deleted: 1 },
 			{
 				where: {
-					mbkm_program_id: { [Op.eq]: req.query.mbkm_program_id },
+					mbkmProgramId: { [Op.eq]: req.query.mbkmProgramId },
 				},
 			}
 		);
