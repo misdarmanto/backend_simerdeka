@@ -11,7 +11,7 @@ export const update = async (req: any, res: Response) => {
 	const body = <TranskripAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["log_book_id", "x-user-id"],
+		requireList: ["logBookId", "x-user-id"],
 		requestData: { ...req.body, ...req.headers },
 	});
 
@@ -25,7 +25,7 @@ export const update = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.header("x-user-id") },
+				studentId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -38,8 +38,8 @@ export const update = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				user_role: { [Op.eq]: "student" },
+				userId: { [Op.eq]: req.header("x-user-id") },
+				userRole: { [Op.eq]: "student" },
 			},
 		});
 

@@ -10,7 +10,7 @@ import { LogBookAttributes, LogBookModel } from "../../models/log-book";
 export const create = async (req: any, res: Response) => {
 	const body = <LogBookAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["x-user-id", "log_book_report_file", "log_book_report_week"],
+		requireList: ["x-user-id", "logBookReportFile", "logBookReportWeek"],
 		requestData: { ...req.body, ...req.headers },
 	});
 
@@ -24,8 +24,8 @@ export const create = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.header("x-user-id") },
-				student_is_registered: { [Op.eq]: true },
+				studentId: { [Op.eq]: req.header("x-user-id") },
+				studentIsRegistered: { [Op.eq]: true },
 			},
 		});
 
@@ -35,14 +35,14 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		body.log_book_id = uuidv4();
-		body.log_book_student_id = student.student_id;
-		body.log_book_student_name = student.student_name;
-		body.log_book_student_nim = student.student_nim;
-		body.log_book_study_program_id = student.student_study_program_id;
-		body.log_book_study_program_name = student.student_study_program_name;
-		body.log_book_department_id = student.student_department_id;
-		body.log_book_department_name = student.student_department_name;
+		body.logBookId = uuidv4();
+		body.logBookStudentId = student.studentId;
+		body.logBookStudentName = student.studentName;
+		body.logBookStudentNim = student.studentNim;
+		body.logBookStudyProgramId = student.studentStudyProgramId;
+		body.logBookStudyProgramName = student.studentStudyProgramName;
+		body.logBookDepartmentId = student.studentDepartmentId;
+		body.logBookDepartmentName = student.studentDepartmentName;
 		await LogBookModel.create(body);
 
 		const response = <ResponseDataAttributes>ResponseData.default;

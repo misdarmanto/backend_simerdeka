@@ -21,9 +21,9 @@ export const findOne = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.params.id },
+				userId: { [Op.eq]: req.params.id },
 			},
-			attributes: ["user_id", "user_name", "user_email", "user_role"],
+			attributes: ["userId", "userName", "userEmail", "userRole"],
 		});
 
 		if (!user) {

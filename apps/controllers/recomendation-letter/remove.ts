@@ -12,7 +12,7 @@ export const remove = async (req: any, res: Response) => {
 	const body = <RecomendationLetterAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["recomendation_letter_id"],
+		requireList: ["recomendationLetterId"],
 		requestData: body,
 	});
 
@@ -26,7 +26,7 @@ export const remove = async (req: any, res: Response) => {
 		const recomendationLetterCheck = await RecomendationLetterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				recomendation_letter_id: { [Op.eq]: req.query.recomendation_letter_id },
+				recomendationLetterId: { [Op.eq]: req.query.recomendationLetterId },
 			},
 		});
 
@@ -40,7 +40,7 @@ export const remove = async (req: any, res: Response) => {
 			{ deleted: 1 },
 			{
 				where: {
-					recomendation_letter_id: { [Op.eq]: body.recomendation_letter_id },
+					recomendationLetterId: { [Op.eq]: body.recomendationLetterId },
 				},
 			}
 		);

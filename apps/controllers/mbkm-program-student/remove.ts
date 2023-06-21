@@ -23,7 +23,7 @@ export const remove = async (req: any, res: Response) => {
 		const academicProgramCheck = await MbkmProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkm_program_id: { [Op.eq]: req.query.mbkm_program_id },
+				mbkmProgramId: { [Op.eq]: req.query.mbkmProgramId },
 			},
 		});
 
@@ -37,7 +37,7 @@ export const remove = async (req: any, res: Response) => {
 			{ deleted: 1 },
 			{
 				where: {
-					mbkm_program_id: { [Op.eq]: body.mbkm_program_id },
+					mbkmProgramId: { [Op.eq]: body.mbkmProgramId },
 				},
 			}
 		);

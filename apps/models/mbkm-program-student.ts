@@ -6,20 +6,20 @@ import { UserModel } from "./user";
 import { MbkmProgramModel } from "./mbkm-program";
 
 export interface MbkmProgramStudentAttributes extends ZygoteAttributes {
-	mbkm_program_student_id: string;
-	mbkm_program_student_sks: number;
-	mbkm_program_id: string;
-	student_id: string;
-	major_id: string;
-	study_program_id: string;
-	semester_id: string;
+	mbkmProgramStudentId: string;
+	mbkmProgramStudentSks: number;
+	mbkmProgramId: string;
+	studentId: string;
+	majorId: string;
+	studyProgramId: string;
+	semesterId: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type MbkmProgramStudentCreationAttributes = Optional<
 	MbkmProgramStudentAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -31,31 +31,31 @@ export const MbkmProgramStudentModel = sequelize.define<MbkmProgramStudentInstan
 	"mbkm_program_student",
 	{
 		...ZygoteModel,
-		mbkm_program_student_id: {
+		mbkmProgramStudentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		mbkm_program_student_sks: {
+		mbkmProgramStudentSks: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		mbkm_program_id: {
+		mbkmProgramId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		student_id: {
+		studentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		major_id: {
+		majorId: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		study_program_id: {
+		studyProgramId: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		semester_id: {
+		semesterId: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
@@ -73,16 +73,16 @@ export const MbkmProgramStudentModel = sequelize.define<MbkmProgramStudentInstan
 );
 
 MbkmProgramStudentModel.hasOne(SemesterModel, {
-	sourceKey: "semester_id",
-	foreignKey: "semester_id",
+	sourceKey: "semesterId",
+	foreignKey: "semesterId",
 });
 
 MbkmProgramStudentModel.hasOne(UserModel, {
-	sourceKey: "student_id",
+	sourceKey: "studentId",
 	foreignKey: "user_id",
 });
 
 MbkmProgramStudentModel.hasOne(MbkmProgramModel, {
-	sourceKey: "mbkm_program_id",
-	foreignKey: "mbkm_program_id",
+	sourceKey: "mbkmProgramId",
+	foreignKey: "mbkmProgramId",
 });

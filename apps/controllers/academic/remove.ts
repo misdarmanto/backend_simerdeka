@@ -9,7 +9,7 @@ export const remove = async (req: any, res: Response) => {
 	const body = <SemesterAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["semester_id"],
+		requireList: ["semesterId"],
 		requestData: body,
 	});
 
@@ -23,7 +23,7 @@ export const remove = async (req: any, res: Response) => {
 		const semesterCheck = await SemesterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				semester_id: { [Op.eq]: req.body.semester_id },
+				semesterId: { [Op.eq]: req.body.semesterId },
 			},
 		});
 
@@ -37,7 +37,7 @@ export const remove = async (req: any, res: Response) => {
 			{ deleted: 1 },
 			{
 				where: {
-					semester_id: { [Op.eq]: body.semester_id },
+					semesterId: { [Op.eq]: body.semesterId },
 				},
 			}
 		);

@@ -12,11 +12,11 @@ export const create = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
 		requireList: [
 			"x-user-id",
-			"mbkm_program_created_by",
-			"mbkm_program_name",
-			"mbkm_program_category",
-			"mbkm_program_semester_id",
-			"mbkm_program_syllabus",
+			"mbkmProgramCreatedBy",
+			"mbkmProgramName",
+			"mbkmProgramCategory",
+			"mbkmProgramSemesterId",
+			"mbkmProgramSyllabus",
 		],
 		requestData: { ...req.body, ...req.headers },
 	});
@@ -31,8 +31,8 @@ export const create = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
+				userId: { [Op.eq]: req.header("x-user-id") },
+				[Op.or]: [{ userRole: "academic" }, { userRole: "lp3m" }],
 			},
 		});
 
@@ -42,7 +42,7 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		body.mbkm_program_id = uuidv4();
+		body.mbkmProgramId = uuidv4();
 		await MbkmProgramModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

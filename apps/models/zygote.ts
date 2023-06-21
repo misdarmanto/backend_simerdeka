@@ -8,12 +8,12 @@ export const ZygoteModel = {
 		primaryKey: true,
 		allowNull: false,
 	},
-	created_on: {
+	createdOn: {
 		type: DataTypes.STRING,
 		allowNull: false,
 		defaultValue: moment().format("YYYY-MM-DD HH:mm:ss"),
 	},
-	modified_on: {
+	modifiedOn: {
 		type: DataTypes.STRING,
 		allowNull: true,
 	},
@@ -26,7 +26,7 @@ export const ZygoteModel = {
 
 export interface ZygoteAttributes {
 	id: number;
-	created_on: String;
-	modified_on: String | null;
+	createdOn: String;
+	modifiedOn: String | null;
 	deleted: number;
 }

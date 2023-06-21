@@ -12,12 +12,12 @@ export const create = async (req: any, res: Response) => {
 	const body = <MbkmProgramStudentAttributes>req.body;
 	const emptyField = requestChecker({
 		requireList: [
-			"mbkm_program_student_sks",
-			"mbkm_program_id",
-			"student_id",
-			"major_id",
-			"study_program_id",
-			"semester_id",
+			"mbkmProgramStudentSks",
+			"mbkmProgramId",
+			"studentId",
+			"majorId",
+			"studyProgramId",
+			"semesterId",
 		],
 		requestData: body,
 	});
@@ -29,7 +29,7 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.mbkm_program_student_id = uuidv4();
+		body.mbkmProgramStudentId = uuidv4();
 		await MbkmProgramStudentModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

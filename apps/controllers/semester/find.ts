@@ -13,13 +13,13 @@ export const findAll = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [{ semester_name: { [Op.like]: `%${req.query.search}%` } }],
+					[Op.or]: [{ semesterName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
-				...(req.query.semester_status && {
-					semester_status: { [Op.eq]: "active" },
+				...(req.query.semesterStatus && {
+					semesterStatus: { [Op.eq]: "active" },
 				}),
 			},
-			order: [["semester_status", "asc"]],
+			order: [["semesterStatus", "asc"]],
 			...(req.query.pagination == "true" && {
 				limit: page.limit,
 				offset: page.offset,
@@ -55,7 +55,7 @@ export const findOne = async (req: any, res: Response) => {
 		const semester = await SemesterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				semester_id: { [Op.eq]: params.id },
+				semesterId: { [Op.eq]: params.id },
 			},
 		});
 

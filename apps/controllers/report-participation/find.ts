@@ -27,7 +27,7 @@ export const findAll = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -42,19 +42,19 @@ export const findAll = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
+					[Op.or]: [{ programName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
-				...(user.user_role === "student" && {
-					report_participation_student_id: { [Op.eq]: user.user_id },
+				...(user.userRole === "student" && {
+					reportParticipationStudentId: { [Op.eq]: user.userId },
 				}),
-				...(user.user_role === "study_program" && {
-					report_participation_study_program_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "study_program" && {
+					reportParticipationStudyProgramId: {
+						[Op.eq]: user.userId,
 					},
 				}),
-				...(user.user_role === "department" && {
-					report_participation_department_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "department" && {
+					reportParticipationDepartmentId: {
+						[Op.eq]: user.userId,
 					},
 				}),
 			},
@@ -95,7 +95,7 @@ export const findOne = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -108,18 +108,18 @@ export const findOne = async (req: any, res: Response) => {
 		const reportParticipation = await ReportParticipationModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				report_participation_id: { [Op.eq]: params.id },
-				...(user.user_role === "student" && {
-					report_participation_student_id: { [Op.eq]: user.user_id },
+				reportParticipationId: { [Op.eq]: params.id },
+				...(user.userRole === "student" && {
+					reportParticipationStudentId: { [Op.eq]: user.userId },
 				}),
-				...(user.user_role === "study_program" && {
-					report_participation_study_program_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "study_program" && {
+					reportParticipationStudyProgramId: {
+						[Op.eq]: user.userId,
 					},
 				}),
-				...(user.user_role === "department" && {
-					report_participation_department_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "department" && {
+					reportParticipationDepartmentId: {
+						[Op.eq]: user.userId,
 					},
 				}),
 			},

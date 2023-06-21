@@ -25,7 +25,7 @@ export const create = async (req: any, res: Response) => {
 		const studyProgram = await StudyProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				study_program_id: { [Op.eq]: req.header("x-user-id") },
+				studyProgramId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -36,10 +36,10 @@ export const create = async (req: any, res: Response) => {
 		}
 
 		body.mataKuliahId = uuidv4();
-		body.mataKuliahStudyProgramId = studyProgram.study_program_id;
-		body.mataKuliahStudyProgramName = studyProgram.study_program_name;
-		body.mataKuliahDepartmentId = studyProgram.study_program_department_id;
-		body.mataKuliahDepartmentName = studyProgram.study_program_department_name;
+		body.mataKuliahStudyProgramId = studyProgram.studyProgramId;
+		body.mataKuliahStudyProgramName = studyProgram.studyProgramName;
+		body.mataKuliahDepartmentId = studyProgram.studyProgramDepartmentId;
+		body.mataKuliahDepartmentName = studyProgram.studyProgramDepartmentName;
 		await MataKuliahModel.create(body);
 
 		const response = <ResponseDataAttributes>ResponseData.default;

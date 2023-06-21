@@ -9,7 +9,7 @@ export const create = async (req: any, res: Response) => {
 	const body = <AcademicAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["academic_name", "academic_email"],
+		requireList: ["academicName", "academicEmail"],
 		requestData: body,
 	});
 
@@ -20,7 +20,7 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.academic_id = uuidv4();
+		body.academicId = uuidv4();
 		await AcademicModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

@@ -3,23 +3,23 @@ import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface LogBookAttributes extends ZygoteAttributes {
-	log_book_id: string;
-	log_book_report_file: string;
-	log_book_report_week: number;
-	log_book_student_id: string;
-	log_book_student_name: string;
-	log_book_student_nim: string;
-	log_book_study_program_id: string;
-	log_book_study_program_name: string;
-	log_book_department_id: string;
-	log_book_department_name: string;
+	logBookId: string;
+	logBookReportFile: string;
+	logBookReportWeek: number;
+	logBookStudentId: string;
+	logBookStudentName: string;
+	logBookStudentNim: string;
+	logBookStudyProgramId: string;
+	logBookStudyProgramName: string;
+	logBookDepartmentId: string;
+	logBookDepartmentName: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type LogBookCreationAttributes = Optional<
 	LogBookAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -28,46 +28,46 @@ interface LogBookInstance
 		LogBookAttributes {}
 
 export const LogBookModel = sequelize.define<LogBookInstance>(
-	"log_book",
+	"log-book",
 	{
 		...ZygoteModel,
-		log_book_id: {
+		logBookId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		log_book_report_file: {
+		logBookReportFile: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		log_book_report_week: {
+		logBookReportWeek: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
-		log_book_student_id: {
+		logBookStudentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		log_book_student_name: {
+		logBookStudentName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		log_book_student_nim: {
+		logBookStudentNim: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		log_book_study_program_id: {
+		logBookStudyProgramId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		log_book_study_program_name: {
+		logBookStudyProgramName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		log_book_department_id: {
+		logBookDepartmentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		log_book_department_name: {
+		logBookDepartmentName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
@@ -75,7 +75,7 @@ export const LogBookModel = sequelize.define<LogBookInstance>(
 	{
 		...sequelize,
 		timestamps: false,
-		tableName: "log_book",
+		tableName: "log-book",
 		deletedAt: false,
 		paranoid: true,
 		underscored: true,

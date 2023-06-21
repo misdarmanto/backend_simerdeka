@@ -29,7 +29,7 @@ export const findAll = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -46,41 +46,41 @@ export const findAll = async (req: any, res: Response) => {
 				...(req.query.search && {
 					[Op.or]: [
 						{
-							recomendation_letter_program_name: {
+							recomendationLetterProgramName: {
 								[Op.like]: `%${req.query.search}%`,
 							},
 						},
 					],
 				}),
-				...(user?.user_role === "student" && {
-					recomendation_letter_student_id: { [Op.eq]: user.user_id },
-					recomendation_letter_assign_to_student: {
+				...(user?.userRole === "student" && {
+					recomendationLetterStudentId: { [Op.eq]: user.userId },
+					recomendationLetterAssignToStudent: {
 						[Op.eq]: 1,
 					},
 				}),
-				...(user?.user_role === "study_program" && {
-					recomendation_letter_study_program_id: {
-						[Op.eq]: user.user_id,
+				...(user?.userRole === "study_program" && {
+					recomendationLetterStudyProgramId: {
+						[Op.eq]: user.userId,
 					},
-					recomendation_letter_assign_to_study_program: {
+					recomendationLetterAssignToStudyProgram: {
 						[Op.eq]: 1,
 					},
 				}),
-				...(user?.user_role === "department" && {
-					recomendation_letter_department_id: {
-						[Op.eq]: user.user_id,
+				...(user?.userRole === "department" && {
+					recomendationLetterDepartmentId: {
+						[Op.eq]: user.userId,
 					},
-					recomendation_letter_assign_to_department: {
+					recomendationLetterAssignToDepartment: {
 						[Op.eq]: 1,
 					},
 				}),
-				...(user?.user_role === "lp3m" && {
-					recomendation_letter_assign_to_lp3m: {
+				...(user?.userRole === "lp3m" && {
+					recomendationLetterAssignToLp3m: {
 						[Op.eq]: 1,
 					},
 				}),
-				...(user?.user_role === "academic" && {
-					recomendation_letter_assign_to_academic: {
+				...(user?.userRole === "academic" && {
+					recomendationLetterAssignToAcademic: {
 						[Op.eq]: 1,
 					},
 				}),
@@ -122,7 +122,7 @@ export const findOne = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -134,37 +134,37 @@ export const findOne = async (req: any, res: Response) => {
 
 		const recomendationLetter = await RecomendationLetterModel.findOne({
 			where: {
-				recomendation_letter_id: { [Op.eq]: params.id },
+				recomendationLetterId: { [Op.eq]: params.id },
 				deleted: { [Op.eq]: 0 },
-				...(user?.user_role === "student" && {
-					recomendation_letter_student_id: { [Op.eq]: user.user_id },
-					recomendation_letter_assign_to_student: {
+				...(user?.userRole === "student" && {
+					recomendationLetterStudentId: { [Op.eq]: user.userId },
+					recomendationLetterAssignToStudent: {
 						[Op.eq]: 1,
 					},
 				}),
-				...(user?.user_role === "study_program" && {
-					recomendation_letter_study_program_id: {
-						[Op.eq]: user.user_id,
+				...(user?.userRole === "study_program" && {
+					recomendationLetterStudyProgramId: {
+						[Op.eq]: user.userId,
 					},
-					recomendation_letter_assign_to_study_program: {
+					recomendationLetterAssignToStudyProgram: {
 						[Op.eq]: 1,
 					},
 				}),
-				...(user?.user_role === "department" && {
-					recomendation_letter_department_id: {
-						[Op.eq]: user.user_id,
+				...(user?.userRole === "department" && {
+					recomendationLetterDepartmentId: {
+						[Op.eq]: user.userId,
 					},
-					recomendation_letter_assign_to_department: {
+					recomendationLetterAssignToDepartment: {
 						[Op.eq]: 1,
 					},
 				}),
-				...(user?.user_role === "lp3m" && {
-					recomendation_letter_assign_to_lp3m: {
+				...(user?.userRole === "lp3m" && {
+					recomendationLetterAssignToLp3m: {
 						[Op.eq]: 1,
 					},
 				}),
-				...(user?.user_role === "academic" && {
-					recomendation_letter_assign_to_academic: {
+				...(user?.userRole === "academic" && {
+					recomendationLetterAssignToAcademic: {
 						[Op.eq]: 1,
 					},
 				}),

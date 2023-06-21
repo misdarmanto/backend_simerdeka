@@ -12,7 +12,7 @@ export const remove = async (req: any, res: Response) => {
 	const body = <ReportParticipationAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["report_participation_id"],
+		requireList: ["reportParticipationId"],
 		requestData: body,
 	});
 
@@ -26,7 +26,7 @@ export const remove = async (req: any, res: Response) => {
 		const academicProgramCheck = await ReportParticipationModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				report_participation_id: { [Op.eq]: req.query.report_participation_id },
+				reportParticipationId: { [Op.eq]: req.query.reportParticipationId },
 			},
 		});
 
@@ -40,7 +40,7 @@ export const remove = async (req: any, res: Response) => {
 			{ deleted: 1 },
 			{
 				where: {
-					report_participation_id: { [Op.eq]: body.report_participation_id },
+					reportParticipationId: { [Op.eq]: body.reportParticipationId },
 				},
 			}
 		);

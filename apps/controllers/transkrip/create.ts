@@ -25,8 +25,8 @@ export const create = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				user_role: { [Op.eq]: "study_program" },
+				userId: { [Op.eq]: req.header("x-user-id") },
+				userRole: { [Op.eq]: "study_program" },
 			},
 		});
 
@@ -39,8 +39,8 @@ export const create = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: body.transkripStudentId },
-				student_is_registered: { [Op.eq]: true },
+				studentId: { [Op.eq]: body.transkripStudentId },
+				studentIsRegistered: { [Op.eq]: true },
 			},
 		});
 
@@ -51,10 +51,10 @@ export const create = async (req: any, res: Response) => {
 		}
 
 		body.transkripId = uuidv4();
-		body.transkripStudentId = student.student_id;
+		body.transkripStudentId = student.studentId;
 		body.transkripMataKuliahId = body.transkripMataKuliahId;
-		body.transkripStudyProgramId = student.student_study_program_id;
-		body.transkripDepartmentId = student.student_department_id;
+		body.transkripStudyProgramId = student.studentStudyProgramId;
+		body.transkripDepartmentId = student.studentDepartmentId;
 		await TranskripModel.create(body);
 
 		const response = <ResponseDataAttributes>ResponseData.default;

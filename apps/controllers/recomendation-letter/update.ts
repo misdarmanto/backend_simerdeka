@@ -12,7 +12,7 @@ export const update = async (req: any, res: Response) => {
 	const body = <RecomendationLetterAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["recomendation_letter_id"],
+		requireList: ["recomendationLetterId"],
 		requestData: body,
 	});
 
@@ -26,7 +26,7 @@ export const update = async (req: any, res: Response) => {
 		const recomendationLetter = await RecomendationLetterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				recomendation_letter_id: { [Op.eq]: body.recomendation_letter_id },
+				recomendationLetterId: { [Op.eq]: body.recomendationLetterId },
 			},
 		});
 

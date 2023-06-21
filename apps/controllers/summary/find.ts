@@ -9,13 +9,13 @@ import { MbkmProgramModel } from "../../models/mbkm-program";
 export const findAll = async (req: any, res: Response) => {
 	try {
 		const totalStudent = await StudentModel.count({
-			where: { deleted: { [Op.eq]: 0 }, student_is_registered: { [Op.eq]: true } },
+			where: { deleted: { [Op.eq]: 0 }, studentIsRegistered: { [Op.eq]: true } },
 		});
 
 		const totalStudyProgram = await StudyProgramModel.count({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				study_program_is_registered: { [Op.eq]: true },
+				studyProgramIsRegistered: { [Op.eq]: true },
 			},
 		});
 
@@ -26,9 +26,9 @@ export const findAll = async (req: any, res: Response) => {
 		const response = <ResponseDataAttributes>ResponseData.default;
 
 		response.data = {
-			total_student: totalStudent,
-			total_study_program: totalStudyProgram,
-			total_program: totalProgram,
+			totalStudent: totalStudent,
+			totalStudyProgram: totalStudyProgram,
+			totalProgram: totalProgram,
 		};
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {

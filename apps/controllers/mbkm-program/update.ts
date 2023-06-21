@@ -10,7 +10,7 @@ export const update = async (req: any, res: Response) => {
 	const body = <MbkmProgramAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["mbkm_program_id"],
+		requireList: ["mbkmProgramId"],
 		requestData: body,
 	});
 
@@ -24,8 +24,8 @@ export const update = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
+				userId: { [Op.eq]: req.header("x-user-id") },
+				[Op.or]: [{ userRole: "academic" }, { userRole: "lp3m" }],
 			},
 		});
 
@@ -38,7 +38,7 @@ export const update = async (req: any, res: Response) => {
 		const mbkmProgram = await MbkmProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkm_program_id: { [Op.eq]: body.mbkm_program_id },
+				mbkmProgramId: { [Op.eq]: body.mbkmProgramId },
 			},
 		});
 

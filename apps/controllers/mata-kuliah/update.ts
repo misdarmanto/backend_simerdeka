@@ -11,7 +11,7 @@ export const update = async (req: any, res: Response) => {
 	const body = <LogBookAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["log_book_id", "x-user-id"],
+		requireList: ["logBookId", "x-user-id"],
 		requestData: { ...req.body, ...req.headers },
 	});
 
@@ -25,7 +25,7 @@ export const update = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.header("x-user-id") },
+				studentId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -38,8 +38,8 @@ export const update = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				user_role: { [Op.eq]: "student" },
+				userId: { [Op.eq]: req.header("x-user-id") },
+				userRole: { [Op.eq]: "student" },
 			},
 		});
 
@@ -52,7 +52,7 @@ export const update = async (req: any, res: Response) => {
 		const logBook = await LogBookModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				log_book_id: { [Op.eq]: body.log_book_id },
+				logBookId: { [Op.eq]: body.logBookId },
 			},
 		});
 
@@ -63,18 +63,18 @@ export const update = async (req: any, res: Response) => {
 		}
 
 		const newData = {
-			...(body.log_book_report_week && {
-				log_book_report_week: body.log_book_report_week,
+			...(body.logBookReportWeek && {
+				logBookReportWeek: body.logBookReportWeek,
 			}),
-			...(body.log_book_report_file && {
-				log_book_report_file: body.log_book_report_file,
+			...(body.logBookReportFile && {
+				logBookReportFile: body.logBookReportFile,
 			}),
 		};
 
 		await LogBookModel.update(newData, {
 			where: {
 				deleted: { [Op.eq]: 0 },
-				log_book_id: { [Op.eq]: body.log_book_id },
+				logBookId: { [Op.eq]: body.logBookId },
 			},
 		});
 

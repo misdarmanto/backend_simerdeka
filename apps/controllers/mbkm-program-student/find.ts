@@ -21,11 +21,11 @@ export const findAll = async (req: any, res: Response) => {
 				...(req.query.search && {
 					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
 				}),
-				...(req.query.semester_id && {
-					semester_id: { [Op.eq]: req.query.semester_id },
+				...(req.query.semesterId && {
+					semesterId: { [Op.eq]: req.query.semesterId },
 				}),
 				...(req.header("x-user-role") === "student" && {
-					student_id: { [Op.eq]: req.header("x-user-id") },
+					studentId: { [Op.eq]: req.header("x-user-id") },
 				}),
 				...(req.header("x-user-role") === "major" && {
 					major_id: { [Op.eq]: req.header("x-major-id") },
@@ -72,8 +72,8 @@ export const findOne = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				mbkm_program_id: { [Op.eq]: params.id },
-				...(req.query.semester_id && {
-					semester_id: { [Op.eq]: req.query.semester_id },
+				...(req.query.semesterId && {
+					semesterId: { [Op.eq]: req.query.semesterId },
 				}),
 				...(req.header("x-user-role") === "major" && {
 					major_id: { [Op.eq]: req.header("x-major-id") },

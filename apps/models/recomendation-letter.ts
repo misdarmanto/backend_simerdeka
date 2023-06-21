@@ -4,33 +4,33 @@ import { ZygoteAttributes, ZygoteModel } from "./zygote";
 import { StudentModel } from "./student";
 
 export interface RecomendationLetterAttributes extends ZygoteAttributes {
-	recomendation_letter_id: string;
-	recomendation_letter_student_transkrip: string;
-	recomendation_letter_dosen_wali: string;
-	recomendation_letter_approval_letter: string;
-	recomendation_letter_from_study_program: string;
-	recomendation_letter_from_department: string;
-	recomendation_letter_from_lp3m: string;
-	recomendation_letter_from_academic: string;
-	recomendation_letter_program_name: string;
-	recomendation_letter_program_correlation: string;
-	recomendation_letter_status: "waiting" | "accepted" | "rejected";
-	recomendation_letter_status_message: string;
-	recomendation_letter_assign_to_student: boolean;
-	recomendation_letter_assign_to_study_program: boolean;
-	recomendation_letter_assign_to_department: boolean;
-	recomendation_letter_assign_to_lp3m: boolean;
-	recomendation_letter_assign_to_academic: boolean;
-	recomendation_letter_study_program_id: string;
-	recomendation_letter_department_id: string;
-	recomendation_letter_student_id: string;
+	recomendationLetterId: string;
+	recomendationLetterStudentTranskrip: string;
+	recomendationLetterDosenWali: string;
+	recomendationLetterApprovalLetter: string;
+	recomendationLetterFromStudyProgram: string;
+	recomendationLetterFromDepartment: string;
+	recomendationLetterFromLp3m: string;
+	recomendationLetterFromAcademic: string;
+	recomendationLetterProgramName: string;
+	recomendationLetterProgramCorrelation: string;
+	recomendationLetterStatus: "waiting" | "accepted" | "rejected";
+	recomendationLetterStatusMessage: string;
+	recomendationLetterAssignToStudent: boolean;
+	recomendationLetterAssignToStudyProgram: boolean;
+	recomendationLetterAssignToDepartment: boolean;
+	recomendationLetterAssignToLp3m: boolean;
+	recomendationLetterAssignToAcademic: boolean;
+	recomendationLetterStudyProgramId: string;
+	recomendationLetterDepartmentId: string;
+	recomendationLetterStudentId: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type RecomendationLetterCreationAttributes = Optional<
 	RecomendationLetterAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -39,91 +39,91 @@ interface RecomendationLetterInstance
 		RecomendationLetterAttributes {}
 
 export const RecomendationLetterModel = sequelize.define<RecomendationLetterInstance>(
-	"recomendation_letter",
+	"recomendationLetter",
 	{
 		...ZygoteModel,
-		recomendation_letter_id: {
+		recomendationLetterId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		recomendation_letter_student_id: {
+		recomendationLetterStudentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		recomendation_letter_department_id: {
+		recomendationLetterDepartmentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		recomendation_letter_study_program_id: {
+		recomendationLetterStudyProgramId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		recomendation_letter_student_transkrip: {
+		recomendationLetterStudentTranskrip: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		recomendation_letter_dosen_wali: {
+		recomendationLetterDosenWali: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		recomendation_letter_approval_letter: {
+		recomendationLetterApprovalLetter: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		recomendation_letter_from_study_program: {
+		recomendationLetterFromStudyProgram: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		recomendation_letter_from_department: {
+		recomendationLetterFromDepartment: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		recomendation_letter_from_lp3m: {
+		recomendationLetterFromLp3m: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		recomendation_letter_from_academic: {
+		recomendationLetterFromAcademic: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		recomendation_letter_program_name: {
+		recomendationLetterProgramName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		recomendation_letter_program_correlation: {
+		recomendationLetterProgramCorrelation: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		recomendation_letter_status: {
+		recomendationLetterStatus: {
 			type: DataTypes.ENUM("waiting", "accepted", "rejected"),
 			allowNull: true,
 			defaultValue: "waiting",
 		},
-		recomendation_letter_status_message: {
+		recomendationLetterStatusMessage: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		recomendation_letter_assign_to_student: {
+		recomendationLetterAssignToStudent: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,
 		},
-		recomendation_letter_assign_to_study_program: {
+		recomendationLetterAssignToStudyProgram: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,
 		},
-		recomendation_letter_assign_to_department: {
+		recomendationLetterAssignToDepartment: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,
 		},
-		recomendation_letter_assign_to_lp3m: {
+		recomendationLetterAssignToLp3m: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,
 		},
-		recomendation_letter_assign_to_academic: {
+		recomendationLetterAssignToAcademic: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,
@@ -132,7 +132,7 @@ export const RecomendationLetterModel = sequelize.define<RecomendationLetterInst
 	{
 		...sequelize,
 		timestamps: false,
-		tableName: "recomendation_letter",
+		tableName: "recomendationLetter",
 		deletedAt: false,
 		paranoid: true,
 		underscored: true,
@@ -142,6 +142,6 @@ export const RecomendationLetterModel = sequelize.define<RecomendationLetterInst
 );
 
 RecomendationLetterModel.hasOne(StudentModel, {
-	sourceKey: "recomendation_letter_student_id",
-	foreignKey: "student_id",
+	sourceKey: "recomendationLetterStudentId",
+	foreignKey: "studentId",
 });
