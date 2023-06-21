@@ -24,8 +24,6 @@ export const findAll = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		console.log(req.query);
-
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await StudentModel.findAndCountAll({
 			where: {
@@ -37,8 +35,6 @@ export const findAll = async (req: any, res: Response) => {
 				studentIsRegistered: {
 					[Op.eq]: true,
 				},
-
-				// ...(req.query.registered && {}),
 				...(req.query.mbkmProgramId && {
 					studentMmProgramId: {
 						[Op.eq]:

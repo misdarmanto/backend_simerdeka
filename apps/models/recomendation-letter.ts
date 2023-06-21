@@ -39,7 +39,7 @@ interface RecomendationLetterInstance
 		RecomendationLetterAttributes {}
 
 export const RecomendationLetterModel = sequelize.define<RecomendationLetterInstance>(
-	"recomendationLetter",
+	"recomendation_letter",
 	{
 		...ZygoteModel,
 		recomendationLetterId: {
@@ -132,7 +132,7 @@ export const RecomendationLetterModel = sequelize.define<RecomendationLetterInst
 	{
 		...sequelize,
 		timestamps: false,
-		tableName: "recomendationLetter",
+		tableName: "recomendation_letter",
 		deletedAt: false,
 		paranoid: true,
 		underscored: true,

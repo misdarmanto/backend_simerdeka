@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../utilities/response";
-import { verifyAccessToken } from "../utilities/jwt";
 import { CONFIG } from "../config";
 
 export const useAuthorization = (req: Request, res: Response, next: NextFunction) => {

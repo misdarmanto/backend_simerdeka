@@ -7,10 +7,10 @@ dotenv.config();
 // 	db_port: process.env.DB_PORT || 3306,
 // 	db_username: process.env.DB_USERNAME || "root",
 // 	db_password: process.env.DB_PASSWORD || "toor",
-// 	db_log: process.env.DB_LOG == "true",
+// 	db_log: process.env.DB_LOG == "false",
 // };
 
-import { Options, Sequelize } from "sequelize";
+import { Options } from "sequelize";
 
 const development: Options = {
 	username: "root",
@@ -18,16 +18,7 @@ const development: Options = {
 	database: "simerdeka",
 	host: "localhost",
 	dialect: "mysql",
-	logging: true,
-};
-
-const production: Options = {
-	username: "root",
-	password: "toor",
-	database: "simerdeka",
-	host: "your-production-host",
-	dialect: "mysql",
-	logging: true,
+	logging: false,
 };
 
 const test: Options = {
@@ -36,7 +27,16 @@ const test: Options = {
 	database: "simerdeka",
 	host: "localhost",
 	dialect: "mysql",
-	logging: true,
+	logging: false,
+};
+
+const production: Options = {
+	username: "root",
+	password: "toor",
+	database: "simerdeka",
+	host: "localhost",
+	dialect: "mysql",
+	logging: false,
 };
 
 const config = {
