@@ -61,8 +61,7 @@ export const update = async (req: any, res: Response) => {
 				reportParticipationStatus: body.reportParticipationStatus,
 			}),
 			...(req.body.reportParticipationStatusMessage && {
-				reportParticipationStatusMessage:
-					body.reportParticipationStatusMessage,
+				reportParticipationStatusMessage: body.reportParticipationStatusMessage,
 			}),
 		};
 
@@ -88,8 +87,7 @@ export const update = async (req: any, res: Response) => {
 				where: {
 					deleted: { [Op.eq]: 0 },
 					studyProgramId: {
-						[Op.eq]:
-							reportParticipation.reportParticipationStudyProgramId,
+						[Op.eq]: reportParticipation.reportParticipationStudyProgramId,
 					},
 				},
 			});

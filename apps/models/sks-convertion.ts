@@ -32,7 +32,7 @@ export const SksConvertionModel = sequelize.define<SksConvertionInstance>(
 			allowNull: false,
 		},
 		sksConvertionTotal: {
-			type: DataTypes.NUMBER,
+			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
 		sksConvertionStudentId: {

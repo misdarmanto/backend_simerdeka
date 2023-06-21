@@ -28,7 +28,7 @@ interface LogBookInstance
 		LogBookAttributes {}
 
 export const LogBookModel = sequelize.define<LogBookInstance>(
-	"logBook",
+	"log-book",
 	{
 		...ZygoteModel,
 		logBookId: {
@@ -75,7 +75,7 @@ export const LogBookModel = sequelize.define<LogBookInstance>(
 	{
 		...sequelize,
 		timestamps: false,
-		tableName: "logBook",
+		tableName: "log-book",
 		deletedAt: false,
 		paranoid: true,
 		underscored: true,
