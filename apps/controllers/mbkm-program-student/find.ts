@@ -30,7 +30,7 @@ export const findAll = async (req: any, res: Response) => {
 				...(req.header("x-user-role") === "major" && {
 					major_id: { [Op.eq]: req.header("x-major-id") },
 				}),
-				...(req.header("x-user-role") === "study_program" && {
+				...(req.header("x-user-role") === "studyProgram" && {
 					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
 				}),
 			},
@@ -78,7 +78,7 @@ export const findOne = async (req: any, res: Response) => {
 				...(req.header("x-user-role") === "major" && {
 					major_id: { [Op.eq]: req.header("x-major-id") },
 				}),
-				...(req.header("x-user-role") === "study_program" && {
+				...(req.header("x-user-role") === "studyProgram" && {
 					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
 				}),
 			},

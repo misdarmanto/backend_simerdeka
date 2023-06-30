@@ -26,7 +26,7 @@ export const create = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				userId: { [Op.eq]: req.header("x-user-id") },
-				userRole: { [Op.eq]: "study_program" },
+				userRole: { [Op.eq]: "studyProgram" },
 			},
 		});
 

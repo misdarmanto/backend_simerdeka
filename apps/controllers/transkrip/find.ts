@@ -43,7 +43,7 @@ export const findAll = async (req: any, res: Response) => {
 				...(user.userRole === "student" && {
 					transkripStudentId: { [Op.eq]: user.userId },
 				}),
-				...(user.userRole === "study_program" && {
+				...(user.userRole === "studyProgram" && {
 					transkripStudyProgramId: {
 						[Op.eq]: user.userId,
 					},
@@ -109,7 +109,7 @@ export const findOne = async (req: any, res: Response) => {
 				...(user.userRole === "student" && {
 					transkripStudentId: { [Op.eq]: user.userId },
 				}),
-				...(user.userRole === "study_program" && {
+				...(user.userRole === "studyProgram" && {
 					transkripStudyProgramId: {
 						[Op.eq]: user.userId,
 					},

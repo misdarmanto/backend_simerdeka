@@ -6,15 +6,12 @@ export interface UserAttributes extends ZygoteAttributes {
 	userId: string;
 	userName: string;
 	userEmail: string;
-	userRole: "student" | "study_program" | "department" | "lp3m" | "academic";
+	userRole: "student" | "studyProgram" | "department" | "lp3m" | "academic";
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
-type UserCreationAttributes = Optional<
-	UserAttributes,
-	"id" | "createdOn" | "modifiedOn"
->;
+type UserCreationAttributes = Optional<UserAttributes, "id" | "createdOn" | "modifiedOn">;
 
 // We need to declare an interface for our model that is basically what our class would be
 interface UserInstance

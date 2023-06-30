@@ -40,7 +40,7 @@ export const findAll = async (req: any, res: Response) => {
 				...(req.query.search && {
 					[Op.or]: [{ mataKuliahName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
-				...(user.userRole === "study_program" && {
+				...(user.userRole === "studyProgram" && {
 					mataKuliahStudyProgramId: {
 						[Op.eq]: user.userId,
 					},
@@ -101,7 +101,7 @@ export const findOne = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				mataKuliahId: { [Op.eq]: params.id },
-				...(user.userRole === "study_program" && {
+				...(user.userRole === "studyProgram" && {
 					mataKuliahStudyProgramId: {
 						[Op.eq]: user.userId,
 					},

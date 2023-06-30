@@ -50,16 +50,16 @@ export const changeAssignMentStatus = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		if ("status" in req.body) {
-			recomendationLetter.recomendationLetterStatus = req.body.status;
+		if ("recomendationLetterStatus" in req.body) {
+			recomendationLetter.recomendationLetterStatus =
+				req.body.recomendationLetterStatus;
 			recomendationLetter.recomendationLetterStatusMessage = req.body.statusMessage;
 		}
 
 		const approvalLetter = body.recomendationLetterApprovalLetter;
 
-		console.log(approvalLetter);
 		switch (user.userRole) {
-			case "study_program":
+			case "studyProgram":
 				recomendationLetter.recomendationLetterAssignToDepartment = true;
 				recomendationLetter.recomendationLetterFromStudyProgram = approvalLetter;
 				break;
