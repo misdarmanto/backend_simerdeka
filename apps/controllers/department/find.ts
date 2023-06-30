@@ -13,9 +13,7 @@ export const findAll = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [
-						{ department_name: { [Op.like]: `%${req.query.search}%` } },
-					],
+					[Op.or]: [{ departmentName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
 			},
 			order: [["id", "desc"]],
@@ -52,7 +50,7 @@ export const findOne = async (req: any, res: Response) => {
 		const result = await DepartmentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				department_id: { [Op.eq]: req.params.id },
+				departmentId: { [Op.eq]: req.params.id },
 			},
 		});
 

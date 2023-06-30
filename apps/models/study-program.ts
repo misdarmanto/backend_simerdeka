@@ -3,19 +3,19 @@ import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface StudyProgramAttributes extends ZygoteAttributes {
-	study_program_id: string;
-	study_program_name: string;
-	study_program_email: string;
-	study_program_is_registered: boolean;
-	study_program_department_id: string;
-	study_program_department_name: string;
+	studyProgramId: string;
+	studyProgramName: string;
+	studyProgramEmail: string;
+	studyProgramIsRegistered: boolean;
+	studyProgramDepartmentId: string;
+	studyProgramDepartmentName: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type StudyProgramCreationAttributes = Optional<
 	StudyProgramAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -27,28 +27,28 @@ export const StudyProgramModel = sequelize.define<StudyProgramInstance>(
 	"study_program",
 	{
 		...ZygoteModel,
-		study_program_id: {
+		studyProgramId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		study_program_name: {
+		studyProgramName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		study_program_email: {
+		studyProgramEmail: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		study_program_is_registered: {
+		studyProgramIsRegistered: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,
 		},
-		study_program_department_id: {
+		studyProgramDepartmentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		study_program_department_name: {
+		studyProgramDepartmentName: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},

@@ -10,12 +10,9 @@ export const update = async (req: any, res: Response) => {
 	const body = <StudentAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["student_id"],
+		requireList: ["studentId"],
 		requestData: body,
 	});
-
-	console.log("_________________");
-	console.log(body);
 
 	if (emptyField) {
 		const message = `invalid request parameter! require (${emptyField})`;
@@ -27,7 +24,7 @@ export const update = async (req: any, res: Response) => {
 		const studyProgram = await StudyProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				study_program_id: { [Op.eq]: req.header("x-user-id") },
+				studyProgramId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -40,7 +37,7 @@ export const update = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: body.student_id },
+				studentId: { [Op.eq]: body.studentId },
 			},
 		});
 
@@ -51,21 +48,21 @@ export const update = async (req: any, res: Response) => {
 		}
 
 		const newData = {
-			...(body.student_mbkm_program_id && {
-				student_mbkm_program_id: body.student_mbkm_program_id + "",
+			...(body.studentMbkmProgramId && {
+				studentMbkmProgramId: body.studentMbkmProgramId + "",
 			}),
-			...(body.student_transkrip_id && {
-				student_transkrip_id: body.student_transkrip_id,
+			...(body.studentTranskripId && {
+				studentTranskripId: body.studentTranskripId,
 			}),
 		};
 
-		if (body.student_mbkm_program_id === null) {
+		if (body.studentMbkmProgramId === null) {
 			await StudentModel.update(
-				{ student_mbkm_program_id: null },
+				{ studentMbkmProgramId: null },
 				{
 					where: {
 						deleted: { [Op.eq]: 0 },
-						student_id: { [Op.eq]: body.student_id },
+						studentId: { [Op.eq]: body.studentId },
 					},
 				}
 			);
@@ -74,7 +71,7 @@ export const update = async (req: any, res: Response) => {
 		await StudentModel.update(newData, {
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: body.student_id },
+				studentId: { [Op.eq]: body.studentId },
 			},
 		});
 

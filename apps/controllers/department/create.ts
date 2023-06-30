@@ -9,7 +9,7 @@ export const create = async (req: any, res: Response) => {
 	const body = <DepartmentAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["department_name", "department_email"],
+		requireList: ["departmentName", "departmentEmail"],
 		requestData: body,
 	});
 
@@ -26,7 +26,7 @@ export const create = async (req: any, res: Response) => {
 		// }));
 		// await UserModel.bulkCreate(users);
 
-		body.department_id = uuidv4();
+		body.departmentId = uuidv4();
 		await DepartmentModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

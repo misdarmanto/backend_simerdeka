@@ -9,7 +9,7 @@ export const remove = async (req: any, res: Response) => {
 	const body = <StudentAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["student_id"],
+		requireList: ["studentId"],
 		requestData: req.query,
 	});
 
@@ -23,7 +23,7 @@ export const remove = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.query.student_id },
+				studentId: { [Op.eq]: req.query.studentId },
 			},
 		});
 
@@ -37,7 +37,7 @@ export const remove = async (req: any, res: Response) => {
 			{ deleted: 1 },
 			{
 				where: {
-					student_id: { [Op.eq]: body.student_id },
+					studentId: { [Op.eq]: body.studentId },
 				},
 			}
 		);

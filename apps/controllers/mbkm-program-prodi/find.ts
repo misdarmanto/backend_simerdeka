@@ -27,7 +27,7 @@ export const findAll = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -42,26 +42,26 @@ export const findAll = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [{ program_name: { [Op.like]: `%${req.query.search}%` } }],
+					[Op.or]: [{ programName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
-				...(req.query.program_id && {
-					mbkm_program_prodi_program_id: {
-						[Op.eq]: req.query.program_id,
+				...(req.query.programId && {
+					mbkmProgramProdiProgramId: {
+						[Op.eq]: req.query.programId,
 					},
 				}),
-				...(req.query.semester_id && {
-					mbkm_program_prodi_semester_id: {
-						[Op.eq]: req.query.semester_id,
+				...(req.query.semesterId && {
+					mbkmProgramProdiSemesterId: {
+						[Op.eq]: req.query.semesterId,
 					},
 				}),
-				...(user?.user_role === "study_program" && {
-					mbkm_program_prodi_study_program_id: {
-						[Op.eq]: user.user_id,
+				...(user?.userRole === "studyProgram" && {
+					mbkmProgramProdiStudyProgramId: {
+						[Op.eq]: user.userId,
 					},
 				}),
-				...(user?.user_role === "department" && {
-					mbkm_program_prodi_department_id: {
-						[Op.eq]: user.user_id,
+				...(user?.userRole === "department" && {
+					mbkmProgramProdiDepartmentId: {
+						[Op.eq]: user.userId,
 					},
 				}),
 			},
@@ -108,7 +108,7 @@ export const findOne = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -121,20 +121,20 @@ export const findOne = async (req: any, res: Response) => {
 		const result = await MbkmProgramProdiModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkm_program_prodi_program_id: { [Op.eq]: params.id },
-				...(req.query.semester_id && {
-					mbkm_program_prodi_semester_id: {
-						[Op.eq]: req.query.semester_id,
+				mbkmProgramProdiProgramId: { [Op.eq]: params.id },
+				...(req.query.semesterId && {
+					mbkmProgramProdiSemesterId: {
+						[Op.eq]: req.query.semesterId,
 					},
 				}),
-				...(user?.user_role === "study_program" && {
-					mbkm_program_prodi_study_program_id: {
-						[Op.eq]: user.user_id,
+				...(user?.userRole === "studyProgram" && {
+					mbkmProgramProdiStudyProgramId: {
+						[Op.eq]: user.userId,
 					},
 				}),
-				...(user?.user_role === "department" && {
-					mbkm_program_prodi_department_id: {
-						[Op.eq]: user.user_id,
+				...(user?.userRole === "department" && {
+					mbkmProgramProdiDepartmentId: {
+						[Op.eq]: user.userId,
 					},
 				}),
 			},

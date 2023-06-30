@@ -5,25 +5,25 @@ import { MbkmProgramModel } from "./mbkm-program";
 import { TranskripModel } from "./transkrip";
 
 export interface StudentAttributes extends ZygoteAttributes {
-	student_id: string;
-	student_name: string;
-	student_nim: string;
-	student_email: string;
-	student_is_registered: boolean;
-	student_department_id: string;
-	student_department_name: string;
-	student_study_program_id: string;
-	student_study_program_name: string;
-	student_mbkm_program_id?: string | null;
-	student_transkrip_id: string;
-	student_sks_total: number;
+	studentId: string;
+	studentName: string;
+	studentNim: string;
+	studentEmail: string;
+	studentIsRegistered: boolean;
+	studentDepartmentId: string;
+	studentDepartmentName: string;
+	studentStudyProgramId: string;
+	studentStudyProgramName: string;
+	studentMbkmProgramId?: string | null;
+	studentTranskripId: string;
+	studentSksTotal: number;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type StudentCreationAttributes = Optional<
 	StudentAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -35,52 +35,52 @@ export const StudentModel = sequelize.define<StudentInstance>(
 	"student",
 	{
 		...ZygoteModel,
-		student_id: {
+		studentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		student_name: {
+		studentName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		student_nim: {
+		studentNim: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		student_email: {
+		studentEmail: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		student_is_registered: {
+		studentIsRegistered: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,
 		},
-		student_department_id: {
+		studentDepartmentId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		student_department_name: {
+		studentDepartmentName: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		student_study_program_id: {
+		studentStudyProgramId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		student_study_program_name: {
+		studentStudyProgramName: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		student_mbkm_program_id: {
+		studentMbkmProgramId: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		student_transkrip_id: {
+		studentTranskripId: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		student_sks_total: {
+		studentSksTotal: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
 			defaultValue: 0,
@@ -99,11 +99,11 @@ export const StudentModel = sequelize.define<StudentInstance>(
 );
 
 StudentModel.hasOne(MbkmProgramModel, {
-	sourceKey: "student_mbkm_program_id",
+	sourceKey: "studentMbkmProgramId",
 	foreignKey: "mbkm_program_id",
 });
 
 StudentModel.hasMany(TranskripModel, {
-	sourceKey: "student_transkrip_id",
+	sourceKey: "studentTranskripId",
 	foreignKey: "transkrip_id",
 });

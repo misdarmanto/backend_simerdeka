@@ -48,7 +48,7 @@ export const create = async (req: any, res: Response) => {
 		// 	return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		// }
 
-		body.student_id = uuidv4();
+		body.studentId = uuidv4();
 		await StudentModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

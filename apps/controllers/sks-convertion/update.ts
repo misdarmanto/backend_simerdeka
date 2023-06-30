@@ -9,7 +9,7 @@ export const update = async (req: any, res: Response) => {
 	const body = <SemesterAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["semester_id"],
+		requireList: ["semesterId"],
 		requestData: body,
 	});
 
@@ -23,7 +23,7 @@ export const update = async (req: any, res: Response) => {
 		const semester = await SemesterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				semester_id: { [Op.eq]: body.semester_id },
+				semesterId: { [Op.eq]: body.semesterId },
 			},
 		});
 
@@ -34,16 +34,16 @@ export const update = async (req: any, res: Response) => {
 		}
 
 		const newData: SemesterAttributes = {
-			...(req.body.semester_name && { semester_name: req.body.semester_name }),
-			...(req.body.semester_status && {
-				semester_status: req.body.semester_status,
+			...(req.body.semesterName && { semesterName: req.body.semesterName }),
+			...(req.body.semesterStatus && {
+				semesterStatus: req.body.semesterStatus,
 			}),
 		};
 
 		await SemesterModel.update(newData, {
 			where: {
 				deleted: { [Op.eq]: 0 },
-				semester_id: { [Op.eq]: body.semester_id },
+				semesterId: { [Op.eq]: body.semesterId },
 			},
 		});
 

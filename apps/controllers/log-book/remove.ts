@@ -8,7 +8,7 @@ import { StudentModel } from "../../models/student";
 
 export const remove = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
-		requireList: ["log_book_id"],
+		requireList: ["logBookId"],
 		requestData: req.query,
 	});
 
@@ -22,7 +22,7 @@ export const remove = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.header("x-user-id") },
+				studentId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -35,7 +35,7 @@ export const remove = async (req: any, res: Response) => {
 		const logBook = await LogBookModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				log_book_id: { [Op.eq]: req.query.log_book_id },
+				logBookId: { [Op.eq]: req.query.logBookId },
 			},
 		});
 
@@ -49,7 +49,7 @@ export const remove = async (req: any, res: Response) => {
 			{ deleted: 1 },
 			{
 				where: {
-					log_book_id: { [Op.eq]: req.query.log_book_id },
+					logBookId: { [Op.eq]: req.query.logBookId },
 				},
 			}
 		);

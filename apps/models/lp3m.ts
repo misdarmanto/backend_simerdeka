@@ -3,16 +3,16 @@ import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
 
 export interface Lp3mAttributes extends ZygoteAttributes {
-	lp3m_id: string;
-	lp3m_name: string;
-	lp3m_email: string;
+	lp3mId: string;
+	lp3mName: string;
+	lp3mEmail: string;
 }
 
 // we're telling the Model that 'id' is optional
 // when creating an instance of the model (such as using Model.create()).
 type Lp3mCreationAttributes = Optional<
 	Lp3mAttributes,
-	"id" | "created_on" | "modified_on"
+	"id" | "createdOn" | "modifiedOn"
 >;
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -24,15 +24,15 @@ export const Lp3mModel = sequelize.define<Lp3mInstance>(
 	"lp3m",
 	{
 		...ZygoteModel,
-		lp3m_id: {
+		lp3mId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		lp3m_name: {
+		lp3mName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		lp3m_email: {
+		lp3mEmail: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

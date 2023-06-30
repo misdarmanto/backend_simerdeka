@@ -15,7 +15,7 @@ export const update = async (req: any, res: Response) => {
 	const body = <ReportParticipationAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["report_participation_id", "x-user-id"],
+		requireList: ["reportParticipationId", "x-user-id"],
 		requestData: { ...req.body, ...req.headers },
 	});
 
@@ -29,8 +29,8 @@ export const update = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				user_role: { [Op.eq]: "academic" },
+				userId: { [Op.eq]: req.header("x-user-id") },
+				userRole: { [Op.eq]: "academic" },
 			},
 		});
 
@@ -43,7 +43,7 @@ export const update = async (req: any, res: Response) => {
 		const reportParticipation = await ReportParticipationModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				report_participation_id: { [Op.eq]: body.report_participation_id },
+				reportParticipationId: { [Op.eq]: body.reportParticipationId },
 			},
 		});
 
@@ -54,32 +54,31 @@ export const update = async (req: any, res: Response) => {
 		}
 
 		const newData: ReportParticipationAttributes = {
-			...(req.body.report_participation_letter && {
-				report_participation_letter: body.report_participation_letter,
+			...(req.body.reportParticipationLetter && {
+				reportParticipationLetter: body.reportParticipationLetter,
 			}),
-			...(req.body.report_participation_status && {
-				report_participation_status: body.report_participation_status,
+			...(req.body.reportParticipationStatus && {
+				reportParticipationStatus: body.reportParticipationStatus,
 			}),
-			...(req.body.report_participation_status_message && {
-				report_participation_status_message:
-					body.report_participation_status_message,
+			...(req.body.reportParticipationStatusMessage && {
+				reportParticipationStatusMessage: body.reportParticipationStatusMessage,
 			}),
 		};
 
 		await ReportParticipationModel.update(newData, {
 			where: {
 				deleted: { [Op.eq]: 0 },
-				report_participation_id: { [Op.eq]: body.report_participation_id },
+				reportParticipationId: { [Op.eq]: body.reportParticipationId },
 			},
 		});
 
-		console.log(req.body.report_participation_status);
-		if (req.body.report_participation_status === "accepted") {
+		console.log(req.body.reportParticipationStatus);
+		if (req.body.reportParticipationStatus === "accepted") {
 			const student = await StudentModel.findOne({
 				where: {
 					deleted: { [Op.eq]: 0 },
-					student_id: {
-						[Op.eq]: reportParticipation.report_participation_student_id,
+					studentId: {
+						[Op.eq]: reportParticipation.reportParticipationStudentId,
 					},
 				},
 			});
@@ -87,20 +86,19 @@ export const update = async (req: any, res: Response) => {
 			const studyProgram = await StudyProgramModel.findOne({
 				where: {
 					deleted: { [Op.eq]: 0 },
-					study_program_id: {
-						[Op.eq]:
-							reportParticipation.report_participation_study_program_id,
+					studyProgramId: {
+						[Op.eq]: reportParticipation.reportParticipationStudyProgramId,
 					},
 				},
 			});
 
 			if (student) {
-				student.student_is_registered = true;
+				student.studentIsRegistered = true;
 				student.save();
 			}
 
 			if (studyProgram) {
-				studyProgram.study_program_is_registered = true;
+				studyProgram.studyProgramIsRegistered = true;
 				studyProgram.save();
 			}
 		}

@@ -13,7 +13,7 @@ export const findAll = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [{ user_name: { [Op.like]: `%${req.query.search}%` } }],
+					[Op.or]: [{ userName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
 			},
 			order: [["id", "desc"]],
@@ -40,14 +40,14 @@ export const findAllStudent = async (req: any, res: Response) => {
 		const result = await UserModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_is_registered: { [Op.eq]: true },
+				userIsRegistered: { [Op.eq]: true },
 				...(req.query.search && {
-					[Op.or]: [{ user_name: { [Op.like]: `%${req.query.search}%` } }],
+					[Op.or]: [{ userName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
 				...(req.header("x-user-role") === "major" && {
-					major_id: { [Op.eq]: req.header("x-major-id") },
+					departmentId: { [Op.eq]: req.header("x-major-id") },
 				}),
-				...(req.header("x-user-role") === "study_program" && {
+				...(req.header("x-user-role") === "studyProgram" && {
 					study_program_id: { [Op.eq]: req.header("x-study-program-id") },
 				}),
 			},
@@ -85,9 +85,9 @@ export const findOne = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 				// study_program_id: { [Op.eq]: req.header("x-study-program-id") },
-				// major_id: { [Op.eq]: req.header("x-major-id") },
+				// departmentId: { [Op.eq]: req.header("x-major-id") },
 			},
 		});
 

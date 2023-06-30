@@ -13,7 +13,7 @@ export const findAll = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
-					[Op.or]: [{ lp3m_name: { [Op.like]: `%${req.query.search}%` } }],
+					[Op.or]: [{ lp3mName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
 			},
 			order: [["id", "desc"]],
@@ -50,7 +50,7 @@ export const findOne = async (req: any, res: Response) => {
 		const result = await Lp3mModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				lp3m_id: { [Op.eq]: req.params.id },
+				lp3mId: { [Op.eq]: req.params.id },
 			},
 		});
 

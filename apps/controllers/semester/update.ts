@@ -10,7 +10,7 @@ export const update = async (req: any, res: Response) => {
 	const body = <SemesterAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["semester_id"],
+		requireList: ["semesterId"],
 		requestData: body,
 	});
 
@@ -24,8 +24,8 @@ export const update = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ user_role: "academic" }, { user_role: "lp3m" }],
+				userId: { [Op.eq]: req.header("x-user-id") },
+				[Op.or]: [{ userRole: "academic" }, { userRole: "lp3m" }],
 			},
 		});
 
@@ -38,7 +38,7 @@ export const update = async (req: any, res: Response) => {
 		const semester = await SemesterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				semester_id: { [Op.eq]: body.semester_id },
+				semesterId: { [Op.eq]: body.semesterId },
 			},
 		});
 
@@ -49,25 +49,25 @@ export const update = async (req: any, res: Response) => {
 		}
 
 		await SemesterModel.update(
-			{ semester_status: "non-active" },
+			{ semesterStatus: "non-active" },
 			{
 				where: {
-					semester_status: { [Op.eq]: "active" },
+					semesterStatus: { [Op.eq]: "active" },
 				},
 			}
 		);
 
 		const newData: SemesterAttributes = {
-			...(req.body.semester_name && { semester_name: req.body.semester_name }),
-			...(req.body.semester_status && {
-				semester_status: req.body.semester_status,
+			...(req.body.semesterName && { semesterName: req.body.semesterName }),
+			...(req.body.semesterStatus && {
+				semesterStatus: req.body.semesterStatus,
 			}),
 		};
 
 		await SemesterModel.update(newData, {
 			where: {
 				deleted: { [Op.eq]: 0 },
-				semester_id: { [Op.eq]: body.semester_id },
+				semesterId: { [Op.eq]: body.semesterId },
 			},
 		});
 

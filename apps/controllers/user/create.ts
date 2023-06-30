@@ -12,7 +12,7 @@ export const create = async (req: any, res: Response) => {
 	try {
 		const users = req.body.users.map((user: UserAttributes) => ({
 			...user,
-			user_id: uuidv4(),
+			userId: uuidv4(),
 		}));
 		await UserModel.bulkCreate(users);
 		const response = <ResponseDataAttributes>ResponseData.default;

@@ -24,7 +24,7 @@ export const findAll = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -40,20 +40,20 @@ export const findAll = async (req: any, res: Response) => {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
 					[Op.or]: [
-						{ log_book_student_name: { [Op.like]: `%${req.query.search}%` } },
+						{ logBookStudentName: { [Op.like]: `%${req.query.search}%` } },
 					],
 				}),
-				...(user.user_role === "student" && {
-					log_book_student_id: { [Op.eq]: user.user_id },
+				...(user.userRole === "student" && {
+					logBookStudentId: { [Op.eq]: user.userId },
 				}),
-				...(user.user_role === "study_program" && {
-					log_book_study_program_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "studyProgram" && {
+					logBookStudyProgramId: {
+						[Op.eq]: user.userId,
 					},
 				}),
-				...(user.user_role === "department" && {
-					log_book_department_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "department" && {
+					logBookDepartmentId: {
+						[Op.eq]: user.userId,
 					},
 				}),
 			},
@@ -93,7 +93,7 @@ export const findOne = async (req: any, res: Response) => {
 		const user = await UserModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				user_id: { [Op.eq]: req.header("x-user-id") },
+				userId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -106,18 +106,18 @@ export const findOne = async (req: any, res: Response) => {
 		const logBook = await LogBookModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				log_book_id: { [Op.eq]: params.id },
-				...(user.user_role === "student" && {
-					log_book_student_id: { [Op.eq]: user.user_id },
+				logBookId: { [Op.eq]: params.id },
+				...(user.userRole === "student" && {
+					logBookStudentId: { [Op.eq]: user.userId },
 				}),
-				...(user.user_role === "study_program" && {
-					log_book_study_program_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "studyProgram" && {
+					logBookStudyProgramId: {
+						[Op.eq]: user.userId,
 					},
 				}),
-				...(user.user_role === "department" && {
-					log_book_department_id: {
-						[Op.eq]: user.user_id,
+				...(user.userRole === "department" && {
+					logBookDepartmentId: {
+						[Op.eq]: user.userId,
 					},
 				}),
 			},

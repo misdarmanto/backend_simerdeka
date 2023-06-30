@@ -14,11 +14,11 @@ export const findAll = async (req: any, res: Response) => {
 				deleted: { [Op.eq]: 0 },
 				...(req.query.search && {
 					[Op.or]: [
-						{ study_program_name: { [Op.like]: `%${req.query.search}%` } },
+						{ studyProgramName: { [Op.like]: `%${req.query.search}%` } },
 					],
 				}),
 				...(req.query.registered && {
-					study_program_is_registered: {
+					studyProgramIsRegistered: {
 						[Op.eq]: true,
 					},
 				}),
@@ -57,9 +57,9 @@ export const findOne = async (req: any, res: Response) => {
 		const studyProgram = await StudyProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				study_program_id: { [Op.eq]: req.params.id },
+				studyProgramId: { [Op.eq]: req.params.id },
 				...(req.query.registered && {
-					study_program_is_registered: {
+					studyProgramIsRegistered: {
 						[Op.eq]: true,
 					},
 				}),

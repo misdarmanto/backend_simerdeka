@@ -14,7 +14,7 @@ import { RecomendationLetterModel } from "../../models/recomendation-letter";
 export const create = async (req: any, res: Response) => {
 	const body = <ReportParticipationAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["x-user-id", "report_participation_letter"],
+		requireList: ["x-user-id", "reportParticipationLetter"],
 		requestData: { ...req.body, ...req.headers },
 	});
 
@@ -28,7 +28,7 @@ export const create = async (req: any, res: Response) => {
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				student_id: { [Op.eq]: req.header("x-user-id") },
+				studentId: { [Op.eq]: req.header("x-user-id") },
 			},
 		});
 
@@ -41,8 +41,8 @@ export const create = async (req: any, res: Response) => {
 		const recomendationLetter = await RecomendationLetterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				recomendation_letter_student_id: { [Op.eq]: student.student_id },
-				recomendation_letter_status: { [Op.eq]: "accepted" },
+				recomendationLetterStudentId: { [Op.eq]: student.studentId },
+				recomendationLetterStatus: { [Op.eq]: "accepted" },
 			},
 		});
 
@@ -52,10 +52,10 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		body.report_participation_id = uuidv4();
-		body.report_participation_student_id = student.student_id;
-		body.report_participation_study_program_id = student.student_study_program_id;
-		body.report_participation_department_id = student.student_department_id;
+		body.reportParticipationId = uuidv4();
+		body.reportParticipationStudentId = student.studentId;
+		body.reportParticipationStudyProgramId = student.studentStudyProgramId;
+		body.reportParticipationDepartmentId = student.studentDepartmentId;
 		await ReportParticipationModel.create(body);
 
 		const response = <ResponseDataAttributes>ResponseData.default;

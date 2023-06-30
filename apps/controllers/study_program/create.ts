@@ -10,10 +10,10 @@ export const create = async (req: any, res: Response) => {
 
 	const emptyField = requestChecker({
 		requireList: [
-			"study_program_name",
-			"study_program_email",
-			"study_program_department_id",
-			"study_program_department_name",
+			"studyProgramName",
+			"studyProgramEmail",
+			"studyProgramDepartmentId",
+			"studyProgramDepartmentName",
 		],
 		requestData: body,
 	});
@@ -25,7 +25,7 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.study_program_id = uuidv4();
+		body.studyProgramId = uuidv4();
 		await StudyProgramModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
