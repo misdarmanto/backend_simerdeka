@@ -44,9 +44,15 @@ export const findAll = async (req: any, res: Response) => {
 				...(req.query.search && {
 					[Op.or]: [{ programName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
+
 				...(req.query.programId && {
 					mbkmProgramProdiProgramId: {
 						[Op.eq]: req.query.programId,
+					},
+				}),
+				...(req.query.mbkmProgramProdiStudyProgramId && {
+					mbkmProgramProdiStudyProgramId: {
+						[Op.eq]: req.query.mbkmProgramProdiStudyProgramId,
 					},
 				}),
 				...(req.query.semesterId && {
@@ -66,11 +72,12 @@ export const findAll = async (req: any, res: Response) => {
 				}),
 			},
 
+			attributes: ["mbkmProgramProdiId"],
 			include: [
-				SemesterModel,
-				StudyProgramModel,
-				DepartmentModel,
-				MbkmProgramModel,
+				{
+					model: MbkmProgramModel,
+					as: "mbkmPrograms",
+				},
 			],
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
@@ -138,12 +145,7 @@ export const findOne = async (req: any, res: Response) => {
 					},
 				}),
 			},
-			include: [
-				SemesterModel,
-				StudyProgramModel,
-				DepartmentModel,
-				MbkmProgramModel,
-			],
+			include: [MbkmProgramModel],
 		});
 
 		if (!result) {

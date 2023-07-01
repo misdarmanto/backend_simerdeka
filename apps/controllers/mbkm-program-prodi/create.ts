@@ -11,6 +11,7 @@ import {
 } from "../../models/mbkm-program-prodi";
 
 export const create = async (req: any, res: Response) => {
+	const body = <MbkmProgramProdiAttributes>req.body;
 	const emptyField = requestChecker({
 		requireList: ["x-user-id"],
 		requestData: req.headers,
@@ -36,6 +37,19 @@ export const create = async (req: any, res: Response) => {
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
+
+		// const checkProgram = await MbkmProgramProdiModel.findOne({
+		// 	where: {
+		// 		deleted: { [Op.eq]: 0 },
+		// 		mbkmProgramProdiId: { [Op.eq]: body.mbkmProgramProdiId },
+		// 	},
+		// });
+
+		// if (!checkProgram) {
+		// 	const message = `mbkm program already exis!`;
+		// 	const response = <ResponseDataAttributes>ResponseData.error(message);
+		// 	return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		// }
 
 		let mbkmProgramProdiList: MbkmProgramProdiAttributes[] = [];
 
