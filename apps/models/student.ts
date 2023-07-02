@@ -99,11 +99,12 @@ export const StudentModel = sequelize.define<StudentInstance>(
 );
 
 StudentModel.hasOne(MbkmProgramModel, {
+	as: "mbkmProgram",
 	sourceKey: "studentMbkmProgramId",
-	foreignKey: "mbkm_program_id",
+	foreignKey: "mbkmProgramId",
 });
 
 StudentModel.hasMany(TranskripModel, {
 	sourceKey: "studentTranskripId",
-	foreignKey: "transkrip_id",
+	foreignKey: "transkripId",
 });

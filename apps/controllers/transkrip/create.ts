@@ -11,7 +11,12 @@ import { StudentModel } from "../../models/student";
 export const create = async (req: any, res: Response) => {
 	const body = <TranskripAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["x-user-id", "transkripStudentId", "transkripMataKuliahId"],
+		requireList: [
+			"x-user-id",
+			"transkripStudentId",
+			"transkripMataKuliahId",
+			"transkripMataKuliahGrade",
+		],
 		requestData: { ...req.body, ...req.headers },
 	});
 
@@ -52,7 +57,6 @@ export const create = async (req: any, res: Response) => {
 
 		body.transkripId = uuidv4();
 		body.transkripStudentId = student.studentId;
-		body.transkripMataKuliahId = body.transkripMataKuliahId;
 		body.transkripStudyProgramId = student.studentStudyProgramId;
 		body.transkripDepartmentId = student.studentDepartmentId;
 		await TranskripModel.create(body);

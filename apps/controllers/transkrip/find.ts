@@ -60,7 +60,15 @@ export const findAll = async (req: any, res: Response) => {
 				offset: page.offset,
 			}),
 
-			include: [MataKuliahModel],
+			include: [
+				{
+					model: MataKuliahModel,
+					as: "mataKuliah",
+					attributes: ["mataKuliahName", "mataKuliahSksTotal"],
+				},
+			],
+
+			attributes: ["transkripMataKuliahGrade", "transkripId"],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;

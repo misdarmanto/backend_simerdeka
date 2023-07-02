@@ -129,11 +129,6 @@ export const findOne = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				mbkmProgramProdiProgramId: { [Op.eq]: params.id },
-				...(req.query.semesterId && {
-					mbkmProgramProdiSemesterId: {
-						[Op.eq]: req.query.semesterId,
-					},
-				}),
 				...(user?.userRole === "studyProgram" && {
 					mbkmProgramProdiStudyProgramId: {
 						[Op.eq]: user.userId,
@@ -145,7 +140,12 @@ export const findOne = async (req: any, res: Response) => {
 					},
 				}),
 			},
-			include: [MbkmProgramModel],
+			include: [
+				{
+					model: MbkmProgramModel,
+					as: "mbkmPrograms",
+				},
+			],
 		});
 
 		if (!result) {
