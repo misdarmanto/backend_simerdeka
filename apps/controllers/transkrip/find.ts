@@ -65,6 +65,9 @@ export const findAll = async (req: any, res: Response) => {
 					model: MataKuliahModel,
 					as: "mataKuliah",
 					attributes: ["mataKuliahName", "mataKuliahSksTotal"],
+					where: {
+						deleted: { [Op.eq]: 0 },
+					},
 				},
 			],
 
