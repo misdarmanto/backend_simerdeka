@@ -23,7 +23,7 @@ export const remove = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				userId: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ userRole: "academic" }, { userRole: "lp3m" }],
+				userRole: { [Op.eq]: "studyProgram" },
 			},
 		});
 

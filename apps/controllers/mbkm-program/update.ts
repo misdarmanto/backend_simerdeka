@@ -48,7 +48,12 @@ export const update = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await mbkmProgram.save();
+		await mbkmProgram.update(body, {
+			where: {
+				deleted: { [Op.eq]: 0 },
+				mbkmProgramId: { [Op.eq]: body.mbkmProgramId },
+			},
+		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

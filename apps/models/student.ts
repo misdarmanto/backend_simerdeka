@@ -16,7 +16,6 @@ export interface StudentAttributes extends ZygoteAttributes {
 	studentStudyProgramName: string;
 	studentMbkmProgramId?: string | null;
 	studentTranskripId: string;
-	studentSksTotal: number;
 }
 
 // we're telling the Model that 'id' is optional
@@ -80,11 +79,6 @@ export const StudentModel = sequelize.define<StudentInstance>(
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
-		studentSksTotal: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			defaultValue: 0,
-		},
 	},
 	{
 		...sequelize,
@@ -99,11 +93,12 @@ export const StudentModel = sequelize.define<StudentInstance>(
 );
 
 StudentModel.hasOne(MbkmProgramModel, {
+	as: "mbkmProgram",
 	sourceKey: "studentMbkmProgramId",
-	foreignKey: "mbkm_program_id",
+	foreignKey: "mbkmProgramId",
 });
 
 StudentModel.hasMany(TranskripModel, {
 	sourceKey: "studentTranskripId",
-	foreignKey: "transkrip_id",
+	foreignKey: "transkripId",
 });

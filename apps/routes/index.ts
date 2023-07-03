@@ -16,6 +16,7 @@ import { summaryRoutes } from "./summary";
 import { logBookRoute } from "./log-book-route";
 import { mataKuliahRoute } from "./mata-kuliah-route";
 import { transkripRoute } from "./transkrip-route";
+import { mbkmProgramProdiRoutes } from "./mbkm-program-prodi";
 
 export const route = (app: Express) => {
 	app.get("/", (req: Request, res: Response) => index(req, res));
@@ -36,4 +37,5 @@ export const route = (app: Express) => {
 	logBookRoute(app);
 	mataKuliahRoute(app);
 	transkripRoute(app);
+	mbkmProgramProdiRoutes(app);
 };

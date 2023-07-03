@@ -1,20 +1,15 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
-import { SemesterModel } from "./semester";
-import { StudyProgramModel } from "./study-program";
-import { DepartmentModel } from "./department";
 import { MbkmProgramModel } from "./mbkm-program";
 
 export interface MbkmProgramProdiAttributes extends ZygoteAttributes {
 	mbkmProgramProdiId: string;
 	mbkmProgramProdiProgramId: string;
-	mbkmProgramProdiProgramName: string;
 	mbkmProgramProdiStudyProgramId: string;
 	mbkmProgramProdiStudyProgramName: string;
 	mbkmProgramProdiDepartmentId: string;
 	mbkmProgramProdiDepartmentName: string;
-	mbkmProgramProdiSemesterId: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -41,10 +36,6 @@ export const MbkmProgramProdiModel = sequelize.define<MbkmProgramProdiInstance>(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		mbkmProgramProdiProgramName: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
 		mbkmProgramProdiStudyProgramId: {
 			type: DataTypes.STRING,
 			allowNull: true,
@@ -58,10 +49,6 @@ export const MbkmProgramProdiModel = sequelize.define<MbkmProgramProdiInstance>(
 			allowNull: true,
 		},
 		mbkmProgramProdiDepartmentName: {
-			type: DataTypes.STRING,
-			allowNull: true,
-		},
-		mbkmProgramProdiSemesterId: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
@@ -79,21 +66,22 @@ export const MbkmProgramProdiModel = sequelize.define<MbkmProgramProdiInstance>(
 );
 
 MbkmProgramProdiModel.hasOne(MbkmProgramModel, {
+	as: "mbkmPrograms",
 	sourceKey: "mbkmProgramProdiProgramId",
-	foreignKey: "mbkm_program_id",
+	foreignKey: "mbkmProgramId",
 });
 
-MbkmProgramProdiModel.hasOne(SemesterModel, {
-	sourceKey: "mbkmProgramProdiSemesterId",
-	foreignKey: "semester_id",
-});
+// MbkmProgramProdiModel.hasOne(SemesterModel, {
+// 	sourceKey: "mbkmProgramProdiSemesterId",
+// 	foreignKey: "semesterId",
+// });
 
-MbkmProgramProdiModel.hasOne(StudyProgramModel, {
-	sourceKey: "mbkmProgramProdiStudyProgramId",
-	foreignKey: "study_program_id",
-});
+// MbkmProgramProdiModel.hasOne(StudyProgramModel, {
+// 	sourceKey: "mbkmProgramProdiStudyProgramId",
+// 	foreignKey: "studyProgramId",
+// });
 
-MbkmProgramProdiModel.hasOne(DepartmentModel, {
-	sourceKey: "mbkmProgramProdiDepartmentId",
-	foreignKey: "department_id",
-});
+// MbkmProgramProdiModel.hasOne(DepartmentModel, {
+// 	sourceKey: "mbkmProgramProdiDepartmentId",
+// 	foreignKey: "departmentId",
+// });

@@ -19,7 +19,7 @@ export const findAll = async (req: any, res: Response) => {
 		});
 
 		if (!user) {
-			const message = `student not found!`;
+			const message = `student not registered`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
@@ -36,7 +36,7 @@ export const findAll = async (req: any, res: Response) => {
 					[Op.eq]: true,
 				},
 				...(req.query.mbkmProgramId && {
-					studentMmProgramId: {
+					studentMbkmProgramId: {
 						[Op.eq]:
 							req.query.mbkmProgramId === "null"
 								? null
@@ -59,7 +59,15 @@ export const findAll = async (req: any, res: Response) => {
 					},
 				}),
 			},
-			include: [MbkmProgramModel, TranskripModel],
+			include: [
+				{
+					model: MbkmProgramModel,
+					as: "mbkmProgram",
+				},
+				{
+					model: TranskripModel,
+				},
+			],
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
 				limit: page.limit,
@@ -99,7 +107,7 @@ export const findOne = async (req: any, res: Response) => {
 		});
 
 		if (!user) {
-			const message = `student not found!`;
+			const message = `user not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
@@ -111,11 +119,6 @@ export const findOne = async (req: any, res: Response) => {
 				studentIsRegistered: {
 					[Op.eq]: true,
 				},
-				// ...(req.query.registered && {
-				// 	student_is_registered: {
-				// 		[Op.eq]: true,
-				// 	},
-				// }),
 				...(req.query.mbkmProgramId && {
 					studentMbkmProgramId: {
 						[Op.eq]: req.query.mbkmProgramId,
@@ -137,11 +140,19 @@ export const findOne = async (req: any, res: Response) => {
 					},
 				}),
 			},
-			include: [MbkmProgramModel, TranskripModel],
+			include: [
+				{
+					model: MbkmProgramModel,
+					as: "mbkmProgram",
+				},
+				{
+					model: TranskripModel,
+				},
+			],
 		});
 
 		if (!student) {
-			const message = `student not found!`;
+			const message = `anda belum terdaftar sebagai peserta MBKM`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}

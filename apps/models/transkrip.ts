@@ -1,16 +1,15 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 import { ZygoteAttributes, ZygoteModel } from "./zygote";
-import { StudentModel } from "./student";
 import { MataKuliahModel } from "./matkul";
 
 export interface TranskripAttributes extends ZygoteAttributes {
 	transkripId: string;
 	transkripStudentId: string;
 	transkripMataKuliahId: string;
+	transkripMataKuliahGrade: string;
 	transkripStudyProgramId: string;
 	transkripDepartmentId: string;
-	transkripMataKuliahGrade: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -66,12 +65,8 @@ export const TranskripModel = sequelize.define<TranskripInstance>(
 	}
 );
 
-// TranskripModel.hasOne(StudentModel, {
-// 	sourceKey: "transkrip_student_id",
-// 	foreignKey: "student_id",
-// });
-
 TranskripModel.hasOne(MataKuliahModel, {
+	as: "mataKuliah",
 	sourceKey: "transkripMataKuliahId",
-	foreignKey: "mata_kuliah_id",
+	foreignKey: "mataKuliahId",
 });
