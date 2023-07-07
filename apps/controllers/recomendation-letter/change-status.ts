@@ -50,33 +50,36 @@ export const changeAssignMentStatus = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		if ("recomendationLetterStatus" in req.body) {
-			recomendationLetter.recomendationLetterStatus =
-				req.body.recomendationLetterStatus;
-			recomendationLetter.recomendationLetterStatusMessage = req.body.statusMessage;
-		}
-
 		const approvalLetter = body.recomendationLetterApprovalLetter;
 
-		switch (user.userRole) {
-			case "studyProgram":
-				recomendationLetter.recomendationLetterAssignToDepartment = true;
-				recomendationLetter.recomendationLetterFromStudyProgram = approvalLetter;
-				break;
-			case "department":
-				recomendationLetter.recomendationLetterAssignToLp3m = true;
-				recomendationLetter.recomendationLetterFromDepartment = approvalLetter;
-				break;
-			case "lp3m":
-				recomendationLetter.recomendationLetterAssignToAcademic = true;
-				recomendationLetter.recomendationLetterFromLp3m = approvalLetter;
-				break;
-			case "academic":
-				recomendationLetter.recomendationLetterStatus = "accepted";
-				recomendationLetter.recomendationLetterFromAcademic = approvalLetter;
-				break;
-			default:
-				break;
+		if ("recomendationLetterStatus" in body) {
+			recomendationLetter.recomendationLetterStatus =
+				body.recomendationLetterStatus;
+			recomendationLetter.recomendationLetterStatusMessage =
+				body.recomendationLetterStatusMessage;
+		} else {
+			switch (user.userRole) {
+				case "studyProgram":
+					recomendationLetter.recomendationLetterAssignToDepartment = true;
+					recomendationLetter.recomendationLetterFromStudyProgram =
+						approvalLetter;
+					break;
+				case "department":
+					recomendationLetter.recomendationLetterAssignToLp3m = true;
+					recomendationLetter.recomendationLetterFromDepartment =
+						approvalLetter;
+					break;
+				case "lp3m":
+					recomendationLetter.recomendationLetterAssignToAcademic = true;
+					recomendationLetter.recomendationLetterFromLp3m = approvalLetter;
+					break;
+				case "academic":
+					recomendationLetter.recomendationLetterStatus = "accepted";
+					recomendationLetter.recomendationLetterFromAcademic = approvalLetter;
+					break;
+				default:
+					break;
+			}
 		}
 
 		await recomendationLetter.save();
