@@ -5,7 +5,6 @@ import { RecomendationLetterRoutes } from "./recomendation-letter-route";
 import { userRoutes } from "./user-router";
 import { reportParticipationRoutes } from "./report-participation-route";
 import { mbkmProgramRoutes } from "./mbkm-program";
-import { mbkmProgramStudentRoutes } from "./mbkm-program-student";
 import { sksConvertionRoutes } from "./sks-convertion-route";
 import { studentRoutes } from "./student-route";
 import { studyProgramRoutes } from "./study-program";
@@ -17,6 +16,7 @@ import { logBookRoute } from "./log-book-route";
 import { mataKuliahRoute } from "./mata-kuliah-route";
 import { transkripRoute } from "./transkrip-route";
 import { mbkmProgramProdiRoutes } from "./mbkm-program-prodi";
+import { sksConvertionSchemaRoutes } from "./sks-convertion-schema-route";
 
 export const route = (app: Express) => {
 	app.get("/", (req: Request, res: Response) => index(req, res));
@@ -25,9 +25,9 @@ export const route = (app: Express) => {
 	semesterRoutes(app);
 	reportParticipationRoutes(app);
 	mbkmProgramRoutes(app);
-	mbkmProgramStudentRoutes(app);
+	mbkmProgramProdiRoutes(app);
 	sksConvertionRoutes(app);
-	mbkmProgramRoutes(app);
+	sksConvertionSchemaRoutes(app);
 	studentRoutes(app);
 	studyProgramRoutes(app);
 	departmentRoutes(app);
@@ -37,5 +37,4 @@ export const route = (app: Express) => {
 	logBookRoute(app);
 	mataKuliahRoute(app);
 	transkripRoute(app);
-	mbkmProgramProdiRoutes(app);
 };

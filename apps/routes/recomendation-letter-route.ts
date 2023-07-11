@@ -21,7 +21,10 @@ export const RecomendationLetterRoutes = (app: Express) => {
 	route.delete("/", (req: Request, res: Response) =>
 		letterOfRecomendation.remove(req, res)
 	);
-	route.patch("/change-status", (req: Request, res: Response) =>
+	route.patch("/change-status-assignment", (req: Request, res: Response) =>
 		letterOfRecomendation.changeAssignMentStatus(req, res)
+	);
+	route.patch("/change-status-approval", (req: Request, res: Response) =>
+		letterOfRecomendation.changeStatusApproval(req, res)
 	);
 };

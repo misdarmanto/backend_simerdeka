@@ -6,6 +6,7 @@ import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
 import { UserModel } from "../../models/user";
 import { MataKuliahAttributes, MataKuliahModel } from "../../models/matkul";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const findAll = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
@@ -33,10 +34,13 @@ export const findAll = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await MataKuliahModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				mataKuliahSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(req.query.search && {
 					[Op.or]: [{ mataKuliahName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
@@ -97,9 +101,12 @@ export const findOne = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const mataKuliah = await MataKuliahModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				mataKuliahSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				mataKuliahId: { [Op.eq]: params.id },
 				...(user.userRole === "studyProgram" && {
 					mataKuliahStudyProgramId: {

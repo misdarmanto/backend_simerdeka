@@ -13,6 +13,7 @@ export interface LogBookAttributes extends ZygoteAttributes {
 	logBookStudyProgramName: string;
 	logBookDepartmentId: string;
 	logBookDepartmentName: string;
+	logBookSemesterId: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -68,6 +69,10 @@ export const LogBookModel = sequelize.define<LogBookInstance>(
 			allowNull: false,
 		},
 		logBookDepartmentName: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		logBookSemesterId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

@@ -4,9 +4,9 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
-import { StudentModel } from "../../models/student";
 import { UserModel } from "../../models/user";
 import { LogBookAttributes, LogBookModel } from "../../models/log-book";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const findAll = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
@@ -34,10 +34,13 @@ export const findAll = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await LogBookModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				logBookSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(req.query.search && {
 					[Op.or]: [
 						{ logBookStudentName: { [Op.like]: `%${req.query.search}%` } },
@@ -103,9 +106,12 @@ export const findOne = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const logBook = await LogBookModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				logBookSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				logBookId: { [Op.eq]: params.id },
 				...(user.userRole === "student" && {
 					logBookStudentId: { [Op.eq]: user.userId },

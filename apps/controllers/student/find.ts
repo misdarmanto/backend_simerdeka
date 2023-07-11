@@ -8,6 +8,7 @@ import { StudentModel } from "../../models/student";
 import { UserModel } from "../../models/user";
 import { MbkmProgramModel } from "../../models/mbkm-program";
 import { TranskripModel } from "../../models/transkrip";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const findAll = async (req: any, res: Response) => {
 	try {
@@ -24,10 +25,13 @@ export const findAll = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await StudentModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				studentSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(req.query.search && {
 					[Op.or]: [{ studentName: { [Op.like]: `%${req.query.search}%` } }],
 				}),

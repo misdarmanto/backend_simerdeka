@@ -4,6 +4,7 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
 import { StudyProgramAttributes, StudyProgramModel } from "../../models/study-program";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const create = async (req: any, res: Response) => {
 	const body = <StudyProgramAttributes>req.body;
@@ -25,7 +26,9 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
+		const activeSemester = await getActiveSemester();
 		body.studyProgramId = uuidv4();
+		body.studyProgramSemesterId = activeSemester?.semesterId || "";
 		await StudyProgramModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

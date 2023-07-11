@@ -26,6 +26,7 @@ export interface RecomendationLetterAttributes extends ZygoteAttributes {
 	recomendationLetterStudyProgramId: string;
 	recomendationLetterDepartmentId: string;
 	recomendationLetterStudentId: string;
+	recomendationLetterSemesterId: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -70,7 +71,7 @@ export const RecomendationLetterModel = sequelize.define<RecomendationLetterInst
 		},
 		recomendationLetterSyllabus: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 		},
 		recomendationLetterApprovalLetter: {
 			type: DataTypes.STRING,
@@ -137,6 +138,10 @@ export const RecomendationLetterModel = sequelize.define<RecomendationLetterInst
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,
+		},
+		recomendationLetterSemesterId: {
+			type: DataTypes.STRING,
+			allowNull: false,
 		},
 	},
 	{

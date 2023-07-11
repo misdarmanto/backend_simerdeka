@@ -9,6 +9,7 @@ import {
 } from "../../models/recomendation-letter";
 import { StudentModel } from "../../models/student";
 import { Op } from "sequelize";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const create = async (req: any, res: Response) => {
 	const body = <RecomendationLetterAttributes>req.body;
@@ -47,12 +48,15 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		body.recomendationLetterStudentId = student.studentId;
 		body.recomendationLetterDepartmentId = student.studentDepartmentId;
 		body.recomendationLetterStudyProgramId = student.studentStudyProgramId;
 		body.recomendationLetterId = uuidv4();
 		body.recomendationLetterAssignToStudent = true;
 		body.recomendationLetterAssignToStudyProgram = true;
+		body.recomendationLetterSemesterId = activeSemester?.semesterId || "";
 
 		await RecomendationLetterModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;

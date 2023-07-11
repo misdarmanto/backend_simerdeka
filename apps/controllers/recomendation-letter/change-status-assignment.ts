@@ -3,13 +3,18 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
+import {
+	RecomendationLetterAttributes,
+	RecomendationLetterModel,
+} from "../../models/recomendation-letter";
 import { UserModel } from "../../models/user";
-import { MbkmProgramProdiModel } from "../../models/mbkm-program-prodi";
 
-export const remove = async (req: any, res: Response) => {
+export const changeAssignMentStatus = async (req: any, res: Response) => {
+	const body = <RecomendationLetterAttributes>req.body;
+
 	const emptyField = requestChecker({
-		requireList: ["programId"],
-		requestData: req.query,
+		requireList: ["recomendationLetterId", "x-user-id"],
+		requestData: { ...req.body, ...req.headers },
 	});
 
 	if (emptyField) {
@@ -23,37 +28,52 @@ export const remove = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				userId: { [Op.eq]: req.header("x-user-id") },
-				[Op.or]: [{ userRole: "academic" }, { userRole: "lp3m" }],
 			},
 		});
 
-		if (!user) {
+		if (user === null || user.userRole === "student") {
 			const message = `access denied!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
-		const mbkmProgramProdi = await MbkmProgramProdiModel.findOne({
+		const recomendationLetter = await RecomendationLetterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkmProgramProdiProgramId: { [Op.eq]: req.query.programId },
+				recomendationLetterId: { [Op.eq]: body.recomendationLetterId },
 			},
 		});
 
-		if (!mbkmProgramProdi) {
-			const message = `mbkm program prodi not found!`;
+		if (!recomendationLetter) {
+			const message = `recomentdation letter not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await MbkmProgramProdiModel.update(
-			{ deleted: 1 },
-			{
-				where: {
-					mbkmProgramProdiProgramId: { [Op.eq]: req.query.programId },
-				},
-			}
-		);
+		const approvalLetter = body.recomendationLetterApprovalLetter;
+
+		switch (user.userRole) {
+			case "studyProgram":
+				recomendationLetter.recomendationLetterAssignToDepartment = true;
+				recomendationLetter.recomendationLetterFromStudyProgram = approvalLetter;
+				break;
+			case "department":
+				recomendationLetter.recomendationLetterAssignToLp3m = true;
+				recomendationLetter.recomendationLetterFromDepartment = approvalLetter;
+				break;
+			case "lp3m":
+				recomendationLetter.recomendationLetterAssignToAcademic = true;
+				recomendationLetter.recomendationLetterFromLp3m = approvalLetter;
+				break;
+			case "academic":
+				recomendationLetter.recomendationLetterStatus = "accepted";
+				recomendationLetter.recomendationLetterFromAcademic = approvalLetter;
+				break;
+			default:
+				break;
+		}
+
+		await recomendationLetter.save();
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

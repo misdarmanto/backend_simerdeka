@@ -5,9 +5,7 @@ import * as mbkmProgramProdi from "../controllers/mbkm-program-prodi/";
 export const mbkmProgramProdiRoutes = (app: Express) => {
 	const route = express.Router();
 	app.use("/mbkm-programs/prodi", middleware.useAuthorization, route);
-	route.get("/all", (req: Request, res: Response) =>
-		mbkmProgramProdi.findAll(req, res)
-	);
+	route.get("/", (req: Request, res: Response) => mbkmProgramProdi.findAll(req, res));
 	route.get("/detail/:id", (req: Request, res: Response) =>
 		mbkmProgramProdi.findOne(req, res)
 	);

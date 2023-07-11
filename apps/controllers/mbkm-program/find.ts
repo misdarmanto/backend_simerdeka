@@ -6,13 +6,17 @@ import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
 import { SemesterModel } from "../../models/semester";
 import { MbkmProgramAttributes, MbkmProgramModel } from "../../models/mbkm-program";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const findAll = async (req: any, res: Response) => {
 	try {
+		const activeSemester = await getActiveSemester();
+
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await MbkmProgramModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				mbkmProgramSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(req.query.search && {
 					[Op.or]: [{ programName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
@@ -54,9 +58,12 @@ export const findOne = async (req: any, res: Response) => {
 	}
 
 	try {
+		const activeSemester = await getActiveSemester();
+
 		const MbkmProgram = await MbkmProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				mbkmProgramSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				mbkmProgramId: { [Op.eq]: params.id },
 				...(req.query.semesterId && {
 					semesterId: { [Op.eq]: req.query.semesterId },
