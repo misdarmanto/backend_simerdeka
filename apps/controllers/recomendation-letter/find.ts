@@ -10,6 +10,7 @@ import {
 } from "../../models/recomendation-letter";
 import { StudentModel } from "../../models/student";
 import { UserModel } from "../../models/user";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const findAll = async (req: any, res: Response) => {
 	const request = <RecomendationLetterAttributes>req.headers;
@@ -39,10 +40,13 @@ export const findAll = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await RecomendationLetterModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				recomendationLetterSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(req.query.search && {
 					[Op.or]: [
 						{
@@ -132,10 +136,13 @@ export const findOne = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const recomendationLetter = await RecomendationLetterModel.findOne({
 			where: {
 				recomendationLetterId: { [Op.eq]: params.id },
 				deleted: { [Op.eq]: 0 },
+				recomendationLetterSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(user?.userRole === "student" && {
 					recomendationLetterStudentId: { [Op.eq]: user.userId },
 					recomendationLetterAssignToStudent: {

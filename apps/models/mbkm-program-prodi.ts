@@ -10,6 +10,7 @@ export interface MbkmProgramProdiAttributes extends ZygoteAttributes {
 	mbkmProgramProdiStudyProgramName: string;
 	mbkmProgramProdiDepartmentId: string;
 	mbkmProgramProdiDepartmentName: string;
+	mbkmProgramProdiSemesterId: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -51,6 +52,10 @@ export const MbkmProgramProdiModel = sequelize.define<MbkmProgramProdiInstance>(
 		mbkmProgramProdiDepartmentName: {
 			type: DataTypes.STRING,
 			allowNull: true,
+		},
+		mbkmProgramProdiSemesterId: {
+			type: DataTypes.STRING,
+			allowNull: false,
 		},
 	},
 	{

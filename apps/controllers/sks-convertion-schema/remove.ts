@@ -3,13 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Op } from "sequelize";
 import { requestChecker } from "../../utilities/requestCheker";
-import { MbkmProgramAttributes, MbkmProgramModel } from "../../models/mbkm-program";
+import { SemesterAttributes, SemesterModel } from "../../models/semester";
 
-export const update = async (req: any, res: Response) => {
-	const body = <MbkmProgramAttributes>req.body;
+export const remove = async (req: any, res: Response) => {
+	const body = <SemesterAttributes>req.body;
 
 	const emptyField = requestChecker({
-		requireList: ["mbkmProgramId"],
+		requireList: ["semesterId"],
 		requestData: body,
 	});
 
@@ -20,20 +20,27 @@ export const update = async (req: any, res: Response) => {
 	}
 
 	try {
-		const mbkmProgram = await MbkmProgramModel.findOne({
+		const semesterCheck = await SemesterModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkmProgramId: { [Op.eq]: body.mbkmProgramId },
+				semesterId: { [Op.eq]: req.body.semesterId },
 			},
 		});
 
-		if (!mbkmProgram) {
+		if (!semesterCheck) {
 			const message = `not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		await mbkmProgram.save();
+		await SemesterModel.update(
+			{ deleted: 1 },
+			{
+				where: {
+					semesterId: { [Op.eq]: body.semesterId },
+				},
+			}
+		);
 
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

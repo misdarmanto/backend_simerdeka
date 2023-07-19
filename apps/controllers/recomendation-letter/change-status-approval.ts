@@ -9,7 +9,7 @@ import {
 } from "../../models/recomendation-letter";
 import { UserModel } from "../../models/user";
 
-export const changeAssignMentStatus = async (req: any, res: Response) => {
+export const changeStatusApproval = async (req: any, res: Response) => {
 	const body = <RecomendationLetterAttributes>req.body;
 
 	const emptyField = requestChecker({
@@ -50,34 +50,9 @@ export const changeAssignMentStatus = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
-		if ("recomendationLetterStatus" in req.body) {
-			recomendationLetter.recomendationLetterStatus =
-				req.body.recomendationLetterStatus;
-			recomendationLetter.recomendationLetterStatusMessage = req.body.statusMessage;
-		}
-
-		const approvalLetter = body.recomendationLetterApprovalLetter;
-
-		switch (user.userRole) {
-			case "studyProgram":
-				recomendationLetter.recomendationLetterAssignToDepartment = true;
-				recomendationLetter.recomendationLetterFromStudyProgram = approvalLetter;
-				break;
-			case "department":
-				recomendationLetter.recomendationLetterAssignToLp3m = true;
-				recomendationLetter.recomendationLetterFromDepartment = approvalLetter;
-				break;
-			case "lp3m":
-				recomendationLetter.recomendationLetterAssignToAcademic = true;
-				recomendationLetter.recomendationLetterFromLp3m = approvalLetter;
-				break;
-			case "academic":
-				recomendationLetter.recomendationLetterStatus = "accepted";
-				recomendationLetter.recomendationLetterFromAcademic = approvalLetter;
-				break;
-			default:
-				break;
-		}
+		recomendationLetter.recomendationLetterStatus = body.recomendationLetterStatus;
+		recomendationLetter.recomendationLetterStatusMessage =
+			body.recomendationLetterStatusMessage;
 
 		await recomendationLetter.save();
 

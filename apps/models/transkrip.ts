@@ -10,6 +10,7 @@ export interface TranskripAttributes extends ZygoteAttributes {
 	transkripMataKuliahGrade: string;
 	transkripStudyProgramId: string;
 	transkripDepartmentId: string;
+	transkripSemesterId: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -51,6 +52,10 @@ export const TranskripModel = sequelize.define<TranskripInstance>(
 		transkripMataKuliahGrade: {
 			type: DataTypes.STRING,
 			allowNull: true,
+		},
+		transkripSemesterId: {
+			type: DataTypes.STRING,
+			allowNull: false,
 		},
 	},
 	{

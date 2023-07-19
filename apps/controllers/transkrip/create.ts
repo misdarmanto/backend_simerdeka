@@ -7,6 +7,7 @@ import { Op } from "sequelize";
 import { UserModel } from "../../models/user";
 import { TranskripAttributes, TranskripModel } from "../../models/transkrip";
 import { StudentModel } from "../../models/student";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const create = async (req: any, res: Response) => {
 	const body = <TranskripAttributes>req.body;
@@ -55,7 +56,10 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		body.transkripId = uuidv4();
+		body.transkripSemesterId = activeSemester?.semesterId || "";
 		body.transkripStudentId = student.studentId;
 		body.transkripStudyProgramId = student.studentStudyProgramId;
 		body.transkripDepartmentId = student.studentDepartmentId;

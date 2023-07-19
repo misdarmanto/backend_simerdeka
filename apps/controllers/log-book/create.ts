@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { StudentModel } from "../../models/student";
 import { Op } from "sequelize";
 import { LogBookAttributes, LogBookModel } from "../../models/log-book";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const create = async (req: any, res: Response) => {
 	const body = <LogBookAttributes>req.body;
@@ -35,7 +36,10 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		body.logBookId = uuidv4();
+		body.logBookSemesterId = activeSemester?.semesterId || "";
 		body.logBookStudentId = student.studentId;
 		body.logBookStudentName = student.studentName;
 		body.logBookStudentNim = student.studentNim;

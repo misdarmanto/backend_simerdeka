@@ -3,21 +3,20 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
+import { UserModel } from "../../models/user";
+import { Op } from "sequelize";
 import {
-	MbkmProgramStudentAttributes,
-	MbkmProgramStudentModel,
-} from "../../models/mbkm-program-student";
+	SksConvertionSchemaAttributes,
+	SksConvertionSchemaModel,
+} from "../../models/sks-convertion-schema";
 
 export const create = async (req: any, res: Response) => {
-	const body = <MbkmProgramStudentAttributes>req.body;
+	const body = <SksConvertionSchemaAttributes>req.body;
 	const emptyField = requestChecker({
 		requireList: [
-			"mbkmProgramStudentSks",
-			"mbkmProgramId",
-			"studentId",
-			"majorId",
-			"studyProgramId",
-			"semesterId",
+			"sksConvertionSchemaSksConvertionId",
+			"sksConvertionSchemaMatkulId",
+			"sksConvertionSchemaMbkmProgramId",
 		],
 		requestData: body,
 	});
@@ -29,8 +28,24 @@ export const create = async (req: any, res: Response) => {
 	}
 
 	try {
-		body.mbkmProgramStudentId = uuidv4();
-		await MbkmProgramStudentModel.create(body);
+		const user = await UserModel.findOne({
+			where: {
+				deleted: { [Op.eq]: 0 },
+				userId: { [Op.eq]: req.header("x-user-id") },
+				userRole: { [Op.eq]: "studyProgram" },
+			},
+		});
+
+		if (!user) {
+			const message = `access denied!`;
+			const response = <ResponseDataAttributes>ResponseData.error(message);
+			return res.status(StatusCodes.UNAUTHORIZED).json(response);
+		}
+
+		body.sksConvertionSchemaStudyProgramId = user.userId;
+		body.sksConvertionSchemaId = uuidv4();
+		await SksConvertionSchemaModel.create(body);
+
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };
 		return res.status(StatusCodes.CREATED).json(response);

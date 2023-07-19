@@ -16,6 +16,7 @@ export interface StudentAttributes extends ZygoteAttributes {
 	studentStudyProgramName: string;
 	studentMbkmProgramId?: string | null;
 	studentTranskripId: string;
+	studentSemesterId: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -78,6 +79,10 @@ export const StudentModel = sequelize.define<StudentInstance>(
 		studentTranskripId: {
 			type: DataTypes.STRING,
 			allowNull: true,
+		},
+		studentSemesterId: {
+			type: DataTypes.STRING,
+			allowNull: false,
 		},
 	},
 	{

@@ -4,8 +4,7 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
 import { StudentAttributes, StudentModel } from "../../models/student";
-import { StudyProgramModel } from "../../models/study-program";
-import { Op } from "sequelize";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const create = async (req: any, res: Response) => {
 	const body = <StudentAttributes>req.body;
@@ -48,6 +47,8 @@ export const create = async (req: any, res: Response) => {
 		// 	return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		// }
 
+		const activeSemester = await getActiveSemester();
+		body.studentSemesterId = activeSemester?.semesterId || "";
 		body.studentId = uuidv4();
 		await StudentModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;

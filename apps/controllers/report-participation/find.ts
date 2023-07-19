@@ -10,6 +10,7 @@ import {
 } from "../../models/report-participation";
 import { StudentModel } from "../../models/student";
 import { UserModel } from "../../models/user";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const findAll = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
@@ -37,10 +38,13 @@ export const findAll = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await ReportParticipationModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				reportParticipationSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(req.query.search && {
 					[Op.or]: [{ programName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
@@ -105,9 +109,12 @@ export const findOne = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const reportParticipation = await ReportParticipationModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				reportParticipationSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				reportParticipationId: { [Op.eq]: params.id },
 				...(user.userRole === "student" && {
 					reportParticipationStudentId: { [Op.eq]: user.userId },
