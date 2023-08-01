@@ -72,7 +72,6 @@ export const update = async (req: any, res: Response) => {
 			},
 		});
 
-		console.log(req.body.reportParticipationStatus);
 		if (req.body.reportParticipationStatus === "accepted") {
 			const student = await StudentModel.findOne({
 				where: {
