@@ -9,6 +9,9 @@ export const semesterRoutes = (app: Express) => {
 	router.get("/detail/:id", (req: Request, res: Response) =>
 		semester.findOne(req, res)
 	);
+	router.get("/active", (req: Request, res: Response) =>
+		semester.findActiveSemester(req, res)
+	);
 	router.post("/", (req: Request, res: Response) => semester.create(req, res));
 	router.patch("/", (req: Request, res: Response) => semester.update(req, res));
 	router.delete("/", (req: Request, res: Response) => semester.remove(req, res));
