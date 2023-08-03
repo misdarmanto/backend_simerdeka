@@ -14,7 +14,7 @@ import { Options } from "sequelize";
 
 const development: Options = {
 	username: "root",
-	password: "toor",
+	password: "",
 	database: "simerdeka",
 	host: "localhost",
 	dialect: "mysql",
