@@ -116,10 +116,13 @@ export const findOne = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				studentId: { [Op.eq]: req.params.id },
+				studentSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				studentIsRegistered: {
 					[Op.eq]: true,
 				},

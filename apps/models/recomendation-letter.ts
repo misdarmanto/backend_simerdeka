@@ -9,6 +9,7 @@ export interface RecomendationLetterAttributes extends ZygoteAttributes {
 	recomendationLetterDosenWali: string;
 	recomendationLetterSyllabus: string;
 	recomendationLetterApprovalLetter: string;
+	recomendationLetterSptjmLetter: string;
 	recomendationLetterFromStudyProgram: string;
 	recomendationLetterFromDepartment: string;
 	recomendationLetterFromLp3m: string;
@@ -74,6 +75,10 @@ export const RecomendationLetterModel = sequelize.define<RecomendationLetterInst
 			allowNull: true,
 		},
 		recomendationLetterApprovalLetter: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		recomendationLetterSptjmLetter: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

@@ -1,0 +1,188 @@
+<itsXml interface="endBatch">
+	<header>
+		<transactionTimestamp>2023-06-23T10:22:10.3975052Z</transactionTimestamp>
+		<transactionTimeZone>+07:00</transactionTimeZone>
+		<interfaceRevision>1.1</interfaceRevision>
+		<messageId>202306231022103975</messageId>
+		<siteCode type="GLN">8993237017007</siteCode>
+		<additionalDetails>	
+			<detail name="splitFileNumber">1</detail>
+			<detail name="splitFileTotal">1</detail>
+			<detail name="expiryMessageTimestamp">2023-06-23T13:22:10.3975052Z</detail>
+		</additionalDetails>
+	</header>
+	<workorders>
+		<workorder status="8">
+			<orderId>Test_WO</orderId>
+			<lotId>Lot_2306</lotId>
+			<material active="true">
+				<gmid>2306_Test_Mat</gmid>
+				<lmid />
+				<description>Test</description>
+			</material>
+			<recipeId>Test_Rec</recipeId>
+			<expiryDate>20230623</expiryDate>
+			<productionDate>20230623</productionDate>
+			<repacking>false</repacking>
+			<productionLines>
+				<productionLine quantity="100" lineId="" atsLineId="4" description="Test_Prod" site="" glnLine="" glnSite="" dept="" />
+			</productionLines>
+			<levels>
+				<level levelId="100">
+					<ntin codingRule="GS1_SGTIN">03664798043075</ntin>
+					<geometry x="1" y="1" z="1" absoluteUnits="1" />
+					<additionalDetails>
+						<detail name="SerialLength">14</detail>
+					</additionalDetails>
+				</level>
+				<level levelId="300">
+					<ntin codingRule="GS1_SGTIN">03664798043013</ntin>
+					<geometry x="2" y="2" z="1" absoluteUnits="4" />
+					<additionalDetails>
+						<detail name="SerialLength">14</detail>
+					</additionalDetails>
+				</level>
+				<level levelId="301">
+					<ntin codingRule="GS1_SGTIN">03664798043013</ntin>
+					<geometry x="1" y="1" z="1" absoluteUnits="4" />
+					<additionalDetails>
+						<detail name="SerialLength">14</detail>
+					</additionalDetails>
+				</level>
+			</levels>
+			<additionalDetails>
+				<detail name="300_RunningNumber"></detail>
+				<detail name="400_RunningNumber"></detail>
+				<detail name="ExpireDate_SP1"></detail>
+				<detail name="ExpireDate_SP2"></detail>
+				<detail name="HelpercodeCameras"></detail>
+				<detail name="ItemQueueProperties"></detail>
+				<detail name="lineManager"></detail>
+				<detail name="lineName"></detail>
+				<detail name="LotNumber_SP1"></detail>
+				<detail name="LotNumber_SP2"></detail>
+				<detail name="ManufDate_SP1"></detail>
+				<detail name="ManufDate_SP2"></detail>
+				<detail name="OrderCodeNumber"></detail>
+				<detail name="ReprintCounter"></detail>
+				<detail name="workshop"></detail>
+			</additionalDetails>
+			<counters>
+				<level id="100">
+					<counter status="-3">87</counter>
+					<counter status="-1">1</counter>
+					<counter status="4">2</counter>
+					<counter status="10">20</counter>
+				</level>
+				<level id="300">
+					<counter status="-3">23</counter>
+					<counter status="1">5</counter>
+				</level>
+				<level id="301">
+					<counter status="-3">2</counter>
+				</level>
+			</counters>
+		</workorder>
+	</workorders>
+	<hierarchy>
+		<quantity>20</quantity>
+		<container codingRule="GS1_SGTIN" containerId="01036647980430132100000000000000" levelId="300" status="1" ntin="03664798043013" ns="0">
+			<quantity>4</quantity>
+			<serialNumbers ntin="03664798043075" codingRule="GS1_SGTIN" levelId="100">
+				<sn status="10" ns="0">00000000000000</sn>
+				<sn status="10" ns="0">00000000000001</sn>
+				<sn status="10" ns="0">00000000000002</sn>
+				<sn status="10" ns="0">00000000000003</sn>
+			</serialNumbers>
+		</container>
+		<container codingRule="GS1_SGTIN" containerId="01036647980430132100000000000001" levelId="300" status="1" ntin="03664798043013" ns="0">
+			<quantity>4</quantity>
+			<serialNumbers ntin="03664798043075" codingRule="GS1_SGTIN" levelId="100">
+				<sn status="10" ns="0">00000000000004</sn>
+				<sn status="10" ns="0">00000000000005</sn>
+				<sn status="10" ns="0">00000000000006</sn>
+				<sn status="10" ns="0">00000000000007</sn>
+			</serialNumbers>
+		</container>
+		<container codingRule="GS1_SGTIN" containerId="01036647980430132100000000000002" levelId="300" status="1" ntin="03664798043013" ns="0">
+			<quantity>4</quantity>
+			<serialNumbers ntin="03664798043075" codingRule="GS1_SGTIN" levelId="100">
+				<sn status="10" ns="0">00000000000008</sn>
+				<sn status="10" ns="0">00000000000009</sn>
+				<sn status="10" ns="0">00000000000010</sn>
+				<sn status="10" ns="0">00000000000011</sn>
+			</serialNumbers>
+		</container>
+		<container codingRule="GS1_SGTIN" containerId="01036647980430132100000000000003" levelId="300" status="1" ntin="03664798043013" ns="0">
+			<quantity>4</quantity>
+			<serialNumbers ntin="03664798043075" codingRule="GS1_SGTIN" levelId="100">
+				<sn status="10" ns="0">00000000000012</sn>
+				<sn status="10" ns="0">00000000000013</sn>
+				<sn status="10" ns="0">00000000000014</sn>
+				<sn status="10" ns="0">00000000000015</sn>
+			</serialNumbers>
+		</container>
+		<container codingRule="GS1_SGTIN" containerId="01036647980430132100000000000004" levelId="300" status="1" ntin="03664798043013" ns="0">
+			<quantity>4</quantity>
+			<serialNumbers ntin="03664798043075" codingRule="GS1_SGTIN" levelId="100">
+				<sn status="10" ns="0">00000000000016</sn>
+				<sn status="10" ns="0">00000000000017</sn>
+				<sn status="10" ns="0">00000000000018</sn>
+				<sn status="10" ns="0">00000000000019</sn>
+			</serialNumbers>
+		</container>
+	</hierarchy>
+	<recipe active="true" serializationMode="0" serializationIncrement="1" useAggregation="true">
+		<recipeId>Test_Rec</recipeId>
+		<gmid>2306_Test_Mat</gmid>
+		<description>Tablet</description>
+		<codingSet>GS1</codingSet>
+		<domainId>AntaresStandard</domainId>
+		<overloadPercent>10</overloadPercent>
+		<additionalDetails>
+			<detail name="authorizedNo"></detail>
+			<detail name="comment"></detail>
+			<detail name="cost"></detail>
+			<detail name="EDMC_SubTypeNo"></detail>
+			<detail name="EXT_RECIPE_CODE"></detail>
+			<detail name="FBunE"></detail>
+			<detail name="FBunM"></detail>
+			<detail name="FCarE"></detail>
+			<detail name="FCarM"></detail>
+			<detail name="FCasE"></detail>
+			<detail name="FCasM"></detail>
+			<detail name="FPalE"></detail>
+			<detail name="FPalM"></detail>
+			<detail name="FSP1E"></detail>
+			<detail name="FSP1M"></detail>
+			<detail name="GS1_AI_240"></detail>
+			<detail name="GS1_AI_710"></detail>
+			<detail name="GS1_AI_711"></detail>
+			<detail name="GS1_AI_712"></detail>
+			<detail name="GS1_AI_713"></detail>
+			<detail name="GS1_AI_714"></detail>
+			<detail name="HANDLE_CONFIRMED_PACKAGE"></detail>
+			<detail name="MultireadCameraPhotos"></detail>
+			<detail name="order_type"></detail>
+			<detail name="owner_id"></detail>
+			<detail name="packageSpec"></detail>
+			<detail name="packUnit"></detail>
+			<detail name="physicDetailType"></detail>
+			<detail name="PMCBOX"></detail>
+			<detail name="PMCLEA"></detail>
+			<detail name="PMCLSP1"></detail>
+			<detail name="PMCSLP2"></detail>
+			<detail name="productName"></detail>
+			<detail name="RelaxedAggregationCameraDateCheck"></detail>
+			<detail name="RU_CONTROL_ID"></detail>
+			<detail name="RU_PACKING_ID"></detail>
+			<detail name="RU_SELLER_ID"></detail>
+			<detail name="ShowVirtualLevelInItemMatrix"></detail>
+			<detail name="spec"></detail>
+			<detail name="type"></detail>
+			<detail name="vat_value"></detail>
+			<detail name="VirtualGeometry"></detail>
+			<detail name="VirtualItem"></detail>
+		</additionalDetails>
+	</recipe>
+</itsXml>
