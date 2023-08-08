@@ -1,48 +1,38 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-// export const DATABASE = {
-// 	db_name: process.env.DB_NAME || "simerdeka",
-// 	db_host: process.env.DB_HOST || "127.0.0.1",
-// 	db_port: process.env.DB_PORT || 3306,
-// 	db_username: process.env.DB_USERNAME || "root",
-// 	db_password: process.env.DB_PASSWORD || "toor",
-// 	db_log: process.env.DB_LOG == "false",
-// };
-
 import { Options } from "sequelize";
-
 const development: Options = {
-	username: "root",
-	password: "toor",
-	database: "simerdeka",
-	host: "localhost",
+	username: process.env.DB_USER_NAME,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME,
+	host: process.env.DB_HOST,
 	dialect: "mysql",
 	logging: false,
 };
 
 const test: Options = {
-	username: "root",
-	password: "toor",
-	database: "simerdeka",
-	host: "localhost",
+	username: process.env.DB_USER_NAME,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME,
+	host: process.env.DB_HOST,
 	dialect: "mysql",
 	logging: false,
 };
 
 const production: Options = {
-	username: "root",
-	password: "toor",
-	database: "simerdeka",
-	host: "localhost",
+	username: process.env.DB_USER_NAME,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME,
+	host: process.env.DB_HOST,
 	dialect: "mysql",
 	logging: false,
 };
 
-const config = {
+const config: "development" | "production" | "test" | any = {
 	development,
 	production,
 	test,
 };
 
-export default config;
+export default config[process.env.APP_STAGE || "development"];

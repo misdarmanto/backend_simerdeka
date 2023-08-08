@@ -10,6 +10,7 @@ import {
 import { UserModel } from "../../models/user";
 import { StudentModel } from "../../models/student";
 import { StudyProgramModel } from "../../models/study-program";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const update = async (req: any, res: Response) => {
 	const body = <ReportParticipationAttributes>req.body;
@@ -82,6 +83,8 @@ export const update = async (req: any, res: Response) => {
 				},
 			});
 
+			const activeSemester = await getActiveSemester();
+
 			const studyProgram = await StudyProgramModel.findOne({
 				where: {
 					deleted: { [Op.eq]: 0 },
@@ -91,12 +94,16 @@ export const update = async (req: any, res: Response) => {
 				},
 			});
 
-			if (student) {
+			if (student && activeSemester) {
+				student.studentSemesterId = activeSemester.semesterId
 				student.studentIsRegistered = true;
 				student.save();
 			}
 
-			if (studyProgram) {
+			
+
+			if (studyProgram && activeSemester) {
+				studyProgram.studyProgramSemesterId = activeSemester.semesterId;
 				studyProgram.studyProgramIsRegistered = true;
 				studyProgram.save();
 			}

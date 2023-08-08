@@ -18,4 +18,5 @@ export const CONFIG = {
 		username: process.env.AUTHORIZATION_USERNAME || "simerdeka",
 		passsword: process.env.AUTHORIZATION_PASSWORD || "simerdeka2023",
 	},
+	MAX_FILE_SIZE: process.env.MAX_FILE_SIZE || 2048,
 };

@@ -51,6 +51,7 @@ export const changeAssignMentStatus = async (req: any, res: Response) => {
 		}
 
 		const approvalLetter = body.recomendationLetterApprovalLetter;
+		const sptjmLetter = body.recomendationLetterSptjmLetter;
 
 		switch (user.userRole) {
 			case "studyProgram":
@@ -68,6 +69,7 @@ export const changeAssignMentStatus = async (req: any, res: Response) => {
 			case "academic":
 				recomendationLetter.recomendationLetterStatus = "accepted";
 				recomendationLetter.recomendationLetterFromAcademic = approvalLetter;
+				recomendationLetter.recomendationLetterSptjmLetter = sptjmLetter
 				break;
 			default:
 				break;
