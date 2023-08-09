@@ -8,15 +8,14 @@ export const CONFIG = {
 	port: process.env.APP_PORT ?? 8000,
 	log: process.env.LOG == "true",
 	secret: {
-		key_encryption: process.env.SECRET_KEY_ENCRYPTION || "",
-		password_encryption: process.env.SECRET_PASSWORD_ENCRYPTION || "",
-		admin_password_encryption: process.env.SECRET_ADMIN_PASSWORD_ENCRYPTION || "",
-		pin_encryption: process.env.SECRET_PIN_ENCRYPTION || "",
+		key_encryption: process.env.SECRET_KEY_ENCRYPTION,
+		password_encryption: process.env.SECRET_PASSWORD_ENCRYPTION,
+		pin_encryption: process.env.SECRET_PIN_ENCRYPTION,
 		token: process.env.TOKEN_SECRET || "",
 	},
 	authorization: {
-		username: process.env.AUTHORIZATION_USERNAME || "simerdeka",
-		passsword: process.env.AUTHORIZATION_PASSWORD || "simerdeka2023",
+		username: process.env.AUTHORIZATION_USERNAME,
+		passsword: process.env.AUTHORIZATION_PASSWORD,
 	},
 	MAX_FILE_SIZE: process.env.MAX_FILE_SIZE || 2048,
 };
