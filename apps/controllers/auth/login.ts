@@ -2,10 +2,8 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { Op } from "sequelize";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { hashPassword } from "../../utilities/scure_password";
 import { requestChecker } from "../../utilities/requestCheker";
 import { UserAttributes, UserModel } from "../../models/user";
-import { generateAccessToken } from "../../utilities/jwt";
 
 export const login = async (req: any, res: Response) => {
 	const body = <UserAttributes>req.body;

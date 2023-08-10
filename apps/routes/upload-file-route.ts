@@ -2,14 +2,14 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import { uploadFile } from "../controllers/upload-file";
 import { uploadMidleWare } from "../middlewares/upload-file";
 import { StatusCodes } from "http-status-codes";
-import { CONFIG } from "../config";
+import { CONFIG } from "../configs";
 import { ResponseData, ResponseDataAttributes } from "../utilities/response";
 
 const checkFileSizeMidleWare = (req: Request, res: Response, next: NextFunction) => {
 	try {
 		if (req.file) {
 			const fileSizeKiloBytes = req.file.size / 1024;
-			if (fileSizeKiloBytes > +CONFIG.MAX_FILE_SIZE) {
+			if (fileSizeKiloBytes > +CONFIG.maximumFileUpload) {
 				throw Error("maksimum file 2mb");
 			}
 			next();

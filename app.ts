@@ -1,5 +1,5 @@
 import { route } from "./apps/routes";
-import { CONFIG } from "./apps/config";
+import { CONFIG } from "./apps/configs";
 import express, { Express } from "express";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";

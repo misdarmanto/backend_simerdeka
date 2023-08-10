@@ -1,7 +1,7 @@
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { CONFIG } from "../../config";
+import { CONFIG } from "../../configs";
 
 export const uploadFile = async (req: any, res: Response) => {
 	try {
