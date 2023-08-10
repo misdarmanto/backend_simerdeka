@@ -5,31 +5,31 @@ const { ZygoteModel } = require("../zygote");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable("sks_convertion", {
+		await queryInterface.createTable("sks_convertion_schema", {
 			...ZygoteModel,
-			sksConvertionId: {
+			sksConvertionSchemaId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionName: {
+			sksConvertionSchemaSksConvertionId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionCreatedBy: {
+			sksConvertionSchemaMatkulId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionStudyProgramId: {
+			sksConvertionSchemaStudyProgramId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionMbkmProgramId: {
+			sksConvertionSchemaMbkmProgramId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
 		});
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable("sks_convertion");
+		await queryInterface.dropTable("sks_convertion_schema");
 	},
 };

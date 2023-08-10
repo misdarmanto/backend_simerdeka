@@ -15,10 +15,6 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mbkmProgramProdiProgramName: {
-				type: Sequelize.STRING,
-				allowNull: false,
-			},
 			mbkmProgramProdiStudyProgramId: {
 				type: Sequelize.STRING,
 				allowNull: true,
@@ -37,7 +33,7 @@ module.exports = {
 			},
 			mbkmProgramProdiSemesterId: {
 				type: Sequelize.STRING,
-				allowNull: true,
+				allowNull: false,
 			},
 		});
 	},

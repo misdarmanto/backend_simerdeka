@@ -31,7 +31,15 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
+			recomendationLetterSyllabus: {
+				type: Sequelize.STRING,
+				allowNull: true,
+			},
 			recomendationLetterApprovalLetter: {
+				type: Sequelize.STRING,
+				allowNull: false,
+			},
+			recomendationLetterSptjmLetter: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
@@ -52,6 +60,10 @@ module.exports = {
 				allowNull: true,
 			},
 			recomendationLetterProgramName: {
+				type: Sequelize.STRING,
+				allowNull: false,
+			},
+			recomendationLetterProgramDescription: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
@@ -92,6 +104,10 @@ module.exports = {
 				type: Sequelize.BOOLEAN,
 				allowNull: true,
 				defaultValue: false,
+			},
+			recomendationLetterSemesterId: {
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 		});
 	},

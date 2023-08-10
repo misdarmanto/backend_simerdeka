@@ -32,6 +32,10 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
+			studyProgramSemesterId: {
+				type: Sequelize.STRING,
+				allowNull: false,
+			},
 		});
 	},
 	async down(queryInterface, Sequelize) {

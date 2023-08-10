@@ -7,7 +7,7 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("mata_kuliah", {
 			...ZygoteModel,
-			mataKuliahMbkmId: {
+			mataKuliahId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
@@ -35,6 +35,10 @@ module.exports = {
 				type: Sequelize.INTEGER,
 				allowNull: true,
 				defaultValue: 0,
+			},
+			mataKuliahSemesterId: {
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 		});
 	},

@@ -61,7 +61,7 @@ export const SksConvertionStudentModel = sequelize.define<SksConvertionStudentIn
 	{
 		...sequelize,
 		timestamps: false,
-		tableName: "sks_convertion_schema",
+		tableName: "sks_convertion_student",
 		deletedAt: false,
 		paranoid: true,
 		underscored: true,
