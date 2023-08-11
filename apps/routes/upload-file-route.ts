@@ -9,7 +9,7 @@ const checkFileSizeMidleWare = (req: Request, res: Response, next: NextFunction)
 	try {
 		if (req.file) {
 			const fileSizeKiloBytes = req.file.size / 1024;
-			if (fileSizeKiloBytes > +CONFIG.maximumFileUpload) {
+			if (fileSizeKiloBytes > +CONFIG.maximumUploadFile) {
 				throw Error("maksimum file 2mb");
 			}
 			next();

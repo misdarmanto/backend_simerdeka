@@ -1,24 +1,19 @@
-# simerdeka backend
+SIMERDEKA BACKEND
 
-## Instalasi
+## Preparation
 
-```
-$ npm install
+-   Copy file `.env.example` to `.env`. Then fill the value.
 
-```
+## How to install app
 
-## copy env.example to .env
+-   if you are using linux or mac run command `./init.sh`
+-   if you are using windows run command `init.bat`
 
-## run migration
+## How to Run App in development mode
 
-```
-$ migrate:up
+-   Run command `npm run dev`
 
-```
+## How to Run Migration
 
-## run the app in development mode
-
-```
-$ npm run dev
-
-```
+-   if you are using linux or mac run command `./run_migration.sh`
+-   if you are using windows run command `run_migration.bat`

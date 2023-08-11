@@ -1,41 +1,36 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { Op } from "sequelize";
-import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
-import { StudyProgramModel } from "../../models/study-program";
-import { getActiveSemester } from "../../utilities/active-semester";
+import { LECTURE } from "../../data/lecture";
+
+type LectureType = {
+	lectureCode: string;
+	lectureName: string;
+};
 
 export const findAll = async (req: any, res: Response) => {
-	try {
-		const activeSemester = await getActiveSemester();
+	const requestQuery = req.query;
+	const emptyField = requestChecker({
+		requireList: ["lectureName"],
+		requestData: requestQuery,
+	});
 
-		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
-		const result = await StudyProgramModel.findAndCountAll({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				// studyProgramSemesterId: { [Op.eq]: activeSemester?.semesterId },
-				...(req.query.search && {
-					[Op.or]: [
-						{ studyProgramName: { [Op.like]: `%${req.query.search}%` } },
-					],
-				}),
-				...(req.query.registered && {
-					studyProgramIsRegistered: {
-						[Op.eq]: true,
-					},
-				}),
-			},
-			order: [["id", "desc"]],
-			...(req.query.pagination == "true" && {
-				limit: page.limit,
-				offset: page.offset,
-			}),
+	if (emptyField) {
+		const message = `invalid request parameter! require (${emptyField})`;
+		const response = <ResponseDataAttributes>ResponseData.error(message);
+		return res.status(StatusCodes.BAD_REQUEST).json(response);
+	}
+
+	try {
+		const result = LECTURE.filter((item: LectureType) => {
+			const input = requestQuery.lectureName.toUpperCase();
+			const isMatch = item.lectureName.toUpperCase().search(input) !== -1;
+			if (isMatch) return item;
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = page.data(result);
+		response.data = result;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);
@@ -46,9 +41,10 @@ export const findAll = async (req: any, res: Response) => {
 };
 
 export const findOne = async (req: any, res: Response) => {
+	const requestParams = req.params;
 	const emptyField = requestChecker({
-		requireList: ["id"],
-		requestData: req.params,
+		requireList: ["lectureCode"],
+		requestData: requestParams,
 	});
 
 	if (emptyField) {
@@ -58,29 +54,18 @@ export const findOne = async (req: any, res: Response) => {
 	}
 
 	try {
-		const activeSemester = await getActiveSemester();
+		const result = LECTURE.find(
+			(item) => item.lectureCode === requestParams.lectureCode
+		);
 
-		const studyProgram = await StudyProgramModel.findOne({
-			where: {
-				deleted: { [Op.eq]: 0 },
-				studyProgramSemesterId: { [Op.eq]: activeSemester?.semesterId },
-				studyProgramId: { [Op.eq]: req.params.id },
-				...(req.query.registered && {
-					studyProgramIsRegistered: {
-						[Op.eq]: true,
-					},
-				}),
-			},
-		});
-
-		if (!studyProgram) {
-			const message = `study program not found!`;
+		if (!result) {
+			const message = `lecture not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = studyProgram;
+		response.data = result;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
 		console.log(error.message);

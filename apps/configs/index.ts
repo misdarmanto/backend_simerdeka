@@ -7,7 +7,7 @@ export const CONFIG = {
 	appMode: process.env.APP_MODE || "development",
 	env: process.env.APP_ENV,
 	port: process.env.APP_PORT ?? 8000,
-	log: process.env.LOG === "true",
+	log: process.env.APP_LOG === "true",
 	secret: {
 		keyEncryption: process.env.SECRET_KEY_ENCRYPTION,
 		passwordEncryption: process.env.SECRET_PASSWORD_ENCRYPTION,
@@ -18,7 +18,7 @@ export const CONFIG = {
 		username: process.env.AUTHORIZATION_USERNAME,
 		passsword: process.env.AUTHORIZATION_PASSWORD,
 	},
-	maximumFileUpload: process.env.MAXIMUM_UPLOAD_FILE || 1024,
+	maximumUploadFile: process.env.MAXIMUM_UPLOAD_FILE || 1024,
 	dataBase: {
 		development: {
 			username: process.env.DB_USER_NAME,

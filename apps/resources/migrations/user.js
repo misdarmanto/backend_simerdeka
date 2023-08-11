@@ -22,7 +22,7 @@ module.exports = {
 			userRole: {
 				type: Sequelize.ENUM(
 					"student",
-					"study_program",
+					"studyProgram",
 					"department",
 					"lp3m",
 					"academic"
