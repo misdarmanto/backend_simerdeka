@@ -5,39 +5,39 @@ const { ZygoteModel } = require("../zygote");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable("mbkm_program_student", {
+		await queryInterface.createTable("sks_convertion_student", {
 			...ZygoteModel,
-			mbkmProgramStudentId: {
+			sksConvertionStudentId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mbkmProgramStudentSks: {
+			sksConvertionStudentStudentId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mbkmProgramId: {
+			sksConvertionStudentSksConvertionId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studentId: {
+			sksConvertionStudentSksConvertionSchemaId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			majorId: {
+			sksConvertionStudentMatkulId: {
 				type: Sequelize.STRING,
-				allowNull: true,
+				allowNull: false,
 			},
-			studyProgramId: {
+			sksConvertionStudentStudyProgramId: {
 				type: Sequelize.STRING,
-				allowNull: true,
+				allowNull: false,
 			},
-			semesterId: {
+			sksConvertionStudentMbkmProgramId: {
 				type: Sequelize.STRING,
-				allowNull: true,
+				allowNull: false,
 			},
 		});
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable("mbkm_program_student");
+		await queryInterface.dropTable("sks_convertion_student");
 	},
 };

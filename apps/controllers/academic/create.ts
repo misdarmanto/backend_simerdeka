@@ -4,30 +4,34 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
 import { AcademicAttributes, AcademicModel } from "../../models/academic";
+import { CONSOLE } from "../../utilities/log";
 
 export const create = async (req: any, res: Response) => {
-	const body = <AcademicAttributes>req.body;
+	const requestBody = <AcademicAttributes>req.body;
 
 	const emptyField = requestChecker({
 		requireList: ["academicName", "academicEmail"],
-		requestData: body,
+		requestData: requestBody,
 	});
 
 	if (emptyField) {
 		const message = `invalid request parameter! require (${emptyField})`;
+		CONSOLE.error(message);
 		const response = <ResponseDataAttributes>ResponseData.error(message);
 		return res.status(StatusCodes.BAD_REQUEST).json(response);
 	}
 
 	try {
-		body.academicId = uuidv4();
-		await AcademicModel.create(body);
+		requestBody.academicId = uuidv4();
+		await AcademicModel.create(requestBody);
 		const response = <ResponseDataAttributes>ResponseData.default;
-		response.data = { message: "success" };
+		const result = { message: "create academic success" };
+		response.data = result;
+		CONSOLE.log(result);
 		return res.status(StatusCodes.CREATED).json(response);
 	} catch (error: any) {
-		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;
+		CONSOLE.error(message);
 		const response = <ResponseDataAttributes>ResponseData.error(message);
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
 	}

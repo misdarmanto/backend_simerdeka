@@ -52,10 +52,9 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			studentSksTotal: {
-				type: Sequelize.INTEGER,
-				allowNull: true,
-				defaultValue: 0,
+			studentSemesterId: {
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 		});
 	},

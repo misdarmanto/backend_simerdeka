@@ -18,6 +18,7 @@ import { transkripRoute } from "./transkrip-route";
 import { mbkmProgramProdiRoutes } from "./mbkm-program-prodi";
 import { sksConvertionSchemaRoutes } from "./sks-convertion-schema-route";
 import { uploadFileRoutes } from "./upload-file-route";
+import { lectureRoutes } from "./lecture-route";
 
 export const route = (app: Express) => {
 	app.get("/", (req: Request, res: Response) => index(req, res));
@@ -39,4 +40,5 @@ export const route = (app: Express) => {
 	mataKuliahRoute(app);
 	transkripRoute(app);
 	uploadFileRoutes(app);
+	lectureRoutes(app);
 };

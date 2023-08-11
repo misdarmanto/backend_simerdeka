@@ -11,11 +11,15 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionTotal: {
-				type: Sequelize.INTEGER,
+			sksConvertionName: {
+				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionStudentId: {
+			sksConvertionCreatedBy: {
+				type: Sequelize.STRING,
+				allowNull: false,
+			},
+			sksConvertionStudyProgramId: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
