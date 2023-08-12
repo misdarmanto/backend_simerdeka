@@ -5,6 +5,7 @@ export const CONFIG = {
 	appVersion: process.env.APP_VERSION,
 	appSemantic: process.env.APP_SEMANTIC,
 	appMode: process.env.APP_MODE || "development",
+	appUrl: process.env.APP_URL,
 	env: process.env.APP_ENV,
 	port: process.env.APP_PORT ?? 8000,
 	log: process.env.APP_LOG === "true",

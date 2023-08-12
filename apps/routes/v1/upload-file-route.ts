@@ -1,9 +1,9 @@
 import express, { Express, NextFunction, Request, Response } from "express";
-import { uploadFile } from "../controllers/upload-file";
-import { uploadMidleWare } from "../middlewares/upload-file";
+import { uploadFile } from "../../controllers/upload-file";
+import { uploadMidleWare } from "../../middlewares/upload-file";
 import { StatusCodes } from "http-status-codes";
-import { CONFIG } from "../configs";
-import { ResponseData, ResponseDataAttributes } from "../utilities/response";
+import { CONFIG } from "../../configs";
+import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 
 const checkFileSizeMidleWare = (req: Request, res: Response, next: NextFunction) => {
 	try {

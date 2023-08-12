@@ -1,9 +1,9 @@
-import express, { Express, Request, Response } from "express";
-import * as department from "../controllers/department";
+import express, { Express, Request, Response, Router } from "express";
+import * as department from "../../controllers/department";
 
-export const departmentRoutes = (app: Express) => {
+export const departmentRoutes = (app: Router) => {
 	const route = express.Router();
-	app.use("/departments", route);
+	app.use("/api/v1/departments", route);
 	route.get("/", (req: Request, res: Response) => department.findAll(req, res));
 	route.get("/detail/:id", (req: Request, res: Response) =>
 		department.findOne(req, res)

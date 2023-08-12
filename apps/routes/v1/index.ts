@@ -1,5 +1,5 @@
 import { Express, Request, Response } from "express";
-import { index } from "../controllers";
+import { index } from "../../controllers";
 import { semesterRoutes } from "./semester-route";
 import { RecomendationLetterRoutes } from "./recomendation-letter-route";
 import { userRoutes } from "./user-router";
@@ -19,15 +19,10 @@ import { mbkmProgramProdiRoutes } from "./mbkm-program-prodi";
 import { sksConvertionSchemaRoutes } from "./sks-convertion-schema-route";
 import { uploadFileRoutes } from "./upload-file-route";
 import { lectureRoutes } from "./lecture-route";
-import { middleware } from "../middlewares";
 
-export const route = (app: Express) => {
-	app.get(
-		"/",
-		middleware.ipBlackList,
-		middleware.useAuthorization,
-		(req: Request, res: Response) => index(req, res)
-	);
+export const appRouterV1 = (app: Express) => {
+	app.get("/api/v1", (req: Request, res: Response) => index(req, res));
+
 	userRoutes(app);
 	RecomendationLetterRoutes(app);
 	semesterRoutes(app);

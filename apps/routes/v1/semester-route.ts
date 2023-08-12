@@ -1,10 +1,10 @@
 import express, { Express, Request, Response } from "express";
-import { middleware } from "../middlewares";
-import * as semester from "../controllers/semester";
+import { middleware } from "../../middlewares";
+import * as semester from "../../controllers/semester";
 
 export const semesterRoutes = (app: Express) => {
 	const router = express.Router();
-	app.use("/semesters", middleware.useAuthorization, router);
+	app.use("/api/v1/semesters", middleware.useAuthorization, router);
 	router.get("/", (req: Request, res: Response) => semester.findAll(req, res));
 	router.get("/detail/:id", (req: Request, res: Response) =>
 		semester.findOne(req, res)
