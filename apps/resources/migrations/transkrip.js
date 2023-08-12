@@ -15,7 +15,7 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			transkrip_mataKuliah_id: {
+			transkrip_mata_kuliah_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
