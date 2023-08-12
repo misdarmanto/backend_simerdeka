@@ -5,22 +5,22 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.bulkInsert("department", [
 			{
-				departmentId: "ed697f88-a372-442d-bc39-3772f544bdb5",
-				departmentName: "SAINS",
-				departmentEmail: "sains@itera.ac.id",
-				departmentIsRegistered: false,
+				department_id: "ed697f88-a372-442d-bc39-3772f544bdb5",
+				department_name: "SAINS",
+				department_email: "sains@itera.ac.id",
+				department_is_registered: false,
 			},
 			{
-				departmentId: "4181f385-6386-4f48-9a07-bf039af11175",
-				departmentName: "JTIK",
-				departmentEmail: "jtik@itera.ac.id",
-				departmentIsRegistered: false,
+				department_id: "4181f385-6386-4f48-9a07-bf039af11175",
+				department_name: "JTIK",
+				department_email: "jtik@itera.ac.id",
+				department_is_registered: false,
 			},
 			{
-				departmentId: "9e9a3381-7459-476b-a72e-8ab053da9e99",
-				departmentName: "JTPI",
-				departmentEmail: "jtpi@itera.ac.id",
-				departmentIsRegistered: false,
+				department_id: "9e9a3381-7459-476b-a72e-8ab053da9e99",
+				department_name: "JTPI",
+				department_email: "jtpi@itera.ac.id",
+				department_is_registered: false,
 			},
 		]);
 	},

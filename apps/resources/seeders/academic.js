@@ -5,9 +5,9 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.bulkInsert("academic", [
 			{
-				academicId: "93df0b9a-8497-41d5-9f8c-370806253b09",
-				academicName: "Akademik",
-				academicEmail: "academic@itera.ac.id",
+				academic_id: "93df0b9a-8497-41d5-9f8c-370806253b09",
+				academic_name: "Akademik",
+				academic_email: "academic@itera.ac.id",
 			},
 		]);
 	},

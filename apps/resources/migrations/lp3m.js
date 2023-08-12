@@ -7,15 +7,15 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("lp3m", {
 			...ZygoteModel,
-			lp3mId: {
+			lp3m_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			lp3mName: {
+			lp3m_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			lp3mEmail: {
+			lp3m_email: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},

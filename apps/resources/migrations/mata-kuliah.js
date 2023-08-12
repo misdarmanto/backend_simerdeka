@@ -7,36 +7,36 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("mata_kuliah", {
 			...ZygoteModel,
-			mataKuliahId: {
+			mata_kuliah_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mataKuliahName: {
+			mata_kuliah_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mataKuliahStudyProgramId: {
+			mata_kuliah_study_program_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mataKuliahStudyProgramName: {
+			mata_kuliah_study_program_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mataKuliahDepartmentId: {
+			mata_kuliah_department_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mataKuliahDepartmentName: {
+			mata_kuliah_department_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mataKuliahSksTotal: {
+			mata_kuliah_sks_total: {
 				type: Sequelize.INTEGER,
 				allowNull: true,
 				defaultValue: 0,
 			},
-			mataKuliahSemesterId: {
+			mata_kuliah_semester_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
