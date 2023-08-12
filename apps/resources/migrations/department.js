@@ -7,19 +7,19 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("department", {
 			...ZygoteModel,
-			departmentId: {
+			department_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			departmentName: {
+			department_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			departmentEmail: {
+			department_email: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			departmentIsRegistered: {
+			department_is_registered: {
 				type: Sequelize.BOOLEAN,
 				allowNull: true,
 				defaultValue: false,

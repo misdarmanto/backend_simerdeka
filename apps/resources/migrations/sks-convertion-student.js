@@ -7,31 +7,31 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("sks_convertion_student", {
 			...ZygoteModel,
-			sksConvertionStudentId: {
+			sks_convertion_student_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionStudentStudentId: {
+			sks_convertion_student_student_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionStudentSksConvertionId: {
+			sks_convertion_student_sks_convertion_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionStudentSksConvertionSchemaId: {
+			sks_convertion_student_sks_convertion_schema_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionStudentMatkulId: {
+			sks_convertion_student_matkul_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionStudentStudyProgramId: {
+			sks_convertion_student_study_program_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionStudentMbkmProgramId: {
+			sks_convertion_student_mbkm_program_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},

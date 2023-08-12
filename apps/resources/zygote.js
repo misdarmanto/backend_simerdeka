@@ -1,4 +1,3 @@
-const moment = require("moment");
 const Sequelize = require("sequelize");
 
 const ZygoteModel = {
@@ -8,12 +7,12 @@ const ZygoteModel = {
 		primaryKey: true,
 		allowNull: false,
 	},
-	createdOn: {
+	created_on: {
 		type: Sequelize.DATE,
 		allowNull: false,
-		defaultValue: moment().format("YYYY-MM-DD HH:mm:ss"),
+		defaultValue: Sequelize.fn("now"),
 	},
-	modifiedOn: {
+	modified_on: {
 		type: Sequelize.DATE,
 		allowNull: true,
 	},

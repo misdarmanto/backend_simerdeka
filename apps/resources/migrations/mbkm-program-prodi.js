@@ -7,31 +7,31 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("mbkm_program_prodi", {
 			...ZygoteModel,
-			mbkmProgramProdiId: {
+			mbkm_program_prodi_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mbkmProgramProdiProgramId: {
+			mbkm_program_prodi_program_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			mbkmProgramProdiStudyProgramId: {
+			mbkm_program_prodi_study_program_id: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			mbkmProgramProdiStudyProgramName: {
+			mbkm_program_prodi_study_program_name: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			mbkmProgramProdiDepartmentId: {
+			mbkm_program_prodi_department_id: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			mbkmProgramProdiDepartmentName: {
+			mbkm_program_prodi_department_name: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			mbkmProgramProdiSemesterId: {
+			mbkm_program_prodi_semester_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},

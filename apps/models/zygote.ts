@@ -1,5 +1,4 @@
-import moment from "moment";
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 
 export const ZygoteModel = {
 	id: {
@@ -9,12 +8,12 @@ export const ZygoteModel = {
 		allowNull: false,
 	},
 	createdOn: {
-		type: DataTypes.STRING,
+		type: DataTypes.DATE,
 		allowNull: false,
-		defaultValue: moment().format("YYYY-MM-DD HH:mm:ss"),
+		defaultValue: Sequelize.fn("now"),
 	},
 	modifiedOn: {
-		type: DataTypes.STRING,
+		type: DataTypes.DATE,
 		allowNull: true,
 	},
 	deleted: {

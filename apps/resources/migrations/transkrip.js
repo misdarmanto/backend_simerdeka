@@ -7,31 +7,31 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("transkrip", {
 			...ZygoteModel,
-			transkripId: {
+			transkrip_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			transkripStudentId: {
+			transkrip_student_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			transkripMataKuliahId: {
+			transkrip_mataKuliah_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			transkripStudyProgramId: {
+			transkrip_study_program_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			transkripDepartmentId: {
+			transkrip_department_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			transkripMataKuliahGrade: {
+			transkrip_mata_kuliah_grade: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			transkripSemesterId: {
+			transkrip_semester_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},

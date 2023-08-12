@@ -7,19 +7,19 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("user", {
 			...ZygoteModel,
-			userId: {
+			user_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			userName: {
+			user_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			userEmail: {
+			user_email: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			userRole: {
+			user_role: {
 				type: Sequelize.ENUM(
 					"student",
 					"studyProgram",

@@ -7,32 +7,32 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("study_program", {
 			...ZygoteModel,
-			studyProgramId: {
+			study_program_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studyProgramName: {
+			study_program_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studyProgramEmail: {
+			study_program_email: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studyProgramIsRegistered: {
+			study_program_is_registered: {
 				type: Sequelize.BOOLEAN,
 				allowNull: true,
 				defaultValue: false,
 			},
-			studyProgramDepartmentId: {
+			study_program_department_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studyProgramDepartmentName: {
+			study_program_department_name: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			studyProgramSemesterId: {
+			study_program_semester_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
