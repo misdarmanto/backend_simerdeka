@@ -8,6 +8,7 @@ export const CONFIG = {
 	env: process.env.APP_ENV,
 	port: process.env.APP_PORT ?? 8000,
 	log: process.env.APP_LOG === "true",
+	ipBlackList: JSON.parse(process.env.IP_BLACK_LIST ?? "[]"),
 	secret: {
 		keyEncryption: process.env.SECRET_KEY_ENCRYPTION,
 		passwordEncryption: process.env.SECRET_PASSWORD_ENCRYPTION,

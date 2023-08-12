@@ -10,9 +10,9 @@ export const index = async (req: Request, res: Response) => {
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = data;
 		return res.status(StatusCodes.OK).json(response);
-	} catch (error) {
-		console.log(error);
-		const message = "Tidak dapat memproses permintaan. Laporkan kendala ini.";
+	} catch (error: any) {
+		console.log(error.message);
+		const message = `unable to process request! error ${error.message}`;
 		const response = <ResponseDataAttributes>ResponseData.error(message);
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
 	}
