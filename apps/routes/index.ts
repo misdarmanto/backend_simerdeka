@@ -19,9 +19,15 @@ import { mbkmProgramProdiRoutes } from "./mbkm-program-prodi";
 import { sksConvertionSchemaRoutes } from "./sks-convertion-schema-route";
 import { uploadFileRoutes } from "./upload-file-route";
 import { lectureRoutes } from "./lecture-route";
+import { middleware } from "../middlewares";
 
 export const route = (app: Express) => {
-	app.get("/", (req: Request, res: Response) => index(req, res));
+	app.get(
+		"/",
+		middleware.ipBlackList,
+		middleware.useAuthorization,
+		(req: Request, res: Response) => index(req, res)
+	);
 	userRoutes(app);
 	RecomendationLetterRoutes(app);
 	semesterRoutes(app);
