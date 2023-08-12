@@ -7,11 +7,17 @@ import { Op } from "sequelize";
 import { UserModel } from "../../models/user";
 import { TranskripAttributes, TranskripModel } from "../../models/transkrip";
 import { StudentModel } from "../../models/student";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const create = async (req: any, res: Response) => {
 	const body = <TranskripAttributes>req.body;
 	const emptyField = requestChecker({
-		requireList: ["x-user-id", "transkripStudentId", "transkripMataKuliahId"],
+		requireList: [
+			"x-user-id",
+			"transkripStudentId",
+			"transkripMataKuliahId",
+			"transkripMataKuliahGrade",
+		],
 		requestData: { ...req.body, ...req.headers },
 	});
 
@@ -26,7 +32,7 @@ export const create = async (req: any, res: Response) => {
 			where: {
 				deleted: { [Op.eq]: 0 },
 				userId: { [Op.eq]: req.header("x-user-id") },
-				userRole: { [Op.eq]: "study_program" },
+				userRole: { [Op.eq]: "studyProgram" },
 			},
 		});
 
@@ -50,9 +56,11 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		body.transkripId = uuidv4();
+		body.transkripSemesterId = activeSemester?.semesterId || "";
 		body.transkripStudentId = student.studentId;
-		body.transkripMataKuliahId = body.transkripMataKuliahId;
 		body.transkripStudyProgramId = student.studentStudyProgramId;
 		body.transkripDepartmentId = student.studentDepartmentId;
 		await TranskripModel.create(body);

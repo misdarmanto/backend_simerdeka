@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { MbkmProgramAttributes, MbkmProgramModel } from "../../models/mbkm-program";
 import { UserModel } from "../../models/user";
 import { Op } from "sequelize";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const create = async (req: any, res: Response) => {
 	const body = <MbkmProgramAttributes>req.body;
@@ -15,7 +16,6 @@ export const create = async (req: any, res: Response) => {
 			"mbkmProgramCreatedBy",
 			"mbkmProgramName",
 			"mbkmProgramCategory",
-			"mbkmProgramSemesterId",
 			"mbkmProgramSyllabus",
 		],
 		requestData: { ...req.body, ...req.headers },
@@ -42,7 +42,10 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		body.mbkmProgramId = uuidv4();
+		body.mbkmProgramSemesterId = activeSemester?.semesterId || "";
 		await MbkmProgramModel.create(body);
 		const response = <ResponseDataAttributes>ResponseData.default;
 		response.data = { message: "success" };

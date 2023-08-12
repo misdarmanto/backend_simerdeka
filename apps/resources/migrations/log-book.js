@@ -7,43 +7,47 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("log_book", {
 			...ZygoteModel,
-			logBookId: {
+			log_book_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			logBookReportFile: {
+			log_book_report_file: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			logBookReportWeek: {
+			log_book_report_week: {
 				type: Sequelize.INTEGER,
 				allowNull: false,
 			},
-			logBookStudentId: {
+			log_book_student_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			logBookStudentName: {
+			log_book_student_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			logBookStudentNim: {
+			log_book_student_nim: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			logBookStudyProgramId: {
+			log_book_study_program_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			logBookStudyProgramName: {
+			log_book_study_program_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			logBookDepartmentId: {
+			log_book_department_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			logBookDepartmentName: {
+			log_book_department_name: {
+				type: Sequelize.STRING,
+				allowNull: false,
+			},
+			log_book_semester_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},

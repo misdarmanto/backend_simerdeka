@@ -7,19 +7,23 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("sks_convertion", {
 			...ZygoteModel,
-			sksConvertionId: {
+			sks_convertion_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionTotal: {
-				type: Sequelize.INTEGER,
-				allowNull: false,
-			},
-			sksConvertionStudentId: {
+			sks_convertion_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			sksConvertionMbkmProgramId: {
+			sks_convertion_created_by: {
+				type: Sequelize.STRING,
+				allowNull: false,
+			},
+			sks_convertion_study_program_id: {
+				type: Sequelize.STRING,
+				allowNull: false,
+			},
+			sks_convertion_mbkm_program_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},

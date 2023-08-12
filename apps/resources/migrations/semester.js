@@ -7,19 +7,19 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("semester", {
 			...ZygoteModel,
-			semesterId: {
+			semester_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			semesterCreatedBy: {
+			semester_created_by: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			semesterName: {
+			semester_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			semesterStatus: {
+			semester_status: {
 				type: Sequelize.ENUM("active", "non-active"),
 				allowNull: true,
 				defaultValue: "active",

@@ -9,6 +9,7 @@ import { UserModel } from "../../models/user";
 import { TranskripAttributes, TranskripModel } from "../../models/transkrip";
 import { MbkmProgramModel } from "../../models/mbkm-program";
 import { MataKuliahModel } from "../../models/matkul";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const findAll = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
@@ -36,14 +37,17 @@ export const findAll = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await TranskripModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				transkripSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(user.userRole === "student" && {
 					transkripStudentId: { [Op.eq]: user.userId },
 				}),
-				...(user.userRole === "study_program" && {
+				...(user.userRole === "studyProgram" && {
 					transkripStudyProgramId: {
 						[Op.eq]: user.userId,
 					},
@@ -60,7 +64,18 @@ export const findAll = async (req: any, res: Response) => {
 				offset: page.offset,
 			}),
 
-			include: [MataKuliahModel],
+			include: [
+				{
+					model: MataKuliahModel,
+					as: "mataKuliah",
+					attributes: ["mataKuliahName", "mataKuliahSksTotal"],
+					where: {
+						deleted: { [Op.eq]: 0 },
+					},
+				},
+			],
+
+			attributes: ["transkripMataKuliahGrade", "transkripId"],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -102,14 +117,17 @@ export const findOne = async (req: any, res: Response) => {
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const transkrip = await TranskripModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				transkripSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				transkripId: { [Op.eq]: params.id },
 				...(user.userRole === "student" && {
 					transkripStudentId: { [Op.eq]: user.userId },
 				}),
-				...(user.userRole === "study_program" && {
+				...(user.userRole === "studyProgram" && {
 					transkripStudyProgramId: {
 						[Op.eq]: user.userId,
 					},

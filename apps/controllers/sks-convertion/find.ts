@@ -7,6 +7,8 @@ import { requestChecker } from "../../utilities/requestCheker";
 import { SksConvertionAttributes, SksConvertionModel } from "../../models/sks-convertion";
 import { StudentModel } from "../../models/student";
 import { MbkmProgramModel } from "../../models/mbkm-program";
+import { SksConvertionSchemaModel } from "../../models/sks-convertion-schema";
+import { MataKuliahModel } from "../../models/matkul";
 
 export const findAll = async (req: any, res: Response) => {
 	try {
@@ -20,14 +22,6 @@ export const findAll = async (req: any, res: Response) => {
 				limit: page.limit,
 				offset: page.offset,
 			}),
-			attributes: [
-				"sksConvertion_id",
-				"sksConvertion_total",
-				"sksConvertion_student_id",
-				"sksConvertionMbkmProgramId",
-			],
-
-			include: [StudentModel, MbkmProgramModel],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -60,21 +54,25 @@ export const findOne = async (req: any, res: Response) => {
 		const result = await SksConvertionModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				sksConvertionMbkmProgramId: { [Op.eq]: params.id },
+				sksConvertionId: { [Op.eq]: params.id },
 			},
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
 				limit: page.limit,
 				offset: page.offset,
 			}),
-			attributes: [
-				"sksConvertion_id",
-				"sksConvertion_total",
-				"sksConvertion_student_id",
-				"sksConvertionMbkmProgramId",
+			include: [
+				{
+					model: SksConvertionSchemaModel,
+					as: "sksConvertionSchema",
+					include: [
+						{
+							model: MataKuliahModel,
+							as: "mataKuliah",
+						},
+					],
+				},
 			],
-
-			include: [StudentModel, MbkmProgramModel],
 		});
 
 		const response = <ResponseDataAttributes>ResponseData.default;
@@ -106,7 +104,6 @@ export const findStudent = async (req: any, res: Response) => {
 		const result = await SksConvertionModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				sksConvertionStudentId: { [Op.eq]: params.id },
 			},
 			attributes: [
 				"sksConvertion_id",

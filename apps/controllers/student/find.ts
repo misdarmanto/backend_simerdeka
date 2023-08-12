@@ -8,6 +8,7 @@ import { StudentModel } from "../../models/student";
 import { UserModel } from "../../models/user";
 import { MbkmProgramModel } from "../../models/mbkm-program";
 import { TranskripModel } from "../../models/transkrip";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const findAll = async (req: any, res: Response) => {
 	try {
@@ -19,15 +20,18 @@ export const findAll = async (req: any, res: Response) => {
 		});
 
 		if (!user) {
-			const message = `student not found!`;
+			const message = `student not registered`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
+
+		const activeSemester = await getActiveSemester();
 
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await StudentModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				studentSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(req.query.search && {
 					[Op.or]: [{ studentName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
@@ -36,7 +40,7 @@ export const findAll = async (req: any, res: Response) => {
 					[Op.eq]: true,
 				},
 				...(req.query.mbkmProgramId && {
-					studentMmProgramId: {
+					studentMbkmProgramId: {
 						[Op.eq]:
 							req.query.mbkmProgramId === "null"
 								? null
@@ -48,7 +52,7 @@ export const findAll = async (req: any, res: Response) => {
 						[Op.eq]: req.query.transkripId || null,
 					},
 				}),
-				...(user.userRole === "study_program" && {
+				...(user.userRole === "studyProgram" && {
 					studentStudyProgramId: {
 						[Op.eq]: user.userId,
 					},
@@ -59,7 +63,15 @@ export const findAll = async (req: any, res: Response) => {
 					},
 				}),
 			},
-			include: [MbkmProgramModel, TranskripModel],
+			include: [
+				{
+					model: MbkmProgramModel,
+					as: "mbkmProgram",
+				},
+				{
+					model: TranskripModel,
+				},
+			],
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
 				limit: page.limit,
@@ -99,23 +111,21 @@ export const findOne = async (req: any, res: Response) => {
 		});
 
 		if (!user) {
-			const message = `student not found!`;
+			const message = `user not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
+
+		const activeSemester = await getActiveSemester();
 
 		const student = await StudentModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
 				studentId: { [Op.eq]: req.params.id },
+				studentSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				studentIsRegistered: {
 					[Op.eq]: true,
 				},
-				// ...(req.query.registered && {
-				// 	student_is_registered: {
-				// 		[Op.eq]: true,
-				// 	},
-				// }),
 				...(req.query.mbkmProgramId && {
 					studentMbkmProgramId: {
 						[Op.eq]: req.query.mbkmProgramId,
@@ -126,7 +136,7 @@ export const findOne = async (req: any, res: Response) => {
 						[Op.eq]: req.query.transkripId,
 					},
 				}),
-				...(user.userRole === "study_program" && {
+				...(user.userRole === "studyProgram" && {
 					studentStudyProgramId: {
 						[Op.eq]: user.userId,
 					},
@@ -137,11 +147,19 @@ export const findOne = async (req: any, res: Response) => {
 					},
 				}),
 			},
-			include: [MbkmProgramModel, TranskripModel],
+			include: [
+				{
+					model: MbkmProgramModel,
+					as: "mbkmProgram",
+				},
+				{
+					model: TranskripModel,
+				},
+			],
 		});
 
 		if (!student) {
-			const message = `student not found!`;
+			const message = `anda belum terdaftar sebagai peserta MBKM`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}

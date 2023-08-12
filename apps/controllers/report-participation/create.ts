@@ -10,6 +10,7 @@ import {
 import { StudentModel } from "../../models/student";
 import { Op } from "sequelize";
 import { RecomendationLetterModel } from "../../models/recomendation-letter";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const create = async (req: any, res: Response) => {
 	const body = <ReportParticipationAttributes>req.body;
@@ -52,10 +53,13 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		body.reportParticipationId = uuidv4();
 		body.reportParticipationStudentId = student.studentId;
 		body.reportParticipationStudyProgramId = student.studentStudyProgramId;
 		body.reportParticipationDepartmentId = student.studentDepartmentId;
+		body.reportParticipationSemesterId = activeSemester?.semesterId || "";
 		await ReportParticipationModel.create(body);
 
 		const response = <ResponseDataAttributes>ResponseData.default;

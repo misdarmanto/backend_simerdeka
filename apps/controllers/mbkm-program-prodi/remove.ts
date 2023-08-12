@@ -8,7 +8,7 @@ import { MbkmProgramProdiModel } from "../../models/mbkm-program-prodi";
 
 export const remove = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
-		requireList: ["id"],
+		requireList: ["programId"],
 		requestData: req.query,
 	});
 
@@ -36,12 +36,12 @@ export const remove = async (req: any, res: Response) => {
 		const mbkmProgramProdi = await MbkmProgramProdiModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
-				mbkmProgramProdiId: { [Op.eq]: req.query.id },
+				mbkmProgramProdiProgramId: { [Op.eq]: req.query.programId },
 			},
 		});
 
 		if (!mbkmProgramProdi) {
-			const message = `not found!`;
+			const message = `mbkm program prodi not found!`;
 			const response = <ResponseDataAttributes>ResponseData.error(message);
 			return res.status(StatusCodes.NOT_FOUND).json(response);
 		}
@@ -50,7 +50,7 @@ export const remove = async (req: any, res: Response) => {
 			{ deleted: 1 },
 			{
 				where: {
-					mbkmProgramProdiId: { [Op.eq]: req.query.id },
+					mbkmProgramProdiProgramId: { [Op.eq]: req.query.programId },
 				},
 			}
 		);

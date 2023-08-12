@@ -2,11 +2,8 @@ import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { Op } from "sequelize";
 import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
-import { hashPassword } from "../../utilities/scure_password";
 import { UserAttributes, UserModel } from "../../models/user";
 import { requestChecker } from "../../utilities/requestCheker";
-import { v4 as uuidv4 } from "uuid";
-import { generateAccessToken } from "../../utilities/jwt";
 
 export const register = async (req: any, res: Response) => {
 	const body = <UserAttributes>req.body;

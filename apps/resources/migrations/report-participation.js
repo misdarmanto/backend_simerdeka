@@ -7,32 +7,36 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("report_participation", {
 			...ZygoteModel,
-			reportParticipationId: {
+			report_participation_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			reportParticipationLetter: {
+			report_participation_letter: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			reportParticipationStatusMessage: {
+			report_participation_status_message: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			reportParticipationStatus: {
+			report_participation_status: {
 				type: Sequelize.ENUM("waiting", "accepted", "rejected"),
 				allowNull: true,
 				defaultValue: "waiting",
 			},
-			reportParticipationStudentId: {
+			report_participation_student_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			reportParticipationDepartmentId: {
+			report_participation_department_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			reportParticipationStudyProgramId: {
+			report_participation_study_program_id: {
+				type: Sequelize.STRING,
+				allowNull: false,
+			},
+			report_participation_semester_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},

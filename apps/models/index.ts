@@ -1,13 +1,8 @@
-import { Sequelize } from "sequelize";
-// import * as DATABASE from "../config/databases";
-import config from "../config/database-config";
+import dotenv from "dotenv";
+dotenv.config();
+import { Options, Sequelize } from "sequelize";
+import { CONFIG } from "../configs";
 
-// export const sequelize = new Sequelize(
-// 	`mysql://${DATABASE.username}:${DATABASE.db_password}@${DATABASE.db_host}:${DATABASE.db_port}/${DATABASE.db_name}`,
-// 	{
-// 		logging: true,
-// 	}
-// );
+const dataBaseConfig: Options | any = CONFIG.dataBase.development;
 
-// const env = process.env.NODE_ENV || "development";
-export const sequelize = new Sequelize(config["development"]);
+export const sequelize = new Sequelize(dataBaseConfig);

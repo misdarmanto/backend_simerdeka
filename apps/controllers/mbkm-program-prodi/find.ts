@@ -7,9 +7,7 @@ import { requestChecker } from "../../utilities/requestCheker";
 import { MbkmProgramAttributes, MbkmProgramModel } from "../../models/mbkm-program";
 import { MbkmProgramProdiModel } from "../../models/mbkm-program-prodi";
 import { UserModel } from "../../models/user";
-import { SemesterModel } from "../../models/semester";
-import { StudyProgramModel } from "../../models/study-program";
-import { DepartmentModel } from "../../models/department";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const findAll = async (req: any, res: Response) => {
 	const emptyField = requestChecker({
@@ -37,16 +35,25 @@ export const findAll = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await MbkmProgramProdiModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				mbkmProgramProdiSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(req.query.search && {
 					[Op.or]: [{ programName: { [Op.like]: `%${req.query.search}%` } }],
 				}),
+
 				...(req.query.programId && {
 					mbkmProgramProdiProgramId: {
 						[Op.eq]: req.query.programId,
+					},
+				}),
+				...(req.query.mbkmProgramProdiStudyProgramId && {
+					mbkmProgramProdiStudyProgramId: {
+						[Op.eq]: req.query.mbkmProgramProdiStudyProgramId,
 					},
 				}),
 				...(req.query.semesterId && {
@@ -54,7 +61,7 @@ export const findAll = async (req: any, res: Response) => {
 						[Op.eq]: req.query.semesterId,
 					},
 				}),
-				...(user?.userRole === "study_program" && {
+				...(user?.userRole === "studyProgram" && {
 					mbkmProgramProdiStudyProgramId: {
 						[Op.eq]: user.userId,
 					},
@@ -67,10 +74,10 @@ export const findAll = async (req: any, res: Response) => {
 			},
 
 			include: [
-				SemesterModel,
-				StudyProgramModel,
-				DepartmentModel,
-				MbkmProgramModel,
+				{
+					model: MbkmProgramModel,
+					as: "mbkmPrograms",
+				},
 			],
 			order: [["id", "desc"]],
 			...(req.query.pagination == "true" && {
@@ -118,16 +125,14 @@ export const findOne = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		const result = await MbkmProgramProdiModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				mbkmProgramProdiSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				mbkmProgramProdiProgramId: { [Op.eq]: params.id },
-				...(req.query.semesterId && {
-					mbkmProgramProdiSemesterId: {
-						[Op.eq]: req.query.semesterId,
-					},
-				}),
-				...(user?.userRole === "study_program" && {
+				...(user?.userRole === "studyProgram" && {
 					mbkmProgramProdiStudyProgramId: {
 						[Op.eq]: user.userId,
 					},
@@ -139,10 +144,10 @@ export const findOne = async (req: any, res: Response) => {
 				}),
 			},
 			include: [
-				SemesterModel,
-				StudyProgramModel,
-				DepartmentModel,
-				MbkmProgramModel,
+				{
+					model: MbkmProgramModel,
+					as: "mbkmPrograms",
+				},
 			],
 		});
 

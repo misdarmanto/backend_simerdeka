@@ -7,55 +7,54 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable("student", {
 			...ZygoteModel,
-			studentId: {
+			student_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studentName: {
+			student_name: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studentNim: {
+			student_nim: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studentEmail: {
+			student_email: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studentIsRegistered: {
+			student_is_registered: {
 				type: Sequelize.BOOLEAN,
 				allowNull: true,
 				defaultValue: false,
 			},
-			studentDepartmentId: {
+			student_department_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studentDepartmentName: {
+			student_department_name: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			studentStudyProgramId: {
+			student_study_program_id: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
-			studentStudyProgramName: {
+			student_study_program_name: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			studentMbkmProgramId: {
+			student_mbkm_program_id: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			studentTranskripId: {
+			student_transkrip_id: {
 				type: Sequelize.STRING,
 				allowNull: true,
 			},
-			studentSksTotal: {
-				type: Sequelize.INTEGER,
-				allowNull: true,
-				defaultValue: 0,
+			student_semester_id: {
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 		});
 	},

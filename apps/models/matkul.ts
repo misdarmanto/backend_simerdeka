@@ -10,6 +10,7 @@ export interface MataKuliahAttributes extends ZygoteAttributes {
 	mataKuliahDepartmentId: string;
 	mataKuliahDepartmentName: string;
 	mataKuliahSksTotal: number;
+	mataKuliahSemesterId: string;
 }
 
 // we're telling the Model that 'id' is optional
@@ -56,6 +57,10 @@ export const MataKuliahModel = sequelize.define<MataKuliahInstance>(
 			type: DataTypes.INTEGER,
 			allowNull: true,
 			defaultValue: 0,
+		},
+		mataKuliahSemesterId: {
+			type: DataTypes.STRING,
+			allowNull: false,
 		},
 	},
 	{

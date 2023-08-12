@@ -5,13 +5,17 @@ import { Op } from "sequelize";
 import { Pagination } from "../../utilities/pagination";
 import { requestChecker } from "../../utilities/requestCheker";
 import { StudyProgramModel } from "../../models/study-program";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const findAll = async (req: any, res: Response) => {
 	try {
+		const activeSemester = await getActiveSemester();
+
 		const page = new Pagination(+req.query.page || 0, +req.query.size || 10);
 		const result = await StudyProgramModel.findAndCountAll({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				// studyProgramSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				...(req.query.search && {
 					[Op.or]: [
 						{ studyProgramName: { [Op.like]: `%${req.query.search}%` } },
@@ -54,9 +58,12 @@ export const findOne = async (req: any, res: Response) => {
 	}
 
 	try {
+		const activeSemester = await getActiveSemester();
+
 		const studyProgram = await StudyProgramModel.findOne({
 			where: {
 				deleted: { [Op.eq]: 0 },
+				studyProgramSemesterId: { [Op.eq]: activeSemester?.semesterId },
 				studyProgramId: { [Op.eq]: req.params.id },
 				...(req.query.registered && {
 					studyProgramIsRegistered: {

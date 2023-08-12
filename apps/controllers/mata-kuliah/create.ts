@@ -7,6 +7,7 @@ import { Op } from "sequelize";
 import { MataKuliahAttributes, MataKuliahModel } from "../../models/matkul";
 import { UserModel } from "../../models/user";
 import { StudyProgramModel } from "../../models/study-program";
+import { getActiveSemester } from "../../utilities/active-semester";
 
 export const create = async (req: any, res: Response) => {
 	const body = <MataKuliahAttributes>req.body;
@@ -35,11 +36,14 @@ export const create = async (req: any, res: Response) => {
 			return res.status(StatusCodes.UNAUTHORIZED).json(response);
 		}
 
+		const activeSemester = await getActiveSemester();
+
 		body.mataKuliahId = uuidv4();
 		body.mataKuliahStudyProgramId = studyProgram.studyProgramId;
 		body.mataKuliahStudyProgramName = studyProgram.studyProgramName;
 		body.mataKuliahDepartmentId = studyProgram.studyProgramDepartmentId;
 		body.mataKuliahDepartmentName = studyProgram.studyProgramDepartmentName;
+		body.mataKuliahSemesterId = activeSemester?.semesterId || "";
 		await MataKuliahModel.create(body);
 
 		const response = <ResponseDataAttributes>ResponseData.default;
