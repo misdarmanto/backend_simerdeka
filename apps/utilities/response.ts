@@ -1,4 +1,5 @@
 import { CONFIG } from "../configs";
+import { CONSOLE } from "./log";
 
 export interface ResponseDataAttributes {
 	request_param: any | null;
@@ -10,6 +11,8 @@ export interface ResponseDataAttributes {
 }
 export const ResponseData = {
 	error: (message?: any) => {
+		CONSOLE.error(message);
+
 		return <ResponseDataAttributes>{
 			request_param: "",
 			status: "error",
