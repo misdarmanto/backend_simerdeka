@@ -4,7 +4,6 @@ import { ResponseData, ResponseDataAttributes } from "../../utilities/response";
 import { requestChecker } from "../../utilities/requestCheker";
 import { v4 as uuidv4 } from "uuid";
 import { AcademicAttributes, AcademicModel } from "../../models/academic";
-import { CONSOLE } from "../../utilities/log";
 
 export const create = async (req: any, res: Response) => {
 	const requestBody = <AcademicAttributes>req.body;
@@ -16,7 +15,6 @@ export const create = async (req: any, res: Response) => {
 
 	if (emptyField) {
 		const message = `invalid request parameter! require (${emptyField})`;
-		CONSOLE.error(message);
 		const response = <ResponseDataAttributes>ResponseData.error(message);
 		return res.status(StatusCodes.BAD_REQUEST).json(response);
 	}
@@ -27,11 +25,9 @@ export const create = async (req: any, res: Response) => {
 		const response = <ResponseDataAttributes>ResponseData.default;
 		const result = { message: "create academic success" };
 		response.data = result;
-		CONSOLE.log(result);
 		return res.status(StatusCodes.CREATED).json(response);
 	} catch (error: any) {
 		const message = `unable to process request! error ${error.message}`;
-		CONSOLE.error(message);
 		const response = <ResponseDataAttributes>ResponseData.error(message);
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
 	}

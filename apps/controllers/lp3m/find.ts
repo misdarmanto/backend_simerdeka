@@ -27,7 +27,6 @@ export const findAll = async (req: any, res: Response) => {
 		response.data = page.data(result);
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
-		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;
 		const response = <ResponseDataAttributes>ResponseData.error(message);
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
@@ -64,7 +63,6 @@ export const findOne = async (req: any, res: Response) => {
 		response.data = result;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
-		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;
 		const response = <ResponseDataAttributes>ResponseData.error(message);
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);

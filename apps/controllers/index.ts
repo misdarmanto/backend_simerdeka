@@ -11,7 +11,6 @@ export const index = async (req: Request, res: Response) => {
 		response.data = data;
 		return res.status(StatusCodes.OK).json(response);
 	} catch (error: any) {
-		console.log(error.message);
 		const message = `unable to process request! error ${error.message}`;
 		const response = <ResponseDataAttributes>ResponseData.error(message);
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response);
