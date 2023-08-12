@@ -1,9 +1,9 @@
 import express, { Express, Request, Response } from "express";
-import * as user from "../controllers/user";
+import * as user from "../../controllers/user";
 
 export const userRoutes = (app: Express) => {
 	const route = express.Router();
-	app.use("/users", route);
+	app.use("/api/v1/users", route);
 	route.get("/", (req: Request, res: Response) => user.findOne(req, res));
 	route.get("/students/registered", (req: Request, res: Response) =>
 		user.findAllStudent(req, res)

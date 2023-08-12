@@ -1,10 +1,10 @@
 import express, { Express, Request, Response } from "express";
-import { middleware } from "../middlewares";
-import * as transkrip from "../controllers/transkrip";
+import { middleware } from "../../middlewares";
+import * as transkrip from "../../controllers/transkrip";
 
 export const transkripRoute = (app: Express) => {
 	const router = express.Router();
-	app.use("/transkrip", middleware.useAuthorization, router);
+	app.use("/api/v1/transkrip", middleware.useAuthorization, router);
 	router.get("/", (req: Request, res: Response) => transkrip.findAll(req, res));
 	router.get("/detail/:id", (req: Request, res: Response) =>
 		transkrip.findOne(req, res)

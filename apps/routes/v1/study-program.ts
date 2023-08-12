@@ -1,9 +1,9 @@
 import express, { Express, Request, Response } from "express";
-import * as studyProgram from "../controllers/study_program";
+import * as studyProgram from "../../controllers/study_program";
 
 export const studyProgramRoutes = (app: Express) => {
 	const route = express.Router();
-	app.use("/study-programs", route);
+	app.use("/api/v1/study-programs", route);
 	route.get("/", (req: Request, res: Response) => studyProgram.findAll(req, res));
 	route.get("/detail/:id", (req: Request, res: Response) =>
 		studyProgram.findOne(req, res)

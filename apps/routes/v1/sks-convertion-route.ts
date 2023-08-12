@@ -1,10 +1,10 @@
 import express, { Express, Request, Response } from "express";
-import { middleware } from "../middlewares";
-import * as sksConvertion from "../controllers/sks-convertion";
+import { middleware } from "../../middlewares";
+import * as sksConvertion from "../../controllers/sks-convertion";
 
 export const sksConvertionRoutes = (app: Express) => {
 	const router = express.Router();
-	app.use("/sks-convertions", middleware.useAuthorization, router);
+	app.use("/api/v1/sks-convertions", middleware.useAuthorization, router);
 	router.get("/", (req: Request, res: Response) => sksConvertion.findAll(req, res));
 	router.get("/detail/:id", (req: Request, res: Response) =>
 		sksConvertion.findOne(req, res)

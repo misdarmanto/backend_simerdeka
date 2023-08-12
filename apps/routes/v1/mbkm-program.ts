@@ -1,11 +1,11 @@
 import express, { Express, Request, Response } from "express";
-import { middleware } from "../middlewares";
-import * as mbkmProgram from "../controllers/mbkm-program";
-import * as mbkmProgramProdi from "../controllers/mbkm-program-prodi";
+import { middleware } from "../../middlewares";
+import * as mbkmProgram from "../../controllers/mbkm-program";
+import * as mbkmProgramProdi from "../../controllers/mbkm-program-prodi";
 
 export const mbkmProgramRoutes = (app: Express) => {
 	const route = express.Router();
-	app.use("/mbkm-programs", middleware.useAuthorization, route);
+	app.use("/api/v1/mbkm-programs", middleware.useAuthorization, route);
 	route.get("/", (req: Request, res: Response) => mbkmProgram.findAll(req, res));
 	route.get("/detail/:id", (req: Request, res: Response) =>
 		mbkmProgram.findOne(req, res)

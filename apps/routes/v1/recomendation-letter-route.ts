@@ -1,10 +1,10 @@
 import express, { Express, Request, Response } from "express";
-import { middleware } from "../middlewares";
-import * as letterOfRecomendation from "../controllers/recomendation-letter";
+import { middleware } from "../../middlewares";
+import * as letterOfRecomendation from "../../controllers/recomendation-letter";
 
 export const RecomendationLetterRoutes = (app: Express) => {
 	const route = express.Router();
-	app.use("/recomendation-letters", middleware.useAuthorization, route);
+	app.use("/api/v1/recomendation-letters", middleware.useAuthorization, route);
 
 	route.get("/", (req: Request, res: Response) =>
 		letterOfRecomendation.findAll(req, res)

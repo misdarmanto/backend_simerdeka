@@ -1,10 +1,10 @@
 import express, { Express, Request, Response } from "express";
-import { middleware } from "../middlewares";
-import * as reportParticipation from "../controllers/report-participation";
+import { middleware } from "../../middlewares";
+import * as reportParticipation from "../../controllers/report-participation";
 
 export const reportParticipationRoutes = (app: Express) => {
 	const route = express.Router();
-	app.use("/report-participations", middleware.useAuthorization, route);
+	app.use("/api/v1/report-participations", middleware.useAuthorization, route);
 	route.get("/", (req: Request, res: Response) =>
 		reportParticipation.findAll(req, res)
 	);

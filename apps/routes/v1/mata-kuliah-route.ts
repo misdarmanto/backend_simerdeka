@@ -1,10 +1,10 @@
 import express, { Express, Request, Response } from "express";
-import { middleware } from "../middlewares";
-import * as mataKuliah from "../controllers/mata-kuliah";
+import { middleware } from "../../middlewares";
+import * as mataKuliah from "../../controllers/mata-kuliah";
 
 export const mataKuliahRoute = (app: Express) => {
 	const router = express.Router();
-	app.use("/mata-kuliah", middleware.useAuthorization, router);
+	app.use("/api/v1/mata-kuliah", middleware.useAuthorization, router);
 	router.get("/", (req: Request, res: Response) => mataKuliah.findAll(req, res));
 	router.get("/detail/:id", (req: Request, res: Response) =>
 		mataKuliah.findOne(req, res)

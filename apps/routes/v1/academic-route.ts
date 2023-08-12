@@ -1,9 +1,9 @@
 import express, { Express, Request, Response } from "express";
-import * as academic from "../controllers/academic";
+import * as academic from "../../controllers/academic";
 
 export const academicRoutes = (app: Express) => {
 	const route = express.Router();
-	app.use("/academics", route);
+	app.use("/api/v1/academics", route);
 	route.get("/", (req: Request, res: Response) => academic.findAll(req, res));
 	route.get("/detail/:id", (req: Request, res: Response) => academic.findOne(req, res));
 	route.post("/", (req: Request, res: Response) => academic.create(req, res));
