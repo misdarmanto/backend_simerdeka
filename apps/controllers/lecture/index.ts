@@ -1,6 +1,6 @@
-import { findAll, findOne } from "./find";
+import { findAll, findOne } from './find'
 
 export const LectureController = {
-	findAll,
-	findOne,
-};
+  findAll,
+  findOne
+}

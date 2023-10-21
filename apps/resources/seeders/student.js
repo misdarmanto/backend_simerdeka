@@ -1,5 +1,5 @@
 'use strict'
-
+/* eslint-disable @typescript-eslint/space-before-function-paren */
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
