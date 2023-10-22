@@ -57,7 +57,7 @@ export const update = async (req: any, res: Response): Promise<any> => {
       }
     )
 
-    const newData: SemesterAttributes = {
+    const newData: SemesterAttributes | any = {
       ...(Boolean(req.body.semesterName) && { semesterName: req.body.semesterName }),
       ...(Boolean(req.body.semesterStatus) && {
         semesterStatus: req.body.semesterStatus

@@ -10,7 +10,7 @@ import { StudentModel } from '../../models/student'
 import { getActiveSemester } from '../../utilities/active-semester'
 
 export const create = async (req: any, res: Response): Promise<any> => {
-  const body = req.body as TranskripAttributes
+  const requestBody = req.body as TranskripAttributes
   const emptyField = requestChecker({
     requireList: [
       'x-user-id',
@@ -18,8 +18,10 @@ export const create = async (req: any, res: Response): Promise<any> => {
       'transkripMataKuliahId',
       'transkripMataKuliahGrade'
     ],
-    requestData: { ...req.body, ...req.headers }
+    requestData: { ...requestBody, ...req.headers }
   })
+
+  console.log(requestBody)
 
   if (emptyField.length > 0) {
     const message = `invalid request parameter! require (${emptyField})`
@@ -45,7 +47,7 @@ export const create = async (req: any, res: Response): Promise<any> => {
     const student = await StudentModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        studentId: { [Op.eq]: body.transkripStudentId },
+        studentId: { [Op.eq]: requestBody.transkripStudentId },
         studentIsRegistered: { [Op.eq]: true }
       }
     })
@@ -58,12 +60,12 @@ export const create = async (req: any, res: Response): Promise<any> => {
 
     const activeSemester = await getActiveSemester()
 
-    body.transkripId = uuidv4()
-    body.transkripSemesterId = activeSemester?.semesterId ?? ''
-    body.transkripStudentId = student.studentId
-    body.transkripStudyProgramId = student.studentStudyProgramId
-    body.transkripDepartmentId = student.studentDepartmentId
-    await TranskripModel.create(body)
+    requestBody.transkripId = uuidv4()
+    requestBody.transkripSemesterId = activeSemester?.semesterId ?? ''
+    requestBody.transkripStudentId = student.studentId
+    requestBody.transkripStudyProgramId = student.studentStudyProgramId
+    requestBody.transkripDepartmentId = student.studentDepartmentId
+    await TranskripModel.create(requestBody)
 
     const response = ResponseData.default
     response.data = { message: 'success' }

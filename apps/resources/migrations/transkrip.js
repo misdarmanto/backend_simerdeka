@@ -28,10 +28,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      transkrip_matakuliah_id: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       transkrip_mata_kuliah_grade: {
         type: Sequelize.STRING,
         allowNull: true

@@ -45,7 +45,7 @@ export const findAllStudent = async (req: any, res: Response): Promise<any> => {
     const result = await UserModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
-        userIsRegistered: { [Op.eq]: true },
+        // userIsRegistered: { [Op.eq]: true },
         ...(Boolean(req.query.search) && {
           [Op.or]: [{ userName: { [Op.like]: `%${req.query.search}%` } }]
         }),

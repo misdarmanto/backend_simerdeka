@@ -13,6 +13,10 @@ export interface ReportParticipationAttributes extends ZygoteAttributes {
   reportParticipationDepartmentId: string
   reportParticipationStudentId: string
   reportParticipationSemesterId: string
+  reportParticipationMbkmProgramCategory: string
+  reportParticipationMbkmProgramName: string
+  reportParticipationLetterOfAcceptance: string
+  reportParticipationRecomendationLetter: string
 }
 
 // we're telling the Model that 'id' is optional
@@ -61,6 +65,22 @@ export const ReportParticipationModel = sequelize.define<ReportParticipationInst
       allowNull: false
     },
     reportParticipationSemesterId: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    reportParticipationMbkmProgramCategory: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    reportParticipationMbkmProgramName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    reportParticipationLetterOfAcceptance: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    reportParticipationRecomendationLetter: {
       type: DataTypes.STRING,
       allowNull: false
     }

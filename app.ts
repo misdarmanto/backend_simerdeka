@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 import { appRouterV1 } from './apps/routes/v1'
 import { CONFIG } from './apps/configs'
 import express, { type Express } from 'express'

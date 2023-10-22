@@ -40,6 +40,22 @@ module.exports = {
       report_participation_semester_id: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      report_participation_mbkm_program_category: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      report_participation_mbkm_program_name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      report_participation_letter_of_acceptance: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      report_participation_recomendation_letter: {
+        type: Sequelize.STRING,
+        allowNull: false
       }
     })
   },

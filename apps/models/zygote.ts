@@ -25,7 +25,7 @@ export const ZygoteModel = {
 
 export interface ZygoteAttributes {
   id: number
-  createdOn: String
-  modifiedOn: String | null
+  createdOn: string
+  modifiedOn: string | null
   deleted: number
 }

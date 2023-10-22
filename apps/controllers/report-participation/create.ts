@@ -48,7 +48,8 @@ export const create = async (req: any, res: Response): Promise<any> => {
     })
 
     if (recomendationLetter == null) {
-      const message = 'recommendation letter not registered'
+      const message =
+        'letter of recommendation is not registered, please create letter of recommendation first'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.UNAUTHORIZED).json(response)
     }
