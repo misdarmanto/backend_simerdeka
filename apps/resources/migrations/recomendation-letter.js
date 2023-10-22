@@ -1,5 +1,6 @@
 'use strict'
-
+/* eslint-disable @typescript-eslint/space-before-function-paren */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { ZygoteModel } = require('../zygote')
 
 /** @type {import('sequelize-cli').Migration} */

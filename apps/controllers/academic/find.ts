@@ -1,49 +1,50 @@
-import { Response } from 'express'
+import { type Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { ResponseData, ResponseDataAttributes } from '../../utilities/response'
+import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { Pagination } from '../../utilities/pagination'
 import { requestChecker } from '../../utilities/requestCheker'
 import { AcademicModel } from '../../models/academic'
-import { CONSOLE } from '../../utilities/log'
 
-export const findAll = async (req: any, res: Response) => {
+export const findAll = async (req: any, res: Response): Promise<any> => {
   try {
-    const page = new Pagination(+req.query.page || 0, +req.query.size || 10)
+    const page = new Pagination(
+      parseInt(req.query.page) ?? 0,
+      parseInt(req.query.size) ?? 10
+    )
     const result = await AcademicModel.findAndCountAll({
       where: {
         deleted: { [Op.eq]: 0 },
-        ...(req.query.search && {
+        ...(Boolean(req.query.search) && {
           [Op.or]: [{ lp3mName: { [Op.like]: `%${req.query.search}%` } }]
         })
       },
       order: [['id', 'desc']],
-      ...(req.query.pagination == 'true' && {
+      ...(req.query.pagination === 'true' && {
         limit: page.limit,
         offset: page.offset
       })
     })
 
-    const response = <ResponseDataAttributes>ResponseData.default
+    const response = ResponseData.default
     response.data = page.data(result)
     return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {
-    CONSOLE.error(error.message)
     const message = `unable to process request! error ${error.message}`
-    const response = <ResponseDataAttributes>ResponseData.error(message)
+    const response = ResponseData.error(message)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response)
   }
 }
 
-export const findOne = async (req: any, res: Response) => {
+export const findOne = async (req: any, res: Response): Promise<any> => {
   const emptyField = requestChecker({
     requireList: ['id'],
     requestData: req.params
   })
 
-  if (emptyField) {
+  if (emptyField.length > 0) {
     const message = `invalid request parameter! require (${emptyField})`
-    const response = <ResponseDataAttributes>ResponseData.error(message)
+    const response = ResponseData.error(message)
     return res.status(StatusCodes.BAD_REQUEST).json(response)
   }
 
@@ -55,18 +56,18 @@ export const findOne = async (req: any, res: Response) => {
       }
     })
 
-    if (!result) {
-      const message = `academic not found!`
-      const response = <ResponseDataAttributes>ResponseData.error(message)
+    if (result == null) {
+      const message = 'academic not found!'
+      const response = ResponseData.error(message)
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
-    const response = <ResponseDataAttributes>ResponseData.default
+    const response = ResponseData.default
     response.data = result
     return res.status(StatusCodes.OK).json(response)
   } catch (error: any) {
     const message = `unable to process request! error ${error.message}`
-    const response = <ResponseDataAttributes>ResponseData.error(message)
+    const response = ResponseData.error(message)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response)
   }
 }

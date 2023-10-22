@@ -1,5 +1,6 @@
 'use strict'
-
+/* eslint-disable @typescript-eslint/space-before-function-paren */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { ZygoteModel } = require('../zygote')
 
 /** @type {import('sequelize-cli').Migration} */
@@ -24,10 +25,6 @@ module.exports = {
         allowNull: false
       },
       transkrip_department_id: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      transkrip_matakuliah_id: {
         type: Sequelize.STRING,
         allowNull: false
       },
