@@ -6,7 +6,6 @@ import { StudentModel } from './student'
 
 export interface ReportParticipationAttributes extends ZygoteAttributes {
   reportParticipationId: string
-  reportParticipationLetter: string
   reportParticipationStatusMessage: string
   reportParticipationStatus: 'waiting' | 'accepted' | 'rejected'
   reportParticipationStudyProgramId: string
@@ -15,7 +14,7 @@ export interface ReportParticipationAttributes extends ZygoteAttributes {
   reportParticipationSemesterId: string
   reportParticipationMbkmProgramCategory: string
   reportParticipationMbkmProgramName: string
-  reportParticipationLetterOfAcceptance: string
+  reportParticipationLetter: string
   reportParticipationRecomendationLetter: string
 }
 
@@ -36,10 +35,6 @@ export const ReportParticipationModel = sequelize.define<ReportParticipationInst
   {
     ...ZygoteModel,
     reportParticipationId: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    reportParticipationLetter: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -76,7 +71,7 @@ export const ReportParticipationModel = sequelize.define<ReportParticipationInst
       type: DataTypes.STRING,
       allowNull: false
     },
-    reportParticipationLetterOfAcceptance: {
+    reportParticipationLetter: {
       type: DataTypes.STRING,
       allowNull: false
     },
