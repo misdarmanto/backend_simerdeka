@@ -21,6 +21,7 @@ import { mbkmProgramProdiRoutes } from './mbkm-program-prodi'
 import { sksConvertionSchemaRoutes } from './sks-convertion-schema-route'
 import { uploadFileRoutes } from './upload-file-route'
 import { lectureRoutes } from './lecture-route'
+import { logActivityRoute } from './log-activity-router'
 
 export const appRouterV1 = (app: Express): void => {
   app.get('/api/v1', async (req: Request, res: Response) => await index(req, res))
@@ -44,4 +45,5 @@ export const appRouterV1 = (app: Express): void => {
   transkripRoute(app)
   uploadFileRoutes(app)
   lectureRoutes(app)
+  logActivityRoute(app)
 }
