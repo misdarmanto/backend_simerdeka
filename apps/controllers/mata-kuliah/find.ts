@@ -52,7 +52,7 @@ export const findAll = async (req: any, res: Response): Promise<any> => {
             [Op.eq]: user.userId
           }
         }),
-        ...(req.query.verificationStatus.length > 0 && {
+        ...(Boolean(req.query.verificationStatus) && {
           mataKuliahVerificationStatus: {
             [Op.eq]: req.query.verificationStatus
           }
