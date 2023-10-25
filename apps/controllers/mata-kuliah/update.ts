@@ -3,16 +3,14 @@ import { StatusCodes } from 'http-status-codes'
 import { ResponseData } from '../../utilities/response'
 import { Op } from 'sequelize'
 import { requestChecker } from '../../utilities/requestCheker'
-import { UserModel } from '../../models/user'
-import { type LogBookAttributes, LogBookModel } from '../../models/log-book'
-import { StudentModel } from '../../models/student'
+import { MataKuliahModel, type MataKuliahAttributes } from '../../models/matkul'
 
 export const update = async (req: any, res: Response): Promise<any> => {
-  const body = req.body as LogBookAttributes
+  const requestBody = req.body as MataKuliahAttributes
 
   const emptyField = requestChecker({
-    requireList: ['logBookId', 'x-user-id'],
-    requestData: { ...req.body, ...req.headers }
+    requireList: ['mataKuliahId', 'x-user-id'],
+    requestData: { ...requestBody, ...req.headers }
   })
 
   if (emptyField.length > 0) {
@@ -22,59 +20,29 @@ export const update = async (req: any, res: Response): Promise<any> => {
   }
 
   try {
-    const student = await StudentModel.findOne({
+    const mataKuliah = await MataKuliahModel.findOne({
       where: {
         deleted: { [Op.eq]: 0 },
-        studentId: { [Op.eq]: req.header('x-user-id') }
+        mataKuliahId: { [Op.eq]: requestBody.mataKuliahId }
       }
     })
 
-    if (student == null) {
-      const message = 'access denied!'
-      const response = ResponseData.error(message)
-      return res.status(StatusCodes.UNAUTHORIZED).json(response)
-    }
-
-    const user = await UserModel.findOne({
-      where: {
-        deleted: { [Op.eq]: 0 },
-        userId: { [Op.eq]: req.header('x-user-id') },
-        userRole: { [Op.eq]: 'student' }
-      }
-    })
-
-    if (user == null) {
-      const message = 'access denied!'
-      const response = ResponseData.error(message)
-      return res.status(StatusCodes.UNAUTHORIZED).json(response)
-    }
-
-    const logBook = await LogBookModel.findOne({
-      where: {
-        deleted: { [Op.eq]: 0 },
-        logBookId: { [Op.eq]: body.logBookId }
-      }
-    })
-
-    if (logBook == null) {
+    if (mataKuliah == null) {
       const message = 'not found!'
       const response = ResponseData.error(message)
       return res.status(StatusCodes.NOT_FOUND).json(response)
     }
 
-    const newData = {
-      ...(body.logBookReportWeek !== 0 && {
-        logBookReportWeek: body.logBookReportWeek
-      }),
-      ...(body.logBookReportFile.length > 0 && {
-        logBookReportFile: body.logBookReportFile
+    const newData: MataKuliahAttributes | any = {
+      ...(requestBody.mataKuliahVerificationStatus.length > 0 && {
+        mataKuliahVerificationStatus: requestBody.mataKuliahVerificationStatus
       })
     }
 
-    await LogBookModel.update(newData, {
+    await MataKuliahModel.update(newData, {
       where: {
         deleted: { [Op.eq]: 0 },
-        logBookId: { [Op.eq]: body.logBookId }
+        mataKuliahId: { [Op.eq]: requestBody.mataKuliahId }
       }
     })
 
