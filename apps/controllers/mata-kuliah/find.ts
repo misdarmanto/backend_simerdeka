@@ -52,6 +52,11 @@ export const findAll = async (req: any, res: Response): Promise<any> => {
             [Op.eq]: user.userId
           }
         }),
+        ...(Boolean(req.query.verificationStatus) && {
+          mataKuliahVerificationStatus: {
+            [Op.eq]: req.query.verificationStatus
+          }
+        }),
         ...(user.userRole === 'department' && {
           mataKuliahDepartmentId: {
             [Op.eq]: user.userId
