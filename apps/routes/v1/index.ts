@@ -25,7 +25,6 @@ import { mbkmProgramTypeRoutes } from './mbkm-program-type-route'
 
 export const appRouterV1 = (app: Express): void => {
   app.get('/api/v1', async (req: Request, res: Response) => await index(req, res))
-
   userRoutes(app)
   RecomendationLetterRoutes(app)
   semesterRoutes(app)
