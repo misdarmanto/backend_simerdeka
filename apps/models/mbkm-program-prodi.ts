@@ -78,16 +78,16 @@ MbkmProgramProdiModel.hasOne(MbkmProgramModel, {
 })
 
 // MbkmProgramProdiModel.hasOne(SemesterModel, {
-// 	sourceKey: "mbkmProgramProdiSemesterId",
-// 	foreignKey: "semesterId",
-// });
+//   sourceKey: 'mbkmProgramProdiSemesterId',
+//   foreignKey: 'semesterId'
+// })
 
 // MbkmProgramProdiModel.hasOne(StudyProgramModel, {
-// 	sourceKey: "mbkmProgramProdiStudyProgramId",
-// 	foreignKey: "studyProgramId",
-// });
+//   sourceKey: 'mbkmProgramProdiStudyProgramId',
+//   foreignKey: 'studyProgramId'
+// })
 
 // MbkmProgramProdiModel.hasOne(DepartmentModel, {
-// 	sourceKey: "mbkmProgramProdiDepartmentId",
-// 	foreignKey: "departmentId",
-// });
+//   sourceKey: 'mbkmProgramProdiDepartmentId',
+//   foreignKey: 'departmentId'
+// })

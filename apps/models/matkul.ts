@@ -12,6 +12,7 @@ export interface MataKuliahAttributes extends ZygoteAttributes {
   mataKuliahDepartmentId: string
   mataKuliahDepartmentName: string
   mataKuliahSksTotal: number
+  mataKuliahVerificationStatus: 'accepted' | 'waiting' | 'rejected'
   mataKuliahSemesterId: string
 }
 
@@ -59,6 +60,11 @@ export const MataKuliahModel = sequelize.define<MataKuliahInstance>(
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0
+    },
+    mataKuliahVerificationStatus: {
+      type: DataTypes.ENUM('accepted', 'waiting', 'rejected'),
+      allowNull: true,
+      defaultValue: 'waiting'
     },
     mataKuliahSemesterId: {
       type: DataTypes.STRING,

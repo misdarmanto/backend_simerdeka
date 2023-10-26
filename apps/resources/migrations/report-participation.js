@@ -12,10 +12,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      report_participation_letter: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       report_participation_status_message: {
         type: Sequelize.STRING,
         allowNull: true
@@ -49,7 +45,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      report_participation_letter_of_acceptance: {
+      report_participation_letter: {
         type: Sequelize.STRING,
         allowNull: false
       },

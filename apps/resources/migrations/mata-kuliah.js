@@ -37,6 +37,11 @@ module.exports = {
         allowNull: true,
         defaultValue: 0
       },
+      mata_kuliah_verification_status: {
+        type: Sequelize.ENUM('accepted', 'waiting', 'rejected'),
+        allowNull: true,
+        defaultValue: 'waiting'
+      },
       mata_kuliah_semester_id: {
         type: Sequelize.STRING,
         allowNull: false
